@@ -12,7 +12,7 @@ window.KK_DATA = (function () {
     {
       id: 'makro', name: 'Makro', channel: 'สาขา / ออนไลน์', logo: L + 'makro.webp', color: '#4DABF7',
       shipping: 0, box: 0, freq: 'ซื้อบ่อย',
-      doc: ['ใบกำกับภาษี / ใบเสร็จ', 'รูปสินค้าที่รับ'],
+      doc: ['ใบกำกับภาษี / ใบเสร็จ'],
       cats: ['หมู', 'ไข่+เต้าหู้', 'ผัก+อื่นๆ', 'เครื่องปรุง'],
       items: [
         { id: 'mk01', name: 'หมูสันนอก', spec: 'สไลซ์ · แพ็กเย็น', unit: 'กก.', price: 165, img: P + 'pork-sliced.webp', cat: 'หมู' },
@@ -137,10 +137,18 @@ window.KK_DATA = (function () {
 
   // ---------- เอกสารรออนุมัติ (ตัวอย่าง) ----------
   const drafts = [
-    { id: 'PV-2569-0042', type: 'ใบสำคัญจ่าย', entity: 'กะเพราโคตรคลีน', vendorId: 'loy', amount: 1890, date: '30 ก.ค. 69', payee: 'หลอยไก่สด (โอนธนาคาร)', ready: true },
-    { id: 'PV-2569-0043', type: 'ใบสำคัญจ่าย', entity: 'กะเพราโคตรคลีน', vendorId: 'fah', amount: 4130, date: '2 ส.ค. 69', payee: 'ฟ้าซีฟู้ด (โอนธนาคาร)', ready: true },
-    { id: 'RC-2569-0007', type: 'ใบรับรองแทนใบเสร็จ', entity: '5% ข้าวมันไก่', vendorId: 'papud', amount: 550, date: '1 ส.ค. 69', payee: 'วินมอเตอร์ไซค์ (ค่าส่งของ)', ready: false, missingField: 'เลขบัตรประชาชนผู้รับเงิน' }
+    { id: 'PV-2569-0042', type: 'ใบสำคัญจ่าย', entity: 'หสม. คดคลีน (คุณ+แฟน)', entityTaxId: '', vendorId: 'loy', amount: 1890, date: '30 ก.ค. 69', payee: 'หลอยไก่สด (โอนธนาคาร)', ready: true },
+    { id: 'PV-2569-0043', type: 'ใบสำคัญจ่าย', entity: 'หสม. คดคลีน (คุณ+แฟน)', entityTaxId: '', vendorId: 'fah', amount: 4130, date: '2 ส.ค. 69', payee: 'ฟ้าซีฟู้ด (โอนธนาคาร)', ready: true },
+    { id: 'RC-2569-0007', type: 'ใบรับรองแทนใบเสร็จ', entity: 'หสม. คดคลีน (คุณ+แฟน)', entityTaxId: '', vendorId: 'papud', amount: 550, date: '1 ส.ค. 69', payee: 'วินมอเตอร์ไซค์ (ค่าส่งของ)', ready: true }
   ];
+
+  // ---------- ผู้จ่ายเงิน/กิจการ (โหมดสาธิต — ตัวจริงมาจาก fin_entities) ----------
+  const entities = [
+    { id: 'e-hsm', name: 'หสม. คดคลีน (คุณ+แฟน)', type: 'ordinary_partnership', tax_id: '', address: '', vat_registered: false },
+    { id: 'e-hjk', name: 'หจก. คดคลีน กรุ๊ป', type: 'juristic_partnership', tax_id: '', address: '', vat_registered: true },
+    { id: 'e-person', name: 'บุคคลธรรมดา (ชื่อเจ้าของ)', type: 'individual', tax_id: '', address: '', vat_registered: true }
+  ];
+  const defaultEntityId = 'e-hsm';
 
   // ---------- งานรับของ (ตัวอย่าง) ----------
   const receives = [
@@ -190,5 +198,5 @@ window.KK_DATA = (function () {
   ];
   const books = { personal: 48620, biz: 41240, vatIn: 1260 };
 
-  return { vendors, purchases, drafts, receives, exp12, vat12, meat, top5, books };
+  return { vendors, purchases, drafts, receives, entities, defaultEntityId, exp12, vat12, meat, top5, books };
 })();

@@ -404,6 +404,14 @@
           <div style="font-size:15px;font-weight:700;color:#1864AB">เข้างบ: {{ sumBookText }}</div>
           <div style="font-size:15px;font-weight:700;color:#1864AB">หลักฐาน: {{ sumEvText }}</div>
         </div>
+        <div style="background:#fff;border-radius:20px;padding:14px 16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+          <div style="font-size:16px;font-weight:900;margin-bottom:2px">จ่ายในนามใคร?</div>
+          <div style="font-size:13px;font-weight:600;color:#B08968;margin-bottom:8px">ชื่อ + เลขภาษีนี้จะขึ้นบนเอกสาร · เพิ่ม/แก้ผู้จ่ายได้ที่ ตั้งค่า › ผู้จ่าย/กิจการ</div>
+          <select value="{{ payerVal }}" onChange="{{ onPayer }}" style="width:100%;box-sizing:border-box;border:2px solid #E5DBFF;border-radius:14px;padding:12px 14px;font-size:16px;font-weight:800;background:#fff;outline:none;color:#3D2C29">
+            <sc-for list="{{ payerOpts }}" as="o" hint-placeholder-count="3"><option value="{{ o.v }}">{{ o.t }}</option></sc-for>
+          </select>
+          <div style="font-size:13px;font-weight:700;color:#7048E8;margin-top:6px">{{ payerMeta }}</div>
+        </div>
         <div style="background:#fff;border-radius:20px;padding:14px 16px;box-shadow:0 3px 12px rgba(255,140,90,.1);display:flex;align-items:center;gap:12px">
           <div style="flex:1">
             <div style="font-size:16px;font-weight:900">เป็นของถาวรไหม?</div>
@@ -513,6 +521,13 @@
             <button onClick="{{ c.pick }}" style="border:2px solid #FFE8CC;border-radius:999px;padding:10px 16px;font-size:15px;font-weight:800;cursor:pointer;background:{{ c.bg }};color:{{ c.fg }}">{{ c.name }}</button>
           </sc-for>
         </div>
+      </div>
+      <div style="background:#fff;border-radius:20px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.12)">
+        <div style="font-size:17px;font-weight:800;margin-bottom:4px">จ่ายในนามใคร?</div>
+        <div style="font-size:13px;font-weight:600;color:#B08968;margin-bottom:8px">แก้/เพิ่มผู้จ่ายได้ที่ ตั้งค่า › ผู้จ่าย/กิจการ</div>
+        <select value="{{ expPayerVal }}" onChange="{{ onExpPayer }}" style="width:100%;box-sizing:border-box;border:2px solid #E5DBFF;border-radius:14px;padding:12px 14px;font-size:16px;font-weight:800;background:#fff;outline:none;color:#3D2C29">
+          <sc-for list="{{ expPayerOpts }}" as="o" hint-placeholder-count="3"><option value="{{ o.v }}">{{ o.t }}</option></sc-for>
+        </select>
       </div>
       <div style="background:#fff;border-radius:20px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.12)">
         <div style="font-size:17px;font-weight:800;margin-bottom:8px">จำนวนเงิน (บาท)</div>
@@ -1158,6 +1173,35 @@
           <div style="font-size:14px;font-weight:600;color:#B08968">เข้าผ่าน LINE · สิทธิ์อนุมัติ+เซ็นเอกสาร</div>
         </div>
       </div>
+
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="font-size:17px;font-weight:900;margin-bottom:2px">ผู้จ่ายเงิน / กิจการ</div>
+        <div style="font-size:13px;font-weight:600;color:#B08968;margin-bottom:12px">เพิ่มได้หลายราย (บุคคลธรรมดา / หสม. / นิติบุคคล) · ตอนบันทึกซื้อเลือกได้ว่าจ่ายในนามไหน · เอกสารดึงชื่อ+เลขภาษีจากรายที่เลือก (ไม่เดา ไม่ใส่ชื่อแบรนด์เอง)</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ entityCards }}" as="e" hint-placeholder-count="2">
+            <div style="border:3px solid {{ e.border }};border-radius:18px;padding:12px 14px;background:#FFF8F0">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="font-size:16px;font-weight:900;flex:1;min-width:0">{{ e.name }}</div>
+                <div style="font-size:12px;font-weight:800;color:{{ e.vatFg }};background:{{ e.vatBg }};border-radius:999px;padding:3px 10px;flex-shrink:0">{{ e.vatBadge }}</div>
+              </div>
+              <div style="font-size:13px;font-weight:700;color:#7048E8;margin-top:2px">{{ e.typeLabel }}</div>
+              <div style="font-size:13px;font-weight:600;color:#8A6D5C;margin-top:2px">{{ e.taxText }}</div>
+              <div style="font-size:13px;font-weight:600;color:#B08968">{{ e.addrText }}</div>
+              <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+                <sc-if value="{{ e.isDefault }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:13px;font-weight:800;color:#5F3DC4;background:#EDE7FF;border-radius:12px;padding:8px 12px">★ ค่าเริ่มต้น</div>
+                </sc-if>
+                <sc-if value="{{ e.notDefault }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ e.makeDefault }}" style="font-size:13px;font-weight:800;color:#5F3DC4;background:#F3F0FF;border:none;border-radius:12px;padding:8px 12px;cursor:pointer">ตั้งเป็นค่าเริ่มต้น</button>
+                </sc-if>
+                <button onClick="{{ e.edit }}" style="font-size:13px;font-weight:800;color:#1971C2;background:#E7F5FF;border:none;border-radius:12px;padding:8px 12px;cursor:pointer">แก้ไข</button>
+                <button onClick="{{ e.del }}" style="font-size:13px;font-weight:800;color:#D9480F;background:#FFF4E6;border:none;border-radius:12px;padding:8px 12px;cursor:pointer">เอาออก</button>
+              </div>
+            </div>
+          </sc-for>
+          <button onClick="{{ addEntity }}" style="background:#FFF8F0;border:2px dashed #FFB27D;border-radius:18px;padding:14px;cursor:pointer;font-size:16px;font-weight:800;color:#F76707">+ เพิ่มผู้จ่าย / กิจการ</button>
+        </div>
+      </div>
       <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
         <div style="font-size:17px;font-weight:900;margin-bottom:4px">ลายเซ็นสำหรับเอกสาร</div>
         <div style="font-size:14px;font-weight:600;color:#B08968;margin-bottom:10px">แปะเมื่อกดยืนยันเท่านั้น + บันทึก log ทุกครั้ง</div>
@@ -1188,6 +1232,14 @@
         </div>
         <div style="font-size:22px;color:#FFB27D;font-weight:900">›</div>
       </button>
+      <button onClick="{{ goData }}" style="background:#fff;border:none;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1);display:flex;align-items:center;gap:14px;cursor:pointer;text-align:left">
+        <img src="assets/icons/icon_stock_shelf.webp" alt="" style="width:52px;height:52px;flex-shrink:0">
+        <div style="flex:1">
+          <div style="font-size:17px;font-weight:900;color:#3D2C29">ร้านค้า / Supplier</div>
+          <div style="font-size:14px;font-weight:600;color:#B08968">เพิ่ม/แก้ร้าน สินค้า ราคา ค่าส่ง เลขภาษีร้าน ได้เอง</div>
+        </div>
+        <div style="font-size:22px;color:#FFB27D;font-weight:900">›</div>
+      </button>
       <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
           <img src="assets/mascots/small_04-mascot-integrations.webp" alt="" style="width:44px;height:44px">
@@ -1212,6 +1264,19 @@
             </div>
           </sc-for>
         </div>
+        <div style="border-top:2px dashed #FFE8CC;margin-top:14px;padding-top:12px">
+          <div style="font-size:15px;font-weight:900;margin-bottom:2px">รุ่น Gemini (AI อ่านบิล)</div>
+          <div style="font-size:13px;font-weight:600;color:#B08968;margin-bottom:8px">พิมพ์ชื่อรุ่นเพื่อสลับได้ทันที · อย่าใช้รุ่น 2.0/1.5 ที่ปิดบริการแล้ว</div>
+          <input value="{{ geminiModelVal }}" onChange="{{ onGeminiModel }}" placeholder="gemini-3.5-flash-lite" style="width:100%;box-sizing:border-box;border:2px solid #E5DBFF;border-radius:14px;padding:12px 14px;font-size:16px;font-weight:800;background:#fff;outline:none;color:#3D2C29">
+          <div style="font-size:12px;font-weight:600;color:#B08968;margin-top:6px">ค่าตั้งต้น: gemini-3.5-flash-lite</div>
+        </div>
+      </div>
+      <div style="background:#F8F0FC;border:2px solid #E9D8F4;border-radius:22px;padding:16px">
+        <div style="font-size:16px;font-weight:900;color:#7048E8;margin-bottom:8px">🔒 แยกส่วนแก้ได้ / ส่วนล็อก</div>
+        <div style="font-size:14px;font-weight:700;color:#2B8A3E;margin-bottom:2px">แก้เองได้ในหน้านี้</div>
+        <div style="font-size:13px;font-weight:600;color:#5C4438;margin-bottom:8px">ชื่อผู้จ่าย · เลขภาษี · ที่อยู่ · ลายเซ็น · ข้อมูลร้าน · กฎคัดกรอง · key บริการ · รุ่น Gemini</div>
+        <div style="font-size:14px;font-weight:700;color:#D9480F;margin-bottom:2px">ล็อกหลังบ้าน (แตะไม่ได้)</div>
+        <div style="font-size:13px;font-weight:600;color:#5C4438">สูตรลงบัญชีเดบิต-เครดิต · การคำนวณ VAT · การตรวจสมดุลเดบิต=เครดิต — ระบบผูกให้อัตโนมัติ กันพลาด</div>
       </div>
       <button onClick="{{ resetData }}" style="background:#fff;color:#D9480F;border:3px solid #E5DBFF;border-radius:18px;padding:14px;font-size:16px;font-weight:800;cursor:pointer">ล้างข้อมูลทดลอง กลับค่าตั้งต้น</button>
     </div>
@@ -1264,6 +1329,9 @@
             <div style="text-align:center;border-bottom:2px solid #3D2C29;padding-bottom:10px">
               <div style="font-size:19px;font-weight:900">{{ docType }}</div>
               <div style="font-size:14px;font-weight:700;color:#8A6D5C">{{ docEntity }} · เลขที่ {{ docNo }}</div>
+              <sc-if value="{{ docHasEntityTax }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:13px;font-weight:600;color:#8A6D5C">{{ docEntityTax }}</div>
+              </sc-if>
             </div>
             <div style="display:flex;flex-direction:column;gap:6px;padding:12px 0;font-size:15px;font-weight:700;color:#5C4438">
               <div>วันที่: {{ docDate }}</div>
@@ -1421,7 +1489,9 @@ class Component extends DCLogic {
     multi: { total: '', rows: [] }, expense: { cat: '', amount: '', note: '', isAsset: false }, svc: {}, aiRunning: false, aiFilled: false,
     // สมุดบันทึก (ปฏิทิน) / งบ 2 ชุด / กฎคัดกรอง / cache ข้อมูลจริงรายเดือน
     diary: { ym: '', sel: '', vFilter: '' }, books: { ym: '', tab: 'p' },
-    rules: null, monthLive: {}, thumbs: {}, agg: null
+    rules: null, monthLive: {}, thumbs: {}, agg: null,
+    // ผู้จ่ายเงิน/กิจการ (เก็บใน fin_entities จริง · ค่าเริ่มต้น/ซ่อน เก็บใน fin_rules)
+    entities: [], hiddenEntities: [], defaultEntityId: null, geminiModel: 'gemini-3.5-flash-lite'
   };
 
   componentDidMount() {
@@ -1511,8 +1581,7 @@ class Component extends DCLogic {
       // กฎคัดกรองที่เจ้าของแก้ไว้ (เก็บใน fin_rules) — โหลดมาทับค่าตั้งต้น
       const savedRules = (d.rules || []).find(r => r.key === 'liff_screening_rules');
       if (savedRules && Array.isArray(savedRules.value) && savedRules.value.length) this.setState({ rules: savedRules.value });
-      this._entityId = (d.entities && d.entities[0] && d.entities[0].id) || 'fe9257df-915a-46e3-8661-d26253924de1';
-      this._entityName = (d.entities && d.entities[0] && d.entities[0].name) || 'กิจการ';
+      this.applyEntitiesFromBootstrap(d);
       // แคตตาล็อกสินค้าจริงจากฐานข้อมูล (fin_vendor_items ผ่าน RPC liff_catalog) — แทน mock ทั้งหมด
       const cat = await this.api('liff_catalog');
       if (cat && cat.ok && Array.isArray(cat.data) && cat.data.length) {
@@ -1533,11 +1602,17 @@ class Component extends DCLogic {
       // ดึงเอกสารรออนุมัติจริงมาแทนตัวอย่าง (ได้ backendId ไว้ใช้ตอนเซ็น) — ว่าง = ยังไม่มีเอกสารรอ
       const a = await this.api('approve_list');
       const docs = (a && a.ok && a.data && Array.isArray(a.data.docs)) ? a.data.docs : [];
+      const entRows = (a && a.ok && a.data && Array.isArray(a.data.entities)) ? a.data.entities : [];
+      const entMap = {}; entRows.forEach(e => { entMap[e.id] = e.name; });
       this.setState({ drafts: docs.map(x => {
         const pl = x.payload || {};
+        // ชื่อผู้จ่าย = ดึงจาก entity ของเอกสารจริง (ไม่เดา/ไม่ใส่ชื่อแบรนด์เอง)
+        const ent = this.entityById(x.entity_id);
         return { id: x.doc_no || x.id, backendId: x.id,
-          type: x.type === 'expense_certificate' ? 'ใบรับรองแทนใบเสร็จ' : 'ใบสำคัญจ่าย',
-          entity: pl.entity_name || this._entityName || 'กิจการ', vendorId: null, amount: +pl.total || 0,
+          type: (x.type === 'expense_certificate' || x.type === 'receipt_substitute') ? 'ใบรับรองแทนใบเสร็จ' : 'ใบสำคัญจ่าย',
+          entity: entMap[x.entity_id] || pl.entity_name || (ent && ent.name) || this._entityName || 'กิจการ',
+          entityTaxId: (ent && ent.tax_id) || pl.entity_tax_id || '',
+          vendorId: null, amount: +pl.total || 0,
           date: pl.date || '', payee: pl.payee || pl.vendor_name || '', ready: true, missingField: '' };
       }) });
     } catch (e) { /* never block — โหมดสาธิตทำงานต่อได้ */ }
@@ -1571,6 +1646,99 @@ class Component extends DCLogic {
     } catch (e) { this.pop('บันทึกในเครื่องไว้ก่อน — ต่อระบบไม่ติด'); }
   }
 
+  /* ---------- ผู้จ่ายเงิน/กิจการ (fin_entities · แก้ได้จริง ไม่ hardcode ชื่อ/เลขภาษี/ที่อยู่) ---------- */
+  entitiesList() { const e = this.state.entities; if (e && e.length) return e; return (window.KK_DATA && KK_DATA.entities) || []; }
+  entityById(id) { return this.entitiesList().find(e => e.id === id) || null; }
+  entityTypeLabel(t) { return { individual: 'บุคคลธรรมดา', ordinary_partnership: 'หสม. / คณะบุคคล', juristic_partnership: 'นิติบุคคล', juristic: 'นิติบุคคล', company: 'นิติบุคคล' }[t] || 'บุคคลธรรมดา'; }
+  currentPayerId() { const c = this.state.cart || {}; return c.payerId || this.state.defaultEntityId || (this.entitiesList()[0] || {}).id || null; }
+  payerEntity() { return this.entityById(this.currentPayerId()) || (this.entitiesList()[0] || null); }
+  // ดึง entities + ค่าเริ่มต้น + ตัวที่ซ่อน + รุ่น Gemini จาก bootstrap (แหล่งจริง = fin_entities + fin_rules)
+  applyEntitiesFromBootstrap(d) {
+    const ents = (d.entities || []).slice();
+    const rules = d.rules || [];
+    const find = (k) => rules.find(r => r.key === k);
+    const hiddenR = find('liff_hidden_entities');
+    const hidden = (hiddenR && Array.isArray(hiddenR.value)) ? hiddenR.value : [];
+    const defR = find('default_expense_entity');
+    const gmR = find('liff_gemini_model');
+    const visible = ents.filter(e => hidden.indexOf(e.id) < 0);
+    let defId = (defR && defR.value && defR.value.entity_id) || (visible.find(e => e.is_default) || {}).id || (visible[0] || {}).id || null;
+    if (!visible.find(e => e.id === defId)) defId = (visible[0] || {}).id || null;
+    const gm = (gmR && typeof gmR.value === 'string' && gmR.value) ? gmR.value : (this.state.geminiModel || 'gemini-3.5-flash-lite');
+    const defEnt = visible.find(e => e.id === defId);
+    this._entityId = defId || 'fe9257df-915a-46e3-8661-d26253924de1';
+    this._entityName = defEnt ? defEnt.name : 'กิจการ';
+    this.setState({ entities: visible, hiddenEntities: hidden, defaultEntityId: defId, geminiModel: gm });
+  }
+  async refreshEntitiesLive() {
+    if (!this.state.liveMode) return;
+    const r = await this.api('bootstrap');
+    if (r && r.ok && r.data) this.applyEntitiesFromBootstrap(r.data);
+  }
+  entityForm(e) {
+    this.openModal({
+      kind: 'entity', title: e ? 'แก้ไขผู้จ่าย / กิจการ' : 'เพิ่มผู้จ่าย / กิจการ', targetId: e ? e.id : null,
+      vals: { name: e ? e.name : '', type: e ? (e.type || 'ordinary_partnership') : 'ordinary_partnership',
+        tax_id: e ? (e.tax_id || '') : '', address: e ? (e.address || '') : '', vat: (e && e.vat_registered) ? 'y' : 'n' },
+      fields: [
+        { key: 'name', label: 'ชื่อผู้จ่าย / กิจการ (ตามที่จะให้ขึ้นเอกสาร)', type: 'text' },
+        { key: 'type', label: 'ประเภท', type: 'select', opts: [{ v: 'individual', t: 'บุคคลธรรมดา' }, { v: 'ordinary_partnership', t: 'ห้างหุ้นส่วนสามัญ / คณะบุคคล (หสม.)' }, { v: 'juristic_partnership', t: 'นิติบุคคล (หจก. / บริษัท)' }] },
+        { key: 'tax_id', label: 'เลขประจำตัว (บัตร ปชช. / เลขทะเบียนนิติบุคคล · เว้นว่างได้)', type: 'text' },
+        { key: 'address', label: 'ที่อยู่ (สำหรับออกเอกสาร · เว้นว่างได้)', type: 'text' },
+        { key: 'vat', label: 'จดทะเบียน VAT ไหม', type: 'select', opts: [{ v: 'n', t: 'ยังไม่จด VAT' }, { v: 'y', t: 'จด VAT แล้ว' }] }
+      ]
+    });
+  }
+  saveEntityForm(m) {
+    const vals = m.vals;
+    if (!vals.name || !vals.name.trim()) { this.pop('ใส่ชื่อผู้จ่าย/กิจการก่อนนะ'); return; }
+    const base = { name: vals.name.trim(), type: vals.type || 'ordinary_partnership', tax_id: (vals.tax_id || '').trim() || null, address: (vals.address || '').trim() || null, vat_registered: vals.vat === 'y' };
+    const ents = this.entitiesList().slice();
+    if (m.targetId) {
+      const i = ents.findIndex(e => e.id === m.targetId);
+      if (i >= 0) ents[i] = Object.assign({}, ents[i], base);
+      this.setState({ entities: ents }, () => this.save());
+      if (this.state.liveMode) this.saveEntityLive(Object.assign({ id: m.targetId }, base));
+      else this.pop('แก้ไขผู้จ่ายแล้ว');
+    } else {
+      const localId = 'e' + Date.now();
+      ents.push(Object.assign({ id: localId }, base));
+      const setDef = ents.length === 1;
+      this.setState({ entities: ents, defaultEntityId: setDef ? localId : this.state.defaultEntityId }, () => this.save());
+      if (this.state.liveMode) this.saveEntityLive(base, true);
+      else this.pop('เพิ่มผู้จ่ายใหม่แล้ว ใช้ได้ทันที');
+    }
+  }
+  async saveEntityLive(entity) {
+    const r = await this.api('settings_save', { entity });
+    if (r && r.ok) { this.pop('บันทึกผู้จ่ายขึ้นระบบจริงแล้ว ✓'); this.refreshEntitiesLive(); }
+    else this.pop('บันทึกในเครื่องไว้ก่อน — ต่อระบบไม่ติด: ' + ((r && r.error) || ''));
+  }
+  delEntity(e) {
+    if (this.entitiesList().length <= 1) { this.pop('ต้องเหลือผู้จ่ายอย่างน้อย 1 ราย'); return; }
+    if (!window.confirm('เอา "' + e.name + '" ออกจากรายการผู้จ่าย? (ข้อมูล/เอกสารเก่าที่อ้างถึงยังอยู่ครบ)')) return;
+    const ents = this.entitiesList().filter(x => x.id !== e.id);
+    let defId = this.state.defaultEntityId;
+    if (defId === e.id) defId = (ents[0] || {}).id || null;
+    const hidden = (this.state.hiddenEntities || []).concat([e.id]);
+    this.setState({ entities: ents, hiddenEntities: hidden, defaultEntityId: defId }, () => this.save());
+    if (this.state.liveMode) {
+      this.pushLive('settings_save', { rule_key: 'liff_hidden_entities', value: hidden, description: 'ผู้จ่ายที่ซ่อนจากแอป LIFF' }, 'เอาผู้จ่ายออกแล้ว');
+      if (defId) this.pushLive('settings_save', { rule_key: 'default_expense_entity', value: { entity_id: defId } });
+    } else this.pop('เอาผู้จ่ายออกแล้ว');
+  }
+  setDefaultEntity(id) {
+    this.setState({ defaultEntityId: id }, () => this.save());
+    this._entityId = id; const e = this.entityById(id); this._entityName = e ? e.name : this._entityName;
+    if (this.state.liveMode) this.pushLive('settings_save', { rule_key: 'default_expense_entity', value: { entity_id: id }, description: 'ผู้จ่าย/กิจการค่าเริ่มต้น' }, 'ตั้งเป็นค่าเริ่มต้นแล้ว');
+    else this.pop('ตั้งเป็นค่าเริ่มต้นแล้ว');
+  }
+  setGeminiModel(v) {
+    this.setState({ geminiModel: v }, () => this.save());
+    if (this.state.liveMode) this.pushLive('settings_save', { rule_key: 'liff_gemini_model', value: v, description: 'รุ่น Gemini สำหรับ AI อ่านบิล' }, 'เปลี่ยนรุ่น Gemini แล้ว ✓');
+    else this.pop('เปลี่ยนรุ่น Gemini แล้ว (สาธิต)');
+  }
+
   /* ---------- โหลด/บันทึกข้อมูล ---------- */
   loadDB() {
     const base = window.KK_DATA;
@@ -1581,10 +1749,14 @@ class Component extends DCLogic {
       vendors: (saved && saved.vendors) || JSON.parse(JSON.stringify(base.vendors)),
       purchases: (saved && saved.purchases) || JSON.parse(JSON.stringify(base.purchases))
     };
-    this.setState({ db, sig: (saved && saved.sig) || '', prefsChars: !(saved && saved.prefsChars === false), svc: (saved && saved.svc) || {}, rules: (saved && saved.rules && saved.rules.length) ? saved.rules : null, drafts: JSON.parse(JSON.stringify(base.drafts)), receives: JSON.parse(JSON.stringify(base.receives)) });
+    this.setState({ db, sig: (saved && saved.sig) || '', prefsChars: !(saved && saved.prefsChars === false), svc: (saved && saved.svc) || {}, rules: (saved && saved.rules && saved.rules.length) ? saved.rules : null,
+      entities: (saved && saved.entities && saved.entities.length) ? saved.entities : JSON.parse(JSON.stringify(base.entities || [])),
+      defaultEntityId: (saved && saved.defaultEntityId) || base.defaultEntityId || ((base.entities || [])[0] || {}).id || null,
+      geminiModel: (saved && saved.geminiModel) || 'gemini-3.5-flash-lite',
+      drafts: JSON.parse(JSON.stringify(base.drafts)), receives: JSON.parse(JSON.stringify(base.receives)) });
   }
   save() {
-    try { localStorage.setItem('kk_liff_v1', JSON.stringify({ vendors: this.state.db.vendors, purchases: this.state.db.purchases, sig: this.state.sig, prefsChars: this.state.prefsChars !== false, svc: this.state.svc || {}, rules: this.state.rules || null })); } catch (e) {}
+    try { localStorage.setItem('kk_liff_v1', JSON.stringify({ vendors: this.state.db.vendors, purchases: this.state.db.purchases, sig: this.state.sig, prefsChars: this.state.prefsChars !== false, svc: this.state.svc || {}, rules: this.state.rules || null, entities: this.state.entities || [], defaultEntityId: this.state.defaultEntityId || null, geminiModel: this.state.geminiModel || 'gemini-3.5-flash-lite' })); } catch (e) {}
   }
   fmt(n) { return '฿' + Math.round(n).toLocaleString('th-TH'); }
   pop(msg) {
@@ -1653,15 +1825,19 @@ class Component extends DCLogic {
     const v = this.vendorById(this.state.cart.vendorId);
     const list = (v.doc || []).slice();
     const info = this.currentRouteInfo();
-    if (info && info.rule && info.rule.doc === 'cert' && list.indexOf('รูป/ข้อมูลผู้รับเงิน') < 0) list.push('รูป/ข้อมูลผู้รับเงิน');
+    // ใบรับรองแทนใบเสร็จ: ขอแค่ "ชื่อ/ข้อมูลผู้รับ" — ไม่ต้องใช้เลขบัตร และเป็นของไม่บังคับ (เซ็นได้เลย)
+    const certLabel = 'ชื่อ/ข้อมูลผู้รับเงิน (ไม่ต้องใช้เลขบัตร)';
+    if (info && info.rule && info.rule.doc === 'cert' && list.indexOf(certLabel) < 0) list.push(certLabel);
     return list;
   }
-  // หลักฐานแนบได้หลายรูปต่อช่อง — คืน array เสมอ (รองรับข้อมูลเก่าที่เป็นรูปเดียว)
+  // หลักฐานที่เป็น "ตัวเสริม" (รูปของ/แคปแชต/ข้อมูลผู้รับ) = ไม่บังคับ — แนบทีหลังได้
+  evOptional(l) { return /รูป|ภาพ|แคป|แชท|คำสั่งซื้อ|ผู้รับ/.test(l || ''); }
   evArr(l) { const v = this.state.cart.ev[l]; return Array.isArray(v) ? v : (v ? [v] : []); }
-  evMissing() { return this.evidenceList().filter(l => this.evArr(l).length === 0); }
+  // กดยืนยันได้เสมอ (never block) — นับเฉพาะเอกสารหลักที่ยังขาด (โชว์เตือนเฉยๆ ไม่ขู่)
+  evMissing() { return this.evidenceList().filter(l => !this.evOptional(l) && this.evArr(l).length === 0); }
 
   /* ---------- flow ซื้อ ---------- */
-  resetCart() { return { vendorId: null, qty: {}, priceOv: {}, ship: '', box: '', route: null, sub: null, ev: {}, isAsset: false }; }
+  resetCart() { return { vendorId: null, qty: {}, priceOv: {}, ship: '', box: '', route: null, sub: null, ev: {}, isAsset: false, payerId: this.state.defaultEntityId || null }; }
   startBuy = () => this.setState({ screen: 'buy', buyStep: 1, cart: this.resetCart(), search: '', catFilter: 'ทั้งหมด', aiFilled: false });
   buyBack = () => {
     const s = this.state.buyStep;
@@ -1691,6 +1867,15 @@ class Component extends DCLogic {
     const missing = this.evMissing();
     if (!draft) { this.setState({ buyStep: 6 }); return; }
     this.createPurchase('ร่าง', missing);
+    // ร่างก็ขึ้น backend จริง (สถานะ DRAFT ยังไม่ลงบัญชี) — ไม่ใช่เก็บแค่ในเครื่อง
+    if (this.state.liveMode && !this.state.cart.isAsset) this.pushLive('liff_purchase_save', {
+      entity_id: this.currentPayerId(), vendor_id: this.beVendorId(this.state.cart.vendorId),
+      vendor_name: this.vendorById(this.state.cart.vendorId).name, route: this.beRoute(),
+      total: this.grandTotal(), is_stock: true, description: this.routeLabel() + ' — ' + this.vendorById(this.state.cart.vendorId).name,
+      items: this.cartLines().map(l => ({ item_name: l.it.name, qty: l.qty, unit: l.it.unit, unit_price: l.price })),
+      shipping_cost: +this.state.cart.ship || 0, packaging_cost: +this.state.cart.box || 0,
+      draft: true, idem: 'liff-draft-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8)
+    }, 'บันทึกร่างขึ้นระบบจริงแล้ว (ยังไม่ลงบัญชี) ✓');
     this.setState({ screen: 'list', buyStep: 0, listTab: 'ร่าง' });
     this.pop('บันทึกร่างแล้ว ไปรอที่ตะกร้ารอจับคู่');
   }
@@ -1702,32 +1887,43 @@ class Component extends DCLogic {
     // กด "ยืนยัน" = ลงบัญชีจริงเสมอ · หลักฐานไม่ครบ = เติมทีหลังได้ ไม่บังคับ ไม่ปัดเป็นร่าง
     const status = needDoc ? 'รออนุมัติ' : 'เสร็จสมบูรณ์';
     this.createPurchase(status, missing);
-    // 🔴 กด "ยืนยัน" = เขียนขึ้นระบบจริงเสมอ (ยกเลิกกติกาเก่าที่ถ้าหลักฐานไม่ครบจะเก็บในเครื่องอย่างเดียว)
+    // 🔴 กด "ยืนยัน" = เขียนขึ้นระบบจริงเสมอ — never block: ร้านจับคู่ไม่ได้ก็ส่งชื่อร้านไปแทน (vendor_id ว่าง)
     if (this.state.liveMode) {
-      // ส่ง payload ให้ตรง contract ของ backend kk-finance (summaryConfirm อ่าน route/total/vat/category_account)
       const vid = this.beVendorId(this.state.cart.vendorId);
       const vn = this.vendorById(this.state.cart.vendorId).name;
       const beR = this.beRoute();
       const total = this.grandTotal();
       const vat = beR === '1a' ? Math.round((total - total / 1.07) * 100) / 100 : 0; // ใบกำกับ = แยกภาษีซื้อ 7%
       const isAsset = !!this.state.cart.isAsset;
-      if (vid) this.pushLive('summary_confirm', {
-        entity_id: this._entityId, vendor_id: vid, vendor_name: vn,
-        route: beR, total, vat, is_stock: !isAsset, is_asset: isAsset,
-        category_account: '5010', // ต้นทุนขาย-วัตถุดิบ (ใช้เมื่อไม่ใช่ของถาวร)
+      if (isAsset) this.pushLive('summary_confirm', {
+        // ของถาวร: ใช้ summary_confirm เดิม (ลง fin_assets + สูตรงบนิติ/งบร้าน)
+        entity_id: this.currentPayerId(), entity_name: (this.payerEntity() || {}).name || null, entity_tax_id: (this.payerEntity() || {}).tax_id || null,
+        vendor_id: vid, vendor_name: vn,
+        route: beR, total, vat, is_stock: false, is_asset: true,
+        category_account: '5010', description: this.routeLabel() + ' — ' + vn,
+        items: this.cartLines().map(l => ({ item_name: l.it.name, qty: l.qty, unit: l.it.unit, unit_price: l.price })),
+        asset: { name: vn + ' (ของถาวร)' }
+      }, 'ลงบัญชีของถาวรขึ้นระบบจริงแล้ว ✓');
+      // ซื้อสินค้า: liff_purchase_save — backend สร้าง CASE + ใบสั่งซื้อ (fin_purchase_orders+รายการ) + ลงบัญชี (เดบิต=เครดิต) + เอกสารร่าง ครบใน transaction เดียว
+      else this.pushLive('liff_purchase_save', {
+        entity_id: this.currentPayerId(), entity_name: (this.payerEntity() || {}).name || null, entity_tax_id: (this.payerEntity() || {}).tax_id || null,
+        vendor_id: vid, vendor_name: vn,
+        route: beR, total, vat, is_stock: true, category_account: '5010',
         description: this.routeLabel() + ' — ' + vn,
         items: this.cartLines().map(l => ({ item_name: l.it.name, qty: l.qty, unit: l.it.unit, unit_price: l.price })),
-        ...(isAsset ? { asset: { name: vn + ' (ของถาวร)' } } : {})
+        shipping_cost: +this.state.cart.ship || 0, packaging_cost: +this.state.cart.box || 0,
+        draft: false, idem: 'liff-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8)
       }, 'ลงบัญชีขึ้นระบบจริงแล้ว ✓ (เดบิต=เครดิต)');
-      else this.pop('ยังจับคู่ร้านนี้กับระบบจริงไม่ได้ (ลองปิด-เปิดแอปใหม่) — บันทึกในเครื่องไว้ก่อน');
     } else {
       this.pop('ตอนนี้เป็นโหมดสาธิต (ยังไม่ได้เข้าผ่าน LINE) — ยังไม่เขียนขึ้นระบบจริง');
     }
     if (!missing.length && needDoc) {
       const docType = info.rule.doc === 'cert' ? 'ใบรับรองแทนใบเสร็จ' : 'ใบสำคัญจ่าย';
       const v = this.vendorById(this.state.cart.vendorId);
+      const pe = this.payerEntity() || {};
       const drafts = this.state.drafts.slice();
-      drafts.unshift({ id: 'PV-2569-' + String(44 + drafts.length).padStart(4, '0'), type: docType, entity: 'กะเพราโคตรคลีน', vendorId: v.id, amount: this.grandTotal(), date: 'วันนี้', payee: v.name + ' (โอนธนาคาร)', ready: true });
+      // ชื่อผู้จ่าย = กิจการที่ผู้ใช้เลือก (ไม่ใส่ชื่อแบรนด์เอง) · ใบรับรองฯ เซ็นได้เลย ไม่ต้องมีเลขบัตรผู้รับ
+      drafts.unshift({ id: (info.rule.doc === 'cert' ? 'RC-2569-' : 'PV-2569-') + String(44 + drafts.length).padStart(4, '0'), type: docType, entity: pe.name || this._entityName || 'กิจการ', entityTaxId: pe.tax_id || '', vendorId: v.id, amount: this.grandTotal(), date: 'วันนี้', payee: v.name + (info.rule.doc === 'cert' ? ' (จ่ายสด)' : ' (โอนธนาคาร)'), ready: true });
       this.setState({ drafts });
     }
     this.setState({
@@ -1765,6 +1961,7 @@ class Component extends DCLogic {
     else if (m.kind === 'item') this.saveItemForm(m);
     else if (m.kind === 'price') this.savePriceForm(m);
     else if (m.kind === 'rule') this.saveRuleForm(m);
+    else if (m.kind === 'entity') this.saveEntityForm(m);
     this.setState({ modal: null });
   };
 
@@ -1980,7 +2177,7 @@ class Component extends DCLogic {
   };
 
   /* ---------- ค่าใช้จ่ายไม่ใช่สินค้า ---------- */
-  startExpense = () => this.setState({ screen: 'expense', expense: { cat: '', amount: '', note: '', isAsset: false } });
+  startExpense = () => this.setState({ screen: 'expense', expense: { cat: '', amount: '', note: '', isAsset: false, payerId: this.state.defaultEntityId || null } });
   expSet = (patch) => this.setState({ expense: Object.assign({}, this.state.expense, patch) });
   confirmExpense = () => {
     const ex = this.state.expense;
@@ -1992,8 +2189,11 @@ class Component extends DCLogic {
       // ผังบัญชีจริง (fin_accounts): 5210 การตลาด · 5220 เบ็ดเตล็ด · 5900 ค่าใช้จ่ายอื่น (ไม่มีเลข 5410 ในผังจริง)
       const accByCat = { 'ค่าไฟฟ้า': '5220', 'ค่าน้ำประปา': '5220', 'ค่าเช่า': '5220', 'ค่าขนส่ง/เดินทาง': '5220', 'ค่าการตลาด': '5210', 'ค่าธรรมเนียมธนาคาร': '5900', 'เบ็ดเตล็ด': '5220' };
       const isAsset = !!ex.isAsset;
+      const pe = this.entityById(ex.payerId) || this.payerEntity() || {};
       this.pushLive('summary_confirm', {
-        entity_id: this._entityId, route: '1b', total: +ex.amount || 0, // 1b = มีบิล/ไม่มี VAT · เข้าทั้ง 2 งบ · ไม่สร้างเอกสารเพิ่ม
+        entity_id: ex.payerId || this.state.defaultEntityId || this._entityId,
+        entity_name: pe.name || null, entity_tax_id: pe.tax_id || null,
+        route: '1b', total: +ex.amount || 0, // 1b = มีบิล/ไม่มี VAT · เข้าทั้ง 2 งบ · ไม่สร้างเอกสารเพิ่ม
         category_account: accByCat[ex.cat] || '5220', is_stock: false, is_asset: isAsset,
         vendor_name: ex.cat, description: ex.cat + (ex.note ? ' · ' + ex.note : ''),
         ...(isAsset ? { asset: { name: ex.cat } } : {})
@@ -2699,6 +2899,27 @@ class Component extends DCLogic {
     const navC = (s) => st.screen === s ? '#F76707' : '#B8A08D';
     const navF = (s) => st.screen === s ? 'none' : 'grayscale(1) opacity(.55)';
 
+    // ---- ผู้จ่าย/กิจการ (ใช้ในสรุปซื้อ + ค่าใช้จ่าย + ตั้งค่า) ----
+    const entList = this.entitiesList();
+    const defId = st.defaultEntityId;
+    const entOpts = entList.map(e => ({ v: e.id, t: e.name + (e.id === defId ? ' (ค่าเริ่มต้น)' : '') }));
+    const payerId = this.currentPayerId();
+    const payerEnt = this.entityById(payerId) || {};
+    const payerMetaText = this.entityTypeLabel(payerEnt.type) + (payerEnt.tax_id ? ' · เลขภาษี ' + payerEnt.tax_id : ' · ยังไม่ใส่เลขภาษี (เพิ่มได้ในตั้งค่า)');
+    const exPayerId = (st.expense && st.expense.payerId) || defId || (entList[0] || {}).id;
+    const exPayerEnt = this.entityById(exPayerId) || {};
+    const entityCards = entList.map(e => ({
+      name: e.name, typeLabel: this.entityTypeLabel(e.type),
+      taxText: e.tax_id ? 'เลขประจำตัว ' + e.tax_id : 'ยังไม่ใส่เลขประจำตัว',
+      addrText: e.address || 'ยังไม่ใส่ที่อยู่',
+      vatBadge: e.vat_registered ? 'จด VAT' : 'ไม่จด VAT',
+      vatFg: e.vat_registered ? '#2B8A3E' : '#B08968', vatBg: e.vat_registered ? '#EBFBEE' : '#F5EFE9',
+      isDefault: e.id === defId, notDefault: e.id !== defId,
+      border: e.id === defId ? '#B197FC' : '#F1E4D4',
+      makeDefault: () => this.setDefaultEntity(e.id),
+      edit: () => this.entityForm(e), del: () => this.delEntity(e)
+    }));
+
     return {
       ...this.extraVals(),
       ...this.pageVals(),
@@ -2742,6 +2963,8 @@ class Component extends DCLogic {
       summaryLines, sumShipText: this.fmt(+st.cart.ship || 0), sumBoxText: this.fmt(+st.cart.box || 0),
       sumDocText: rInfo ? rInfo.result : '—', sumBookText: rInfo ? rInfo.book : '—',
       sumEvText: evAllDone ? 'ครบทุกชิ้น ✓' : 'ขาด ' + this.evMissing().length + ' ชิ้น (เติมภายหลังได้ · กดยืนยันลงบัญชีได้เลย)',
+      payerOpts: entOpts, payerVal: payerId, payerName: payerEnt.name || '—', payerMeta: payerMetaText,
+      onPayer: (e) => this.setState({ cart: Object.assign({}, st.cart, { payerId: e.target.value }) }),
       confirmBuy: this.confirmBuy,
       successTitle: st.success ? st.success.title : '', successDesc: st.success ? st.success.desc : '',
 
@@ -2765,6 +2988,10 @@ class Component extends DCLogic {
       addItem: () => this.itemForm(dv, null),
 
       hasSig: !!st.sig, noSig: !st.sig, sigThumb: st.sig,
+      entityCards, addEntity: () => this.entityForm(null),
+      geminiModelVal: st.geminiModel || 'gemini-3.5-flash-lite', onGeminiModel: (e) => this.setGeminiModel(e.target.value),
+      expPayerOpts: entOpts, expPayerVal: exPayerId, expPayerName: exPayerEnt.name || '—',
+      onExpPayer: (e) => this.expSet({ payerId: e.target.value }),
       onSigFile: (e) => this.readFile(e, (url) => { this.setState({ sig: url }); this.save(); this.pop('บันทึกลายเซ็นแล้ว'); }),
       toggleChars: () => this.setState({ prefsChars: st.prefsChars === false }, () => this.save()),
       charsBg: st.prefsChars !== false ? '#37B24D' : '#D9C6B2',
@@ -2773,7 +3000,7 @@ class Component extends DCLogic {
       resetData: () => { if (window.confirm('ล้างข้อมูลทดลองทั้งหมด กลับค่าตั้งต้น?')) { localStorage.removeItem('kk_liff_v1'); this.loadDB(); this.pop('กลับค่าตั้งต้นแล้ว'); } },
 
       hasModal: !!m, closeModal: this.closeModal, stopClick: this.stopClick, modalSave: this.modalSave,
-      modalIsForm: !!m && (m.kind === 'vendor' || m.kind === 'item' || m.kind === 'price' || m.kind === 'rule'),
+      modalIsForm: !!m && (m.kind === 'vendor' || m.kind === 'item' || m.kind === 'price' || m.kind === 'rule' || m.kind === 'entity'),
       modalIsDoc: !!m && m.kind === 'doc', modalIsSign: !!m && m.kind === 'sign',
       modalTitle: m ? m.title : '', modalFields,
       modalHasImgField: !!m && (m.kind === 'vendor' || m.kind === 'item'),
@@ -2784,6 +3011,7 @@ class Component extends DCLogic {
       priceSaveBg: m && m.saveToVendor ? '#37B24D' : '#E4D5C3', priceSaveMark: m && m.saveToVendor ? '✓' : '',
       togglePriceSave: () => { m.saveToVendor = !m.saveToVendor; this.forceUpdate(); },
       docType: m && m.d ? m.d.type : '', docNo: m && m.d ? m.d.id : '', docEntity: m && m.d ? m.d.entity : '',
+      docEntityTax: m && m.d && m.d.entityTaxId ? ('เลขภาษีผู้จ่าย ' + m.d.entityTaxId) : '', docHasEntityTax: !!(m && m.d && m.d.entityTaxId),
       docDate: m && m.d ? m.d.date : '', docPayee: m && m.d ? m.d.payee : '',
       docAmountText: m && m.d ? this.fmt(m.d.amount) : '', docAmountWords: m && m.d ? thaiBaht(m.d.amount) : '',
 

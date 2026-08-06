@@ -53,7 +53,7 @@ window.KK_HELPERS = (function () {
       { id: 'bill', group: 'main', title: 'มีบิล / ใบเสร็จ (ไม่มี VAT)', desc: 'ไม่ต้องสร้างเอกสารเพิ่ม', doc: 'none', vat: false, book: 'both' },
       { id: 'slip', group: 'main', title: 'มีแค่สลิปโอน', desc: 'พบบ่อยสุด · ระบบสร้างใบสำคัญจ่ายให้', doc: 'pv', vat: false, book: 'both' },
       { id: 'none_transfer', group: 'none', title: 'โอนเงิน (มีสลิป)', desc: 'พิสูจน์ผู้รับได้ → ระบบสร้างใบสำคัญจ่าย · ลงภาษีได้', doc: 'pv', vat: false, book: 'both' },
-      { id: 'none_cashid', group: 'none', title: 'จ่ายสด · ระบุตัวผู้รับได้', desc: 'เช่นแท็กซี่/วิน → ใบรับรองแทนใบเสร็จ · ลงภาษีได้', doc: 'cert', vat: false, book: 'both' },
+      { id: 'none_cashid', group: 'none', title: 'จ่ายสด · ระบุชื่อผู้รับได้', desc: 'เช่น วิน/ค่าส่ง/แผงลอย → ใบรับรองแทนใบเสร็จ · กรอกแค่ชื่อผู้รับ ไม่ต้องใช้เลขบัตร · ลงภาษีได้', doc: 'cert', vat: false, book: 'both' },
       { id: 'none_cashno', group: 'none', title: 'จ่ายสด · พิสูจน์ผู้รับไม่ได้เลย', desc: 'เข้าเฉพาะงบส่วนตัว ระบบกันไม่ให้เข้างบจำลองนิติ', doc: 'none', vat: false, book: 'inhouse' },
     ];
   }
@@ -62,7 +62,7 @@ window.KK_HELPERS = (function () {
   function bookLabel(r) { return r.book === 'inhouse' ? 'เฉพาะงบส่วนตัว' : 'เข้าทั้ง 2 งบ'; }
   function ruleResult(r) {
     if (r.doc === 'pv') return 'ระบบสร้าง "ใบสำคัญจ่าย" ให้อัตโนมัติ + แนบหลักฐาน';
-    if (r.doc === 'cert') return 'ระบบสร้าง "ใบรับรองแทนใบเสร็จ" ให้กรอกผู้รับ';
+    if (r.doc === 'cert') return 'ระบบสร้าง "ใบรับรองแทนใบเสร็จ" — กรอกแค่ชื่อผู้รับ (ไม่ต้องใช้เลขบัตร)';
     if (r.book === 'inhouse') return 'บันทึกเข้าเฉพาะงบส่วนตัว (ระบบกันอัตโนมัติ)';
     if (r.vat) return 'ไม่สร้างเอกสารเพิ่ม + แยกภาษีซื้อเข้า VAT (ใช้ในงบจำลองนิติ)';
     return 'ใช้เอกสารจากร้านเป็นหลักฐานได้เลย ไม่สร้างเอกสารเพิ่ม';
