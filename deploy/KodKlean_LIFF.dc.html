@@ -1,0 +1,2799 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="data.js"></script>
+<script src="config.js"></script>
+<script src="kk-helpers.js"></script>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<style>
+  body { margin:0; background:#FFF4E6; font-family:'Noto Sans Thai',sans-serif; }
+  a { color:#F76707; } a:hover { color:#E8590C; }
+  input,button,select,textarea { font-family:'Noto Sans Thai',sans-serif; }
+  @keyframes kkpop { 0%{transform:scale(.6);opacity:0} 70%{transform:scale(1.06)} 100%{transform:scale(1);opacity:1} }
+  @keyframes kkfloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+</style>
+</helmet>
+
+<template id="__bundler_thumbnail">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#63C6F5"/><stop offset=".5" stop-color="#9D8BF3"/><stop offset="1" stop-color="#FF93C6"/>
+    </linearGradient></defs>
+    <rect width="240" height="240" rx="48" fill="url(#g)"/>
+    <text x="120" y="150" font-size="96" font-family="'Noto Sans Thai',sans-serif" font-weight="900" fill="#fff" text-anchor="middle">฿</text>
+  </svg>
+</template>
+
+<div style="min-height:100vh;background:linear-gradient(160deg,#FFF3D6 0%,#FFE3EC 45%,#DFF6FF 100%);display:flex;justify-content:center">
+<div style="width:100%;max-width:440px;position:relative;padding:0 0 110px 0;font-size:16px;color:#3D2C29">
+
+  <!-- ═══════════ TOAST ═══════════ -->
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:99;background:#2B8A3E;color:#fff;padding:12px 22px;border-radius:999px;font-weight:700;font-size:16px;box-shadow:0 6px 20px rgba(43,138,62,.4);animation:kkpop .3s ease">{{ toast }}</div>
+  </sc-if>
+
+  <!-- ═══════════ หน้าหลัก ═══════════ -->
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <div data-screen-label="หน้าหลัก">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 18px 4px 18px">
+      <img src="assets/brandlogos/kodklean_group_logo.webp" alt="KodKlean Group" style="height:44px">
+      <div style="display:flex;gap:10px;align-items:center">
+        <button onClick="{{ goSettings }}" style="background:#fff;border:none;border-radius:16px;padding:8px 14px;font-size:15px;font-weight:700;color:#7048E8;box-shadow:0 3px 10px rgba(112,72,232,.15);cursor:pointer">ตั้งค่า</button>
+        <div style="position:relative;background:#fff;border-radius:16px;padding:6px;box-shadow:0 3px 10px rgba(255,150,80,.2)">
+          <img src="assets/icons/icon_notification_bell.webp" alt="แจ้งเตือน" style="width:34px;height:34px;display:block">
+          <div style="position:absolute;top:-4px;right:-4px;background:#F76707;color:#fff;font-size:12px;font-weight:800;border-radius:999px;min-width:20px;height:20px;display:flex;align-items:center;justify-content:center">3</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin:14px 16px 0 16px;background:linear-gradient(115deg,#63C6F5,#9D8BF3,#FF93C6,#FFB765);border-radius:26px;padding:18px 18px 0 18px;color:#fff;position:relative;overflow:hidden">
+      <div style="display:flex;justify-content:space-between;gap:8px">
+        <div style="padding-bottom:18px">
+          <div style="font-size:15px;font-weight:600;opacity:.95">{{ todayText }}</div>
+          <div style="font-size:21px;font-weight:900;line-height:1.3;margin-top:4px;text-shadow:0 1px 3px rgba(0,0,0,.15)">สวัสดีจ้า <span style="white-space:nowrap">อาเฮีย &amp; แม่พัน</span></div>
+          <div style="font-size:16px;font-weight:600;margin-top:4px;opacity:.95;text-shadow:0 1px 2px rgba(0,0,0,.12)">วันนี้ซื้ออะไรมา บันทึกเลย!</div>
+          <button onClick="{{ startBuy }}" style="margin-top:12px;background:#fff;color:#8B5CF6;border:none;border-radius:16px;padding:12px 20px;font-size:17px;font-weight:800;box-shadow:0 4px 12px rgba(0,0,0,.15);cursor:pointer">+ บันทึกการซื้อ</button>
+        </div>
+        <sc-if value="{{ showMascots }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;align-items:flex-end;gap:0;flex-shrink:0;align-self:flex-end">
+          <img src="assets/poses2/boynavy_09.png" alt="อาเฮีย" style="height:152px;display:block;margin-right:-20px">
+          <img src="assets/poses2/girlpink_09.png" alt="แม่พัน" style="height:148px;display:block">
+        </div>
+        </sc-if>
+      </div>
+    </div>
+
+    <div style="margin:14px 16px 0 16px;background:#fff;border-radius:22px;padding:16px 18px;box-shadow:0 4px 16px rgba(255,140,90,.12);display:flex;align-items:center;gap:14px">
+      <sc-if value="{{ showMascots }}" hint-placeholder-val="{{ true }}">
+        <img src="assets/mascots/small_03-mascot-profit-loss.webp" alt="" style="width:62px;height:62px;animation:kkfloat 3.4s ease-in-out infinite">
+      </sc-if>
+      <div style="flex:1">
+        <div style="font-size:15px;font-weight:700;color:#8A6D5C">เงินไหลออกเดือนนี้ (ส.ค.)</div>
+        <div style="font-size:34px;font-weight:900;color:#7048E8;line-height:1.15">{{ monthOutText }}</div>
+        <div style="font-size:14px;font-weight:600;color:#B08968">ค่าใช้จ่ายฝั่งซื้อ · ยังไม่รวมรายการร่าง</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin:12px 16px 0 16px">
+      <button onClick="{{ goApprove }}" style="flex:1;background:#FFF4E6;border:2px solid #E5DBFF;border-radius:18px;padding:10px 6px;cursor:pointer">
+        <div style="font-size:24px;font-weight:900;color:#7048E8">{{ nApprove }}</div>
+        <div style="font-size:14px;font-weight:700;color:#5F3DC4">รออนุมัติ</div>
+      </button>
+      <button onClick="{{ goReceive }}" style="flex:1;background:#FFF9DB;border:2px solid #FFE066;border-radius:18px;padding:10px 6px;cursor:pointer">
+        <div style="font-size:24px;font-weight:900;color:#E67700">{{ nReceive }}</div>
+        <div style="font-size:14px;font-weight:700;color:#B35C00">ค้างรับของ</div>
+      </button>
+      <button onClick="{{ goDraftTab }}" style="flex:1;background:#F3F0FF;border:2px solid #D0BFFF;border-radius:18px;padding:10px 6px;cursor:pointer">
+        <div style="font-size:24px;font-weight:900;color:#7048E8">{{ nDraft }}</div>
+        <div style="font-size:14px;font-weight:700;color:#5F3DC4">ร่างรอเติม</div>
+      </button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 16px 0 16px">
+      <button onClick="{{ startBuy }}" style="background:#fff;border:none;border-radius:22px;padding:16px 12px;box-shadow:0 4px 14px rgba(255,140,90,.14);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px">
+        <img src="assets/icons/icon_camera.webp" alt="" style="width:64px;height:64px">
+        <div style="font-size:17px;font-weight:800;color:#3D2C29">บันทึกการซื้อ</div>
+        <div style="font-size:13px;font-weight:600;color:#B08968">ถ่ายรูป / อัปโหลด / กรอกเอง</div>
+      </button>
+      <button onClick="{{ goReceive }}" style="background:#fff;border:none;border-radius:22px;padding:16px 12px;box-shadow:0 4px 14px rgba(255,140,90,.14);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px">
+        <img src="assets/icons/icon_receive_box.webp" alt="" style="width:64px;height:64px">
+        <div style="font-size:17px;font-weight:800;color:#3D2C29">รับของ</div>
+        <div style="font-size:13px;font-weight:600;color:#B08968">เช็คของมาส่ง ครบ/ขาด</div>
+      </button>
+      <button onClick="{{ goDraftTab }}" style="background:#fff;border:none;border-radius:22px;padding:16px 12px;box-shadow:0 4px 14px rgba(255,140,90,.14);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px">
+        <img src="assets/icons/icon_document_folder.webp" alt="" style="width:64px;height:64px">
+        <div style="font-size:17px;font-weight:800;color:#3D2C29">ตะกร้ารอจับคู่</div>
+        <div style="font-size:13px;font-weight:600;color:#B08968">หลักฐานขาด เติมทีหลังได้</div>
+      </button>
+      <button onClick="{{ goApprove }}" style="background:#fff;border:none;border-radius:22px;padding:16px 12px;box-shadow:0 4px 14px rgba(255,140,90,.14);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px">
+        <img src="assets/icons/icon_tax_invoice.webp" alt="" style="width:64px;height:64px">
+        <div style="font-size:17px;font-weight:800;color:#3D2C29">อนุมัติ + เซ็น</div>
+        <div style="font-size:13px;font-weight:600;color:#B08968">เอกสารรอลายเซ็น</div>
+      </button>
+    </div>
+
+    <div style="display:flex;gap:12px;margin:14px 16px 0 16px">
+      <button onClick="{{ startMulti }}" style="flex:1;background:linear-gradient(135deg,#E3F2FF,#EDE7FF);border:none;border-radius:20px;padding:14px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px">
+        <img src="assets/icons/icon_payment_slip.webp" alt="" style="width:44px;height:44px">
+        <div style="font-size:15px;font-weight:800;color:#5F3DC4;text-align:center">สลิปเดียว หลายร้าน</div>
+      </button>
+      <button onClick="{{ startExpense }}" style="flex:1;background:linear-gradient(135deg,#FFF3D6,#FFE3EC);border:none;border-radius:20px;padding:14px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px">
+        <img src="assets/icons/icon_document_folder.webp" alt="" style="width:44px;height:44px">
+        <div style="font-size:15px;font-weight:800;color:#B35C00;text-align:center">ค่าใช้จ่ายอื่น (ไม่ใช่สินค้า)</div>
+      </button>
+    </div>
+
+    <div style="margin:18px 16px 0 16px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-size:19px;font-weight:900">รายการล่าสุด</div>
+        <button onClick="{{ goDiary }}" style="background:none;border:none;font-size:15px;font-weight:700;color:#F76707;cursor:pointer">เปิดสมุดบันทึก ›</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <sc-for list="{{ recent3 }}" as="p" hint-placeholder-count="3">
+          <div style="background:#fff;border-radius:18px;padding:12px 14px;box-shadow:0 3px 10px rgba(255,140,90,.1);display:flex;align-items:center;gap:12px">
+            <img src="{{ p.logo }}" alt="" style="width:46px;height:46px;object-fit:contain;border-radius:12px;background:#FFF8F0;padding:3px">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:16px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.vendorName }}</div>
+              <div style="font-size:13px;font-weight:600;color:#B08968">{{ p.date }} · {{ p.route }}</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:17px;font-weight:900">{{ p.totalText }}</div>
+              <div style="font-size:12px;font-weight:800;color:{{ p.statusColor }};background:{{ p.statusBg }};border-radius:999px;padding:2px 10px;display:inline-block">{{ p.status }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="margin:18px 16px 0 16px;background:#FFFDF5;border:2px dashed #FFD8A8;border-radius:20px;padding:12px 14px">
+      <div style="font-size:13px;font-weight:800;color:#B08968;margin-bottom:8px;text-align:center">กิจการในเครือ KodKlean Group</div>
+      <div style="display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap">
+        <img src="assets/brandlogos/krapao_kod_clean_logo.webp" alt="กะเพราโคตรคลีน" style="height:36px">
+        <img src="assets/brandlogos/five_percent_khaomangai_logo.webp" alt="5% ข้าวมันไก่" style="height:38px">
+        <img src="assets/brandlogos/luksao_tam_eng_logo.webp" alt="ลูกสาวทำเอง" style="height:38px">
+        <img src="assets/brandlogos/raimun_logo.webp" alt="ไร้มัน" style="height:36px">
+        <img src="assets/brandlogos/redrink_logo.webp" alt="Re:Drink" style="height:26px">
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ FLOW บันทึกซื้อ ═══════════ -->
+  <sc-if value="{{ inBuy }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="บันทึกการซื้อ">
+    <div style="display:flex;align-items:center;gap:12px;padding:16px 16px 8px 16px">
+      <button onClick="{{ buyBack }}" style="background:#fff;border:none;border-radius:14px;width:44px;height:44px;font-size:22px;font-weight:900;color:#F76707;box-shadow:0 3px 10px rgba(255,140,90,.2);cursor:pointer">‹</button>
+      <div style="flex:1">
+        <div style="font-size:20px;font-weight:900">{{ buyTitle }}</div>
+        <div style="display:flex;gap:6px;margin-top:6px">
+          <sc-for list="{{ buyDots }}" as="d" hint-placeholder-count="6">
+            <div style="height:8px;border-radius:99px;flex:1;background:{{ d.bg }}"></div>
+          </sc-for>
+        </div>
+      </div>
+      <sc-if value="{{ showMascots }}" hint-placeholder-val="{{ true }}">
+        <img src="{{ buyPairA }}" alt="อาเฮีย" style="height:88px;margin-right:-8px">
+        <img src="{{ buyPairB }}" alt="แม่พัน" style="height:86px">
+      </sc-if>
+    </div>
+
+    <!-- A1 เลือกร้าน -->
+    <sc-if value="{{ isBuy1 }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:4px 16px">
+        <input value="{{ searchVal }}" onChange="{{ onSearch }}" placeholder="ค้นหาร้านค้า…" style="width:100%;box-sizing:border-box;border:2px solid #FFD8A8;border-radius:16px;padding:13px 16px;font-size:17px;font-weight:600;background:#fff;outline:none">
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+          <sc-for list="{{ vendorsView }}" as="v" hint-placeholder-count="5">
+            <button onClick="{{ v.pick }}" style="background:#fff;border:none;border-radius:20px;padding:12px 14px;box-shadow:0 3px 12px rgba(255,140,90,.12);cursor:pointer;display:flex;align-items:center;gap:14px;text-align:left">
+              <img src="{{ v.logo }}" alt="" style="width:58px;height:58px;object-fit:contain;border-radius:14px;background:#FFF8F0;padding:4px;flex-shrink:0">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:17px;font-weight:800">{{ v.name }}</div>
+                <div style="font-size:13px;font-weight:600;color:#B08968">{{ v.channel }}</div>
+                <div style="font-size:13px;font-weight:700;color:#F76707">{{ v.meta }}</div>
+              </div>
+              <sc-if value="{{ v.isFreq }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:12px;font-weight:800;color:#2B8A3E;background:#EBFBEE;border-radius:999px;padding:3px 10px;flex-shrink:0">ซื้อบ่อย</div>
+              </sc-if>
+              <div style="font-size:22px;color:#FFB27D;font-weight:900">›</div>
+            </button>
+          </sc-for>
+          <button onClick="{{ addVendorFromBuy }}" style="background:#FFF8F0;border:2px dashed #FFB27D;border-radius:20px;padding:16px;cursor:pointer;font-size:17px;font-weight:800;color:#F76707">+ เพิ่มร้านใหม่ (กรอกสั้นๆ ใช้ได้ทันที)</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- A2 เลือกสินค้า -->
+    <sc-if value="{{ isBuy2 }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:4px 16px 90px 16px">
+        <div style="background:#fff;border-radius:18px;padding:10px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 10px rgba(255,140,90,.12)">
+          <img src="{{ buyVendorLogo }}" alt="" style="width:44px;height:44px;object-fit:contain">
+          <div style="font-size:17px;font-weight:800;flex:1">{{ buyVendorName }}</div>
+          <div style="font-size:13px;font-weight:700;color:#B08968">แตะราคาเพื่อแก้ได้</div>
+        </div>
+        <sc-if value="{{ aiEnabled }}" hint-placeholder-val="{{ false }}">
+          <label style="display:flex;align-items:center;gap:12px;margin-top:10px;background:linear-gradient(135deg,#EDE7FF,#E3F2FF);border:2px solid #B197FC;border-radius:16px;padding:12px 14px;cursor:pointer">
+            <input type="file" accept="image/*" onChange="{{ aiScan }}" style="display:none">
+            <img src="assets/mascots/small_02-mascot-auto-decision.webp" alt="" style="width:44px;height:44px">
+            <div style="flex:1"><div style="font-size:16px;font-weight:800;color:#5F3DC4">ให้ AI อ่านจากรูป (บิลยาวๆ)</div><div style="font-size:13px;font-weight:600;color:#7048E8">AI เติมให้ · ตรวจ/แก้ก่อนยืนยัน</div></div>
+          </label>
+        </sc-if>
+        <sc-if value="{{ aiDisabled }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ aiScanBlocked }}" style="display:flex;align-items:center;gap:12px;margin-top:10px;width:100%;box-sizing:border-box;background:#F5EFE9;border:2px dashed #D9C6B2;border-radius:16px;padding:12px 14px;cursor:pointer;opacity:.75">
+            <img src="assets/mascots/small_02-mascot-auto-decision.webp" alt="" style="width:44px;height:44px;filter:grayscale(.6)">
+            <div style="flex:1;text-align:left"><div style="font-size:16px;font-weight:800;color:#8A6D5C">ให้ AI อ่านจากรูป</div><div style="font-size:13px;font-weight:600;color:#B08968">ยังไม่ได้เชื่อม Gemini — แตะดูวิธีเปิด</div></div>
+          </button>
+        </sc-if>
+        <sc-if value="{{ aiRunning }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:10px;background:#FFF9DB;border-radius:14px;padding:12px 14px;font-size:15px;font-weight:800;color:#8A6D00">กำลังให้ AI อ่านรูป… ⏳</div>
+        </sc-if>
+        <sc-if value="{{ aiFilled }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:10px;background:#EBFBEE;border-radius:14px;padding:12px 14px;font-size:15px;font-weight:800;color:#2B8A3E">AI เติมจำนวนให้แล้ว — ตรวจ/แก้ที่ปุ่ม −/+ ก่อนยืนยัน ✎</div>
+        </sc-if>
+        <sc-if value="{{ hasCats }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:8px;margin-top:10px;overflow-x:auto;padding-bottom:4px">
+            <sc-for list="{{ catChips }}" as="c" hint-placeholder-count="4">
+              <button onClick="{{ c.pick }}" style="flex-shrink:0;border:none;border-radius:999px;padding:9px 16px;font-size:15px;font-weight:800;cursor:pointer;background:{{ c.bg }};color:{{ c.fg }}">{{ c.name }}</button>
+            </sc-for>
+          </div>
+        </sc-if>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">
+          <sc-for list="{{ buyItems }}" as="it" hint-placeholder-count="6">
+            <div style="background:#fff;border-radius:18px;padding:10px 12px;box-shadow:0 3px 10px rgba(255,140,90,.1);display:flex;align-items:center;gap:12px">
+              <img src="{{ it.img }}" alt="" style="width:60px;height:60px;object-fit:contain;border-radius:14px;background:#FFF8F0;flex-shrink:0">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:16px;font-weight:800;line-height:1.25">{{ it.name }}</div>
+                <div style="font-size:13px;font-weight:600;color:#B08968">{{ it.spec }}</div>
+                <button onClick="{{ it.editPrice }}" style="background:#F3F0FF;border:none;border-radius:999px;padding:3px 12px;font-size:14px;font-weight:800;color:#7048E8;cursor:pointer;margin-top:3px">{{ it.priceText }} / {{ it.unit }} ✎</button>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <button onClick="{{ it.dec }}" style="width:38px;height:38px;border-radius:12px;border:none;background:#FFE8CC;color:#E8590C;font-size:22px;font-weight:900;cursor:pointer">−</button>
+                  <div style="min-width:34px;text-align:center;font-size:19px;font-weight:900">{{ it.qty }}</div>
+                  <button onClick="{{ it.inc }}" style="width:38px;height:38px;border-radius:12px;border:none;background:#FF8A3D;color:#fff;font-size:22px;font-weight:900;cursor:pointer">+</button>
+                </div>
+                <sc-if value="{{ it.hasQty }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:14px;font-weight:900;color:#2B8A3E">{{ it.lineText }}</div>
+                </sc-if>
+              </div>
+            </div>
+          </sc-for>
+          <button onClick="{{ addItemFromBuy }}" style="background:#FFF8F0;border:2px dashed #FFB27D;border-radius:18px;padding:14px;cursor:pointer;font-size:16px;font-weight:800;color:#F76707">+ สินค้าใหม่ยังไม่มีในร้าน — เพิ่มด่วน</button>
+        </div>
+      </div>
+      <div style="position:fixed;bottom:96px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:408px;background:#3D2C29;border-radius:20px;padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 24px rgba(61,44,41,.35);z-index:40">
+        <div style="flex:1;color:#fff">
+          <div style="font-size:13px;font-weight:700;opacity:.8">{{ cartCountText }}</div>
+          <div style="font-size:20px;font-weight:900">{{ cartTotalText }}</div>
+        </div>
+        <button onClick="{{ buyNext }}" style="background:{{ next2Bg }};color:#fff;border:none;border-radius:14px;padding:13px 26px;font-size:17px;font-weight:800;cursor:pointer">ถัดไป ›</button>
+      </div>
+    </sc-if>
+
+    <!-- A3 ค่าส่ง/ค่าลัง -->
+    <sc-if value="{{ isBuy3 }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:4px 16px;display:flex;flex-direction:column;gap:12px">
+        <div style="background:#fff;border-radius:20px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.12)">
+          <div style="font-size:17px;font-weight:800;margin-bottom:4px">ค่าส่ง</div>
+          <div style="font-size:13px;font-weight:600;color:#B08968;margin-bottom:8px">เด้งจากค่าปกติของร้าน — แก้ได้ทุกครั้ง</div>
+          <input type="number" value="{{ shipVal }}" onChange="{{ onShip }}" style="width:100%;box-sizing:border-box;border:2px solid #FFD8A8;border-radius:14px;padding:13px 16px;font-size:20px;font-weight:800;outline:none">
+        </div>
+        <div style="background:#fff;border-radius:20px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.12)">
+          <div style="font-size:17px;font-weight:800;margin-bottom:4px">ค่าลังโฟม / แพ็กกิ้ง</div>
+          <div style="font-size:13px;font-weight:600;color:#B08968;margin-bottom:8px">ร้านแชทแต่ละรอบไม่เท่ากัน ใส่ตามจริง</div>
+          <input type="number" value="{{ boxVal }}" onChange="{{ onBox }}" style="width:100%;box-sizing:border-box;border:2px solid #FFD8A8;border-radius:14px;padding:13px 16px;font-size:20px;font-weight:800;outline:none">
+        </div>
+        <div style="background:#EBFBEE;border-radius:18px;padding:12px 16px;font-size:16px;font-weight:800;color:#2B8A3E;display:flex;justify-content:space-between"><span>รวมทั้งบิล</span><span>{{ grandTotalText }}</span></div>
+        <button onClick="{{ buyNext }}" style="background:linear-gradient(135deg,#FF922B,#F76BB8);color:#fff;border:none;border-radius:18px;padding:16px;font-size:18px;font-weight:800;cursor:pointer;box-shadow:0 6px 18px rgba(247,107,184,.35)">ถัดไป ›</button>
+      </div>
+    </sc-if>
+
+    <!-- A4 คัดกรองเอกสาร -->
+    <sc-if value="{{ isBuy4 }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:4px 16px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:10px;background:#FFF9DB;border-radius:16px;padding:10px 14px">
+          <sc-if value="{{ showMascots }}" hint-placeholder-val="{{ true }}">
+            <img src="assets/mascots/small_02-mascot-auto-decision.webp" alt="" style="width:52px;height:52px">
+          </sc-if>
+          <div style="font-size:15px;font-weight:700;color:#8A6D00">เอกสารจากผู้ขายเป็นแบบไหน? เลือกแล้วระบบจัดการเอกสาร+ลงบัญชีให้เองเลย</div>
+        </div>
+        <sc-for list="{{ routeCards }}" as="r" hint-placeholder-count="4">
+          <button onClick="{{ r.pick }}" style="background:#fff;border:3px solid {{ r.border }};border-radius:20px;padding:12px 14px;cursor:pointer;display:flex;align-items:center;gap:14px;text-align:left">
+            <img src="{{ r.icon }}" alt="" style="width:54px;height:54px;flex-shrink:0">
+            <div style="flex:1">
+              <div style="font-size:17px;font-weight:800">{{ r.title }}</div>
+              <div style="font-size:14px;font-weight:600;color:#B08968">{{ r.desc }}</div>
+            </div>
+            <div style="width:28px;height:28px;border-radius:999px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;background:{{ r.checkBg }}">{{ r.check }}</div>
+          </button>
+        </sc-for>
+        <sc-if value="{{ showSub }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:16px;font-weight:800;color:#8A6D5C;margin-top:4px">จ่ายเงินยังไง?</div>
+          <sc-for list="{{ subCards }}" as="s" hint-placeholder-count="3">
+            <button onClick="{{ s.pick }}" style="background:#fff;border:3px solid {{ s.border }};border-radius:18px;padding:12px 14px;cursor:pointer;text-align:left">
+              <div style="font-size:16px;font-weight:800">{{ s.title }}</div>
+              <div style="font-size:14px;font-weight:600;color:#B08968">{{ s.desc }}</div>
+            </button>
+          </sc-for>
+        </sc-if>
+        <sc-if value="{{ routeHasResult }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#E7F5FF;border-radius:18px;padding:14px 16px">
+            <div style="font-size:16px;font-weight:900;color:#1971C2">{{ routeResultTitle }}</div>
+            <div style="font-size:15px;font-weight:600;color:#1864AB;margin-top:2px">{{ routeResultDesc }}</div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ routeHasWarn }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FFF4E6;border-radius:18px;padding:12px 16px;font-size:15px;font-weight:700;color:#D9480F">{{ routeWarn }}</div>
+        </sc-if>
+        <button onClick="{{ buyNext }}" style="background:{{ next4Bg }};color:#fff;border:none;border-radius:18px;padding:16px;font-size:18px;font-weight:800;cursor:pointer">ถัดไป ›</button>
+      </div>
+    </sc-if>
+
+    <!-- A5 แนบหลักฐาน -->
+    <sc-if value="{{ isBuy5 }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:4px 16px;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:15px;font-weight:700;color:#8A6D5C">เช็คลิสต์หลักฐานของร้านนี้ — ไม่ครบก็บันทึกร่างไว้ก่อนได้ ไม่มีอะไรหาย</div>
+        <sc-for list="{{ evSlots }}" as="s" hint-placeholder-count="3">
+          <div style="background:#fff;border:3px solid {{ s.border }};border-radius:20px;padding:12px 14px">
+            <div style="display:flex;align-items:center;gap:14px">
+              <img src="{{ s.icon }}" alt="" style="width:50px;height:50px;flex-shrink:0">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:16px;font-weight:800">{{ s.label }}</div>
+                <div style="font-size:14px;font-weight:600;color:{{ s.subColor }}">{{ s.sub }}</div>
+              </div>
+              <div style="width:30px;height:30px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;background:{{ s.checkBg }};flex-shrink:0">{{ s.check }}</div>
+            </div>
+            <sc-if value="{{ s.hasThumbs }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-top:2px">
+                <sc-for list="{{ s.thumbs }}" as="t" hint-placeholder-count="2">
+                  <div style="position:relative;flex-shrink:0">
+                    <img src="{{ t.src }}" alt="" style="width:62px;height:62px;object-fit:cover;border-radius:12px;display:block">
+                    <button onClick="{{ t.del }}" style="position:absolute;top:-6px;right:-6px;width:22px;height:22px;border:2px solid #fff;border-radius:999px;background:#E8590C;color:#fff;font-size:11px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">✕</button>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <label style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;background:#FFF8F0;border:2px dashed #FFB27D;border-radius:12px;padding:9px;cursor:pointer">
+              <input type="file" accept="image/*" multiple onChange="{{ s.onFile }}" style="display:none">
+              <span style="font-size:14px;font-weight:800;color:#F76707">{{ s.addLabel }}</span>
+            </label>
+          </div>
+        </sc-for>
+        <div style="display:flex;gap:10px;margin-top:4px">
+          <button onClick="{{ saveDraft }}" style="flex:1;background:#fff;color:#7048E8;border:3px solid #D0BFFF;border-radius:18px;padding:15px;font-size:17px;font-weight:800;cursor:pointer">บันทึกร่าง</button>
+          <button onClick="{{ buyNext }}" style="flex:1.3;background:{{ next5Bg }};color:#fff;border:none;border-radius:18px;padding:15px;font-size:17px;font-weight:800;cursor:pointer">{{ next5Label }}</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- A6 สรุป -->
+    <sc-if value="{{ isBuy6 }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:4px 16px;display:flex;flex-direction:column;gap:12px">
+        <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 4px 14px rgba(255,140,90,.14)">
+          <div style="display:flex;align-items:center;gap:12px;border-bottom:2px dashed #FFE8CC;padding-bottom:10px;margin-bottom:10px">
+            <img src="{{ buyVendorLogo }}" alt="" style="width:46px;height:46px;object-fit:contain">
+            <div>
+              <div style="font-size:17px;font-weight:900">{{ buyVendorName }}</div>
+              <div style="font-size:13px;font-weight:600;color:#B08968">{{ todayText }}</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <sc-for list="{{ summaryLines }}" as="l" hint-placeholder-count="3">
+              <div style="display:flex;justify-content:space-between;gap:10px;font-size:15px;font-weight:700">
+                <span style="color:#5C4438">{{ l.name }} <span style="color:#B08968;font-weight:600">× {{ l.qtyText }}</span></span>
+                <span>{{ l.amtText }}</span>
+              </div>
+            </sc-for>
+            <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:#8A6D5C"><span>ค่าส่ง</span><span>{{ sumShipText }}</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:#8A6D5C"><span>ค่าลังโฟม</span><span>{{ sumBoxText }}</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:20px;font-weight:900;border-top:2px dashed #FFE8CC;padding-top:8px;color:#7048E8"><span>รวมทั้งบิล</span><span>{{ grandTotalText }}</span></div>
+          </div>
+        </div>
+        <div style="background:#E7F5FF;border-radius:20px;padding:14px 16px;display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:14px;font-weight:800;color:#1971C2">ระบบจะจัดการให้อัตโนมัติ (แก้ได้ทุกช่อง)</div>
+          <div style="font-size:15px;font-weight:700;color:#1864AB">เอกสาร: {{ sumDocText }}</div>
+          <div style="font-size:15px;font-weight:700;color:#1864AB">เข้างบ: {{ sumBookText }}</div>
+          <div style="font-size:15px;font-weight:700;color:#1864AB">หลักฐาน: {{ sumEvText }}</div>
+        </div>
+        <div style="background:#fff;border-radius:20px;padding:14px 16px;box-shadow:0 3px 12px rgba(255,140,90,.1);display:flex;align-items:center;gap:12px">
+          <div style="flex:1">
+            <div style="font-size:16px;font-weight:900">เป็นของถาวรไหม?</div>
+            <div style="font-size:13px;font-weight:600;color:#B08968">ตู้เย็น/อุปกรณ์ ฯลฯ · เปิดไว้ = ลงค่าใช้จ่ายทันที (ยังไม่คิดค่าเสื่อม)</div>
+          </div>
+          <button onClick="{{ toggleCartAsset }}" style="width:64px;height:36px;border:none;border-radius:999px;cursor:pointer;background:{{ cartAssetBg }};position:relative;flex-shrink:0">
+            <div style="position:absolute;top:4px;left:{{ cartAssetKnob }};width:28px;height:28px;border-radius:999px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:left .2s"></div>
+          </button>
+        </div>
+        <button onClick="{{ confirmBuy }}" style="background:linear-gradient(135deg,#37B24D,#2B8A3E);color:#fff;border:none;border-radius:18px;padding:17px;font-size:19px;font-weight:900;cursor:pointer;box-shadow:0 6px 18px rgba(43,138,62,.35)">ยืนยัน ส่งเข้าระบบ ✓</button>
+      </div>
+    </sc-if>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ สำเร็จ ═══════════ -->
+  <sc-if value="{{ isSuccess }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="บันทึกสำเร็จ" style="padding:40px 24px;text-align:center;animation:kkpop .4s ease">
+      <sc-if value="{{ showMascots }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;justify-content:center;align-items:flex-end;gap:0">
+          <img src="assets/poses2/boynavy_06.png" alt="อาเฮีย" style="height:132px;margin-right:-16px">
+          <img src="assets/mascots/big_mascot_05.webp" alt="" style="height:170px;animation:kkfloat 3s ease-in-out infinite;z-index:2">
+          <img src="assets/poses2/girlpink_06.png" alt="แม่พัน" style="height:132px;margin-left:-16px">
+        </div>
+      </sc-if>
+      <div style="font-size:26px;font-weight:900;margin-top:14px;color:#2B8A3E">{{ successTitle }}</div>
+      <div style="font-size:16px;font-weight:600;color:#8A6D5C;margin-top:6px">{{ successDesc }}</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:22px">
+        <button onClick="{{ goDiary }}" style="background:linear-gradient(135deg,#FF922B,#F76BB8);color:#fff;border:none;border-radius:18px;padding:15px;font-size:17px;font-weight:800;cursor:pointer">เปิดสมุดบันทึก</button>
+        <button onClick="{{ goHome }}" style="background:#fff;color:#F76707;border:3px solid #FFD8A8;border-radius:18px;padding:14px;font-size:17px;font-weight:800;cursor:pointer">กลับหน้าหลัก</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ═══════════ สลิปเดียว หลายร้าน ═══════════ -->
+  <sc-if value="{{ isMulti }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="สลิปหลายร้าน">
+    <div style="display:flex;align-items:center;gap:12px;padding:16px 16px 8px 16px">
+      <button onClick="{{ backHome }}" style="background:#fff;border:none;border-radius:14px;width:44px;height:44px;font-size:22px;font-weight:900;color:#F76707;box-shadow:0 3px 10px rgba(255,140,90,.2);cursor:pointer">‹</button>
+      <div style="flex:1">
+        <div style="font-size:20px;font-weight:900">สลิปเดียว หลายร้าน</div>
+        <div style="font-size:13px;font-weight:600;color:#8A6D5C">แตกยอดสลิปใบเดียวเข้าหลายร้าน</div>
+      </div>
+      <sc-if value="{{ showMascots }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;align-items:flex-end">
+          <img src="assets/poses2/boynavy_08.png" alt="อาเฮีย" style="height:86px;margin-right:-8px">
+          <img src="assets/poses2/girlpink_08.png" alt="แม่พัน" style="height:84px">
+        </div>
+      </sc-if>
+    </div>
+    <div style="padding:4px 16px;display:flex;flex-direction:column;gap:12px">
+      <div style="background:#fff;border-radius:20px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.12)">
+        <div style="font-size:17px;font-weight:800;margin-bottom:4px">ยอดรวมทั้งสลิป</div>
+        <div style="font-size:13px;font-weight:600;color:#B08968;margin-bottom:8px">ตัวเลขบนสลิปโอนเงินที่จ่ายไปจริง</div>
+        <input type="number" value="{{ multiTotalVal }}" onChange="{{ onMultiTotal }}" placeholder="0" style="width:100%;box-sizing:border-box;border:2px solid #FFD8A8;border-radius:14px;padding:13px 16px;font-size:22px;font-weight:900;outline:none;color:#7048E8">
+      </div>
+      <sc-for list="{{ multiRows }}" as="r" hint-placeholder-count="2">
+        <div style="background:#fff;border-radius:18px;padding:12px 14px;box-shadow:0 3px 10px rgba(255,140,90,.1);display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <img src="{{ r.logo }}" alt="" style="width:40px;height:40px;object-fit:contain;border-radius:10px;background:#FFF8F0;padding:2px;flex-shrink:0">
+            <select value="{{ r.vendorId }}" onChange="{{ r.onVendor }}" style="flex:1;min-width:0;border:2px solid #FFD8A8;border-radius:12px;padding:10px;font-size:15px;font-weight:800;background:#fff;outline:none;color:#3D2C29">
+              <option value="">เลือกร้าน…</option>
+              <sc-for list="{{ r.opts }}" as="o" hint-placeholder-count="4">
+                <option value="{{ o.id }}">{{ o.name }}</option>
+              </sc-for>
+            </select>
+            <button onClick="{{ r.del }}" style="background:#FFF4E6;color:#D9480F;border:none;border-radius:10px;width:38px;height:38px;font-size:18px;font-weight:900;cursor:pointer;flex-shrink:0">✕</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <button onClick="{{ r.cycleRoute }}" style="background:#F3F0FF;color:#7048E8;border:none;border-radius:12px;padding:10px 14px;font-size:14px;font-weight:800;cursor:pointer;white-space:nowrap">{{ r.routeLabel }} ⇄</button>
+            <input type="number" value="{{ r.amountVal }}" onChange="{{ r.onAmount }}" placeholder="ยอดร้านนี้" style="flex:1;min-width:0;box-sizing:border-box;border:2px solid #FFD8A8;border-radius:12px;padding:10px 12px;font-size:17px;font-weight:800;text-align:right;outline:none">
+          </div>
+        </div>
+      </sc-for>
+      <button onClick="{{ multiAddRow }}" style="background:#FFF8F0;border:2px dashed #FFB27D;border-radius:16px;padding:13px;cursor:pointer;font-size:16px;font-weight:800;color:#F76707">+ เพิ่มร้านในสลิปนี้</button>
+      <div style="background:#fff;border-radius:18px;padding:14px 16px;box-shadow:0 3px 10px rgba(255,140,90,.1)">
+        <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:#8A6D5C"><span>รวมรายร้าน</span><span>{{ multiSumText }}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:#8A6D5C"><span>ยอดสลิป</span><span>{{ multiTargetText }}</span></div>
+        <div style="margin-top:6px;font-size:15px;font-weight:900;color:{{ multiMatchColor }};text-align:center">{{ multiDiffText }}</div>
+      </div>
+      <button onClick="{{ confirmMulti }}" style="background:{{ multiConfirmBg }};color:#fff;border:none;border-radius:18px;padding:16px;font-size:18px;font-weight:900;cursor:pointer">ยืนยันแตกสลิป ✓</button>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ ค่าใช้จ่ายไม่ใช่สินค้า ═══════════ -->
+  <sc-if value="{{ isExpense }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="ค่าใช้จ่ายอื่น">
+    <div style="display:flex;align-items:center;gap:12px;padding:16px 16px 8px 16px">
+      <button onClick="{{ backHome }}" style="background:#fff;border:none;border-radius:14px;width:44px;height:44px;font-size:22px;font-weight:900;color:#F76707;box-shadow:0 3px 10px rgba(255,140,90,.2);cursor:pointer">‹</button>
+      <div style="flex:1">
+        <div style="font-size:20px;font-weight:900">ค่าใช้จ่ายอื่น</div>
+        <div style="font-size:13px;font-weight:600;color:#8A6D5C">ค่าไฟ ค่าเช่า เบ็ดเตล็ด — ไม่ต้องเลือกสินค้า</div>
+      </div>
+      <sc-if value="{{ showMascots }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;align-items:flex-end">
+          <img src="assets/poses2/boynavy_05.png" alt="อาเฮีย" style="height:86px;margin-right:-8px">
+          <img src="assets/poses2/girlpink_05.png" alt="แม่พัน" style="height:84px">
+        </div>
+      </sc-if>
+    </div>
+    <div style="padding:4px 16px;display:flex;flex-direction:column;gap:12px">
+      <div style="background:#fff;border-radius:20px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.12)">
+        <div style="font-size:17px;font-weight:800;margin-bottom:10px">ประเภทค่าใช้จ่าย</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <sc-for list="{{ expCats }}" as="c" hint-placeholder-count="7">
+            <button onClick="{{ c.pick }}" style="border:2px solid #FFE8CC;border-radius:999px;padding:10px 16px;font-size:15px;font-weight:800;cursor:pointer;background:{{ c.bg }};color:{{ c.fg }}">{{ c.name }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="background:#fff;border-radius:20px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.12)">
+        <div style="font-size:17px;font-weight:800;margin-bottom:8px">จำนวนเงิน (บาท)</div>
+        <input type="number" value="{{ expAmountVal }}" onChange="{{ onExpAmount }}" placeholder="0" style="width:100%;box-sizing:border-box;border:2px solid #FFD8A8;border-radius:14px;padding:13px 16px;font-size:22px;font-weight:900;outline:none;color:#7048E8">
+      </div>
+      <div style="background:#fff;border-radius:20px;padding:14px 16px;box-shadow:0 3px 12px rgba(255,140,90,.1);display:flex;align-items:center;gap:12px">
+        <div style="flex:1">
+          <div style="font-size:16px;font-weight:900">เป็นของถาวรไหม?</div>
+          <div style="font-size:13px;font-weight:600;color:#B08968">เช่น ซื้อตู้เย็น/อุปกรณ์ · เปิด = บันทึก flag ของถาวร</div>
+        </div>
+        <button onClick="{{ toggleExpAsset }}" style="width:64px;height:36px;border:none;border-radius:999px;cursor:pointer;background:{{ expAssetBg }};position:relative;flex-shrink:0">
+          <div style="position:absolute;top:4px;left:{{ expAssetKnob }};width:28px;height:28px;border-radius:999px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:left .2s"></div>
+        </button>
+      </div>
+      <div style="background:#fff;border-radius:20px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.12)">
+        <div style="font-size:17px;font-weight:800;margin-bottom:8px">หมายเหตุ (เว้นว่างได้)</div>
+        <input value="{{ expNoteVal }}" onChange="{{ onExpNote }}" placeholder="เช่น ค่าไฟเดือน ก.ค. สาขาลาดพร้าว" style="width:100%;box-sizing:border-box;border:2px solid #FFD8A8;border-radius:14px;padding:12px 14px;font-size:16px;font-weight:600;outline:none">
+      </div>
+      <div style="background:#E7F5FF;border-radius:16px;padding:12px 16px;font-size:14px;font-weight:700;color:#1864AB">ระบบจะสร้างใบสำคัญจ่าย + ลงบัญชีให้อัตโนมัติ (แนบสลิปทีหลังได้ · never block)</div>
+      <button onClick="{{ confirmExpense }}" style="background:linear-gradient(135deg,#37B24D,#2B8A3E);color:#fff;border:none;border-radius:18px;padding:16px;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 6px 18px rgba(43,138,62,.35)">บันทึกค่าใช้จ่าย ✓</button>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ สมุดบันทึก (ปฏิทิน/ไดอารี่ — ดึงจาก fin จริงเมื่อเชื่อม LINE) ═══════════ -->
+  <sc-if value="{{ isDiary }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="สมุดบันทึก">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 16px 6px 16px">
+      <div>
+        <div style="font-size:24px;font-weight:900">สมุดบันทึก</div>
+        <div style="font-size:14px;font-weight:600;color:#8A6D5C">ไดอารี่การซื้อ · แตะวันเพื่อเปิดดู</div>
+      </div>
+      <sc-if value="{{ showMascots }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;align-items:flex-end">
+          <img src="assets/poses2/boynavy_07.png" alt="อาเฮีย" style="height:92px;margin-right:-8px">
+          <img src="assets/poses2/girlpink_07.png" alt="แม่พัน" style="height:90px">
+        </div>
+      </sc-if>
+    </div>
+    <div style="padding:8px 16px;display:flex;flex-direction:column;gap:12px">
+      <div style="background:#fff;border-radius:22px;padding:14px;box-shadow:0 4px 14px rgba(255,140,90,.12)">
+        <div style="display:flex;align-items:center;gap:8px">
+          <button onClick="{{ diaryPrev }}" style="background:#FFF3E6;border:none;border-radius:12px;width:44px;height:44px;font-size:20px;font-weight:900;color:#E8590C;cursor:pointer">‹</button>
+          <div style="flex:1;text-align:center;font-size:18px;font-weight:900">{{ diaryMonthLabel }}</div>
+          <button onClick="{{ diaryNext }}" style="background:#FFF3E6;border:none;border-radius:12px;width:44px;height:44px;font-size:20px;font-weight:900;color:#E8590C;cursor:pointer">›</button>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+          <div style="font-size:13px;font-weight:800;color:#B08968;flex-shrink:0">ไปที่</div>
+          <select value="{{ jumpDayVal }}" onChange="{{ onJumpDay }}" style="flex:1;min-width:0;border:2px solid #FFD8A8;border-radius:12px;padding:9px 6px;font-size:15px;font-weight:800;background:#fff;color:#3D2C29;outline:none">
+            <option value="">วัน…</option>
+            <sc-for list="{{ jumpDays }}" as="o" hint-placeholder-count="5"><option value="{{ o }}">{{ o }}</option></sc-for>
+          </select>
+          <select value="{{ jumpMonthVal }}" onChange="{{ onJumpMonth }}" style="flex:1.4;min-width:0;border:2px solid #FFD8A8;border-radius:12px;padding:9px 6px;font-size:15px;font-weight:800;background:#fff;color:#3D2C29;outline:none">
+            <sc-for list="{{ jumpMonths }}" as="o" hint-placeholder-count="5"><option value="{{ o.v }}">{{ o.t }}</option></sc-for>
+          </select>
+          <select value="{{ jumpYearVal }}" onChange="{{ onJumpYear }}" style="flex:1.1;min-width:0;border:2px solid #FFD8A8;border-radius:12px;padding:9px 6px;font-size:15px;font-weight:800;background:#fff;color:#3D2C29;outline:none">
+            <sc-for list="{{ jumpYears }}" as="o" hint-placeholder-count="3"><option value="{{ o.v }}">{{ o.t }}</option></sc-for>
+          </select>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:12px">
+          <sc-for list="{{ weekDays }}" as="w" hint-placeholder-count="7">
+            <div style="text-align:center;font-size:12px;font-weight:800;color:#B08968">{{ w }}</div>
+          </sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:4px">
+          <sc-for list="{{ calCells }}" as="c" hint-placeholder-count="35">
+            <button onClick="{{ c.pick }}" style="position:relative;border:2px solid {{ c.border }};border-radius:12px;aspect-ratio:1;cursor:pointer;background:{{ c.bg }};color:{{ c.fg }};font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0">
+              {{ c.day }}
+              <sc-if value="{{ c.hasN }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;top:-5px;right:-4px;background:{{ c.badgeBg }};color:#fff;font-size:10px;font-weight:900;border-radius:999px;min-width:17px;height:17px;display:flex;align-items:center;justify-content:center;border:2px solid #fff">{{ c.n }}</div>
+              </sc-if>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:2px">
+        <sc-for list="{{ diaryVendorChips }}" as="v" hint-placeholder-count="5">
+          <button onClick="{{ v.pick }}" style="flex-shrink:0;border:none;border-radius:999px;padding:9px 16px;font-size:14px;font-weight:800;cursor:pointer;background:{{ v.bg }};color:{{ v.fg }}">{{ v.name }}</button>
+        </sc-for>
+      </div>
+      <div style="font-size:17px;font-weight:900">{{ diaryDayTitle }}</div>
+      <sc-if value="{{ diaryDayEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center;padding:14px 20px;background:#FFFDF5;border:2px dashed #FFD8A8;border-radius:20px">
+          <img src="assets/mascots/big_mascot_03.webp" alt="" style="height:100px">
+          <div style="font-size:15px;font-weight:800;color:#8A6D5C;margin-top:6px">วันนี้ไม่มีรายการ — แตะวันที่มีตัวเลขสีม่วงดูได้เลย</div>
+        </div>
+      </sc-if>
+      <sc-for list="{{ diaryEntries }}" as="d" hint-placeholder-count="3">
+        <button onClick="{{ d.open }}" style="background:#fff;border:none;border-radius:20px;padding:12px 14px;box-shadow:0 3px 12px rgba(255,140,90,.1);cursor:pointer;text-align:left">
+          <div style="display:flex;align-items:center;gap:12px">
+            <img src="{{ d.logo }}" alt="" style="width:48px;height:48px;object-fit:contain;border-radius:12px;background:#FFF8F0;padding:3px;flex-shrink:0">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:16px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ d.name }}</div>
+              <div style="font-size:13px;font-weight:600;color:#B08968">{{ d.sub }}</div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-size:17px;font-weight:900">{{ d.totalText }}</div>
+              <div style="font-size:12px;font-weight:800;color:{{ d.statusColor }};background:{{ d.statusBg }};border-radius:999px;padding:2px 10px;display:inline-block">{{ d.status }}</div>
+            </div>
+          </div>
+          <sc-if value="{{ d.hasThumbs }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;gap:6px;margin-top:8px;overflow-x:auto">
+              <sc-for list="{{ d.thumbs }}" as="t" hint-placeholder-count="3">
+                <img src="{{ t }}" alt="" style="width:54px;height:54px;object-fit:cover;border-radius:10px;flex-shrink:0;background:#FFF8F0">
+              </sc-for>
+            </div>
+          </sc-if>
+        </button>
+      </sc-for>
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <img src="assets/mascots/small_04-mascot-ledgers.webp" alt="" style="width:44px;height:44px">
+          <div style="flex:1;font-size:17px;font-weight:900">สรุปทั้งเดือน</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:800;color:#5C4438"><span>{{ diaryMonthCount }} รายการ</span><span style="color:#7048E8">{{ diaryMonthTotalText }}</span></div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
+          <sc-for list="{{ diaryVendorPct }}" as="t" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="width:108px;font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">{{ t.name }}</div>
+              <div style="flex:1;background:#FFF3E6;border-radius:99px;height:14px;overflow:hidden"><div style="height:100%;border-radius:99px;background:{{ t.color }};width:{{ t.w }}"></div></div>
+              <div style="width:42px;text-align:right;font-size:13px;font-weight:900;flex-shrink:0">{{ t.pctText }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button onClick="{{ diaryExportCsv }}" style="flex:1;background:#37B24D;color:#fff;border:none;border-radius:14px;padding:11px 6px;font-size:14px;font-weight:800;cursor:pointer">⬇ Excel เดือนนี้</button>
+          <button onClick="{{ diaryExportZip }}" style="flex:1;background:#7048E8;color:#fff;border:none;border-radius:14px;padding:11px 6px;font-size:14px;font-weight:800;cursor:pointer">⬇ ZIP หลักฐานทั้งเดือน</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button onClick="{{ goReceive }}" style="flex:1;background:#FFF9DB;border:2px solid #FFE066;border-radius:16px;padding:12px;font-size:15px;font-weight:800;color:#B35C00;cursor:pointer">รับของ ({{ nReceive }})</button>
+        <button onClick="{{ goDraftTab }}" style="flex:1;background:#F3F0FF;border:2px solid #D0BFFF;border-radius:16px;padding:12px;font-size:15px;font-weight:800;color:#5F3DC4;cursor:pointer">ตะกร้ารอจับคู่ ({{ nDraft }})</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ งบ 2 ชุด (ส่วนตัว vs จำลองนิติ) ═══════════ -->
+  <sc-if value="{{ isBooks }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="งบ 2 ชุด">
+    <div style="display:flex;align-items:center;gap:12px;padding:16px 16px 6px 16px">
+      <button onClick="{{ goDash }}" style="background:#fff;border:none;border-radius:14px;width:44px;height:44px;font-size:22px;font-weight:900;color:#F76707;box-shadow:0 3px 10px rgba(255,140,90,.2);cursor:pointer">‹</button>
+      <div style="flex:1">
+        <div style="font-size:22px;font-weight:900">งบ 2 ชุด</div>
+        <div style="font-size:13px;font-weight:600;color:#8A6D5C">ส่วนตัว (ทุกรายการ) vs จำลองถ้าจดนิติ</div>
+      </div>
+      <sc-if value="{{ showMascots }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;align-items:flex-end">
+          <img src="assets/poses2/boypink_06.png" alt="อาเฮีย" style="height:84px;margin-right:-10px">
+          <img src="assets/poses2/girlbaby_06.png" alt="แม่พัน" style="height:84px">
+        </div>
+      </sc-if>
+    </div>
+    <div style="padding:8px 16px;display:flex;flex-direction:column;gap:12px">
+      <div style="background:#fff;border-radius:18px;padding:10px;box-shadow:0 3px 12px rgba(255,140,90,.1);display:flex;align-items:center;gap:8px">
+        <button onClick="{{ booksPrev }}" style="background:#FFF3E6;border:none;border-radius:12px;width:40px;height:40px;font-size:18px;font-weight:900;color:#E8590C;cursor:pointer">‹</button>
+        <div style="flex:1;text-align:center;font-size:16px;font-weight:900">{{ booksMonthLabel }}</div>
+        <button onClick="{{ booksNext }}" style="background:#FFF3E6;border:none;border-radius:12px;width:40px;height:40px;font-size:18px;font-weight:900;color:#E8590C;cursor:pointer">›</button>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button onClick="{{ bookPickP }}" style="flex:1;border:none;border-radius:16px;padding:13px 8px;font-size:15px;font-weight:800;cursor:pointer;background:{{ bookTabPBg }};color:{{ bookTabPFg }}">งบส่วนตัว<br><span style="font-size:12px;font-weight:600">ทุกรายการ</span></button>
+        <button onClick="{{ bookPickB }}" style="flex:1;border:none;border-radius:16px;padding:13px 8px;font-size:15px;font-weight:800;cursor:pointer;background:{{ bookTabBBg }};color:{{ bookTabBFg }}">งบจำลองนิติ<br><span style="font-size:12px;font-weight:600">เฉพาะเอกสารครบ</span></button>
+      </div>
+      <div style="background:linear-gradient(120deg,#5F3DC4,#7048E8);border-radius:22px;padding:16px;color:#fff">
+        <div style="font-size:14px;font-weight:700;opacity:.9">{{ bkMoneyLabel }}</div>
+        <div style="font-size:32px;font-weight:900;line-height:1.2">{{ bkMoneyText }}</div>
+        <div style="font-size:13px;font-weight:600;opacity:.85;margin-top:2px">{{ bkMoneySub }}</div>
+      </div>
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="font-size:17px;font-weight:900;margin-bottom:10px">{{ bkPlTitle }}</div>
+        <sc-if value="{{ bkEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:14px;font-weight:700;color:#B08968;text-align:center;padding:10px">เดือนนี้ยังไม่มีรายการในงบชุดนี้</div>
+        </sc-if>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ bkRows }}" as="r" hint-placeholder-count="4">
+            <div style="display:flex;justify-content:space-between;gap:10px;font-size:15px;font-weight:700;color:#5C4438">
+              <span>{{ r.name }}</span><span style="font-weight:900">{{ r.amtText }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:17px;font-weight:900;border-top:2px dashed #FFE8CC;padding-top:10px;margin-top:10px;color:#7048E8">
+          <span>รวมค่าใช้จ่าย</span><span>{{ bkTotalText }}</span>
+        </div>
+      </div>
+      <sc-if value="{{ bookIsB }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+            <img src="assets/mascots/small_04-mascot-vat.webp" alt="" style="width:40px;height:40px">
+            <div style="font-size:17px;font-weight:900">ตาราง VAT ซื้อ</div>
+          </div>
+          <sc-if value="{{ bkVatEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:14px;font-weight:700;color:#B08968;text-align:center;padding:8px">เดือนนี้ยังไม่มีรายการ VAT ซื้อ</div>
+          </sc-if>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <sc-for list="{{ bkVatRows }}" as="r" hint-placeholder-count="3">
+              <div style="display:flex;justify-content:space-between;gap:10px;font-size:14px;font-weight:700;color:#5C4438">
+                <span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.date }} · {{ r.name }}</span><span style="font-weight:900;flex-shrink:0">{{ r.vatText }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:900;border-top:2px dashed #FFE8CC;padding-top:8px;margin-top:8px">
+            <span>รวม VAT ซื้อ</span><span style="color:#7048E8">{{ bkVatTotalText }}</span>
+          </div>
+        </div>
+      </sc-if>
+      <div style="background:#FFF9DB;border-radius:16px;padding:12px 14px;font-size:14px;font-weight:700;color:#8A6D00">หมายเหตุ: ต้นทุนขายจริงรอเชื่อม App_stock — ตอนนี้เห็นเฉพาะค่าใช้จ่ายฝั่งซื้อ + เงินไหลออก</div>
+      <button onClick="{{ booksExport }}" style="background:#37B24D;color:#fff;border:none;border-radius:16px;padding:14px;font-size:16px;font-weight:800;cursor:pointer">⬇ ส่งออก Excel งบเดือนนี้ (2 ชุด + VAT)</button>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ กฎคัดกรองเอกสาร (เจ้าของแก้เองได้ · สูตรบัญชีล็อกหลังบ้าน) ═══════════ -->
+  <sc-if value="{{ isRules }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="กฎคัดกรอง">
+    <div style="display:flex;align-items:center;gap:12px;padding:16px 16px 6px 16px">
+      <button onClick="{{ goSettings }}" style="background:#fff;border:none;border-radius:14px;width:44px;height:44px;font-size:22px;font-weight:900;color:#F76707;box-shadow:0 3px 10px rgba(255,140,90,.2);cursor:pointer">‹</button>
+      <div style="flex:1">
+        <div style="font-size:22px;font-weight:900">กฎคัดกรองเอกสาร</div>
+        <div style="font-size:13px;font-weight:600;color:#8A6D5C">เจอเอกสารแบบไหน → ระบบทำอะไรให้</div>
+      </div>
+      <sc-if value="{{ showMascots }}" hint-placeholder-val="{{ true }}">
+        <img src="assets/mascots/small_02-mascot-auto-decision.webp" alt="" style="width:64px;height:64px">
+      </sc-if>
+    </div>
+    <div style="padding:8px 16px;display:flex;flex-direction:column;gap:10px">
+      <div style="background:#E7F5FF;border-radius:16px;padding:12px 14px;font-size:14px;font-weight:700;color:#1864AB">แก้ข้อความ เพิ่มกฎ สลับลำดับได้เอง — กฎที่แก้มีผลกับหน้า "เอกสารจากผู้ขาย" ตอนบันทึกซื้อทันที และบันทึกเก็บในระบบ</div>
+      <sc-for list="{{ ruleCards }}" as="r" hint-placeholder-count="6">
+        <div style="background:#fff;border-radius:20px;padding:12px 14px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="display:flex;flex-direction:column;gap:2px;flex-shrink:0">
+              <button onClick="{{ r.up }}" style="border:none;background:#FFF3E6;border-radius:8px;width:30px;height:26px;font-size:14px;font-weight:900;color:#E8590C;cursor:pointer">▲</button>
+              <button onClick="{{ r.down }}" style="border:none;background:#FFF3E6;border-radius:8px;width:30px;height:26px;font-size:14px;font-weight:900;color:#E8590C;cursor:pointer">▼</button>
+            </div>
+            <img src="{{ r.icon }}" alt="" style="width:46px;height:46px;flex-shrink:0">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:15px;font-weight:800;line-height:1.3">{{ r.title }}</div>
+              <div style="font-size:13px;font-weight:600;color:#B08968">{{ r.groupLabel }}</div>
+            </div>
+          </div>
+          <div style="margin-top:8px;background:#F3F0FF;border-radius:12px;padding:8px 12px;font-size:13px;font-weight:700;color:#5F3DC4">→ {{ r.resultLine }}</div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button onClick="{{ r.edit }}" style="flex:1;background:#FFF9DB;color:#B35C00;border:none;border-radius:10px;padding:9px;font-size:13px;font-weight:800;cursor:pointer">แก้ไขกฎ</button>
+            <button onClick="{{ r.del }}" style="background:#FFF4E6;color:#D9480F;border:none;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">ลบ</button>
+          </div>
+        </div>
+      </sc-for>
+      <button onClick="{{ addRule }}" style="background:#FFF8F0;border:2px dashed #FFB27D;border-radius:18px;padding:14px;cursor:pointer;font-size:16px;font-weight:800;color:#F76707">+ เพิ่มกฎ/เงื่อนไขใหม่</button>
+      <div style="background:#fff;border-radius:20px;padding:14px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="font-size:16px;font-weight:900;margin-bottom:2px">เอกสารตั้งต้นของแต่ละร้าน</div>
+        <div style="font-size:13px;font-weight:600;color:#B08968;margin-bottom:10px">แตะ ⇄ เพื่อสลับ — ใช้เด้งตัวเลือกให้อัตโนมัติตอนบันทึกซื้อ</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ ruleVendorRows }}" as="v" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:10px">
+              <img src="{{ v.logo }}" alt="" style="width:38px;height:38px;object-fit:contain;border-radius:10px;background:#FFF8F0;flex-shrink:0">
+              <div style="flex:1;min-width:0;font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ v.name }}</div>
+              <button onClick="{{ v.cycle }}" style="background:#F3F0FF;color:#7048E8;border:none;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:800;cursor:pointer;max-width:170px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ v.routeLabel }} ⇄</button>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="background:#3D2C29;border-radius:20px;padding:14px 16px;color:#fff">
+        <div style="font-size:15px;font-weight:900">🔒 ล็อกไว้หลังบ้าน (แก้ไม่ได้ — กันงบพัง)</div>
+        <div style="font-size:13px;font-weight:600;opacity:.85;margin-top:4px;line-height:1.5">สูตรลงบัญชีเดบิต-เครดิตของเอกสารแต่ละชนิด · การคำนวณ VAT · การตรวจสมดุลทุกใบ — เมื่อเพิ่มกฎใหม่ ระบบผูกสูตรบัญชีให้อัตโนมัติตามชนิดเอกสารที่เลือก ไม่ต้องแตะบัญชีเอง</div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ รายการ / รับของ ═══════════ -->
+  <sc-if value="{{ isList }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="รายการ">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 16px 8px 16px">
+      <div style="font-size:24px;font-weight:900">รายการ</div>
+      <sc-if value="{{ showMascots }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;align-items:flex-end">
+          <img src="assets/poses2/boynavy_07.png" alt="อาเฮีย" style="height:92px;margin-right:-8px">
+          <img src="assets/poses2/girlpink_07.png" alt="แม่พัน" style="height:90px">
+        </div>
+      </sc-if>
+    </div>
+    <div style="display:flex;gap:8px;padding:0 16px;overflow-x:auto">
+      <sc-for list="{{ listTabs }}" as="t" hint-placeholder-count="4">
+        <button onClick="{{ t.pick }}" style="flex-shrink:0;border:none;border-radius:999px;padding:10px 16px;font-size:15px;font-weight:800;cursor:pointer;background:{{ t.bg }};color:{{ t.fg }}">{{ t.name }}</button>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ listIsPurchases }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;gap:8px;padding:12px 16px 0 16px;align-items:center">
+      <input value="{{ listSearchVal }}" onInput="{{ onListSearch }}" placeholder="ค้นหา ร้าน / เลขที่ / เอกสาร" style="flex:1;min-width:0;border:2px solid #FFE0C2;border-radius:14px;padding:11px 14px;font-size:15px;background:#fff;color:#3D2C29;box-sizing:border-box">
+      <button onClick="{{ exportCsv }}" style="flex-shrink:0;border:none;border-radius:14px;padding:11px 15px;font-size:15px;font-weight:800;background:#37B24D;color:#fff;cursor:pointer">⬇ Excel/CSV</button>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ listIsReceive }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:12px 16px;display:flex;flex-direction:column;gap:14px">
+        <sc-for list="{{ receivesView }}" as="j" hint-placeholder-count="2">
+          <div style="background:#fff;border-radius:22px;padding:14px;box-shadow:0 4px 14px rgba(255,140,90,.12)">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+              <img src="{{ j.logo }}" alt="" style="width:46px;height:46px;object-fit:contain;border-radius:12px;background:#FFF8F0;padding:3px">
+              <div style="flex:1">
+                <div style="font-size:17px;font-weight:800">{{ j.vendorName }}</div>
+                <div style="font-size:13px;font-weight:600;color:#B08968">{{ j.date }}</div>
+              </div>
+              <div style="font-size:13px;font-weight:800;color:{{ j.waitFg }};background:{{ j.waitBg }};border-radius:999px;padding:4px 12px">{{ j.waitBadge }}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ j.lines }}" as="ln" hint-placeholder-count="3">
+                <div style="background:#FFF8F0;border-radius:14px;padding:10px 12px">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <div style="flex:1;font-size:15px;font-weight:800">{{ ln.name }}</div>
+                    <div style="font-size:13px;font-weight:600;color:#B08968">สั่ง {{ ln.orderedText }}</div>
+                    <input type="number" value="{{ ln.val }}" onChange="{{ ln.onVal }}" style="width:64px;border:2px solid #FFD8A8;border-radius:12px;padding:8px;font-size:17px;font-weight:800;text-align:center;outline:none">
+                    <div style="font-size:14px;font-weight:700;color:#8A6D5C">{{ ln.unit }}</div>
+                  </div>
+                  <sc-if value="{{ ln.isShort }}" hint-placeholder-val="{{ false }}">
+                    <div style="margin-top:8px;background:#FFF4E6;border-radius:12px;padding:8px 10px">
+                      <div style="font-size:14px;font-weight:800;color:#D9480F">ขาด {{ ln.shortText }} — จะทำยังไงต่อ?</div>
+                      <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+                        <sc-for list="{{ ln.choices }}" as="ch" hint-placeholder-count="3">
+                          <button onClick="{{ ch.pick }}" style="border:none;border-radius:999px;padding:7px 12px;font-size:13px;font-weight:800;cursor:pointer;background:{{ ch.bg }};color:{{ ch.fg }}">{{ ch.label }}</button>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+            <label style="display:flex;align-items:center;gap:10px;margin-top:10px;background:#FFF8F0;border:2px dashed #FFB27D;border-radius:14px;padding:10px 12px;cursor:pointer">
+              <input type="file" accept="image/*" multiple onChange="{{ j.onPhoto }}" style="display:none">
+              <img src="assets/icons/icon_camera.webp" alt="" style="width:38px;height:38px">
+              <div style="font-size:15px;font-weight:800;color:#F76707">{{ j.photoLabel }}</div>
+            </label>
+            <button onClick="{{ j.confirm }}" style="width:100%;margin-top:10px;background:linear-gradient(135deg,#37B24D,#2B8A3E);color:#fff;border:none;border-radius:16px;padding:14px;font-size:17px;font-weight:800;cursor:pointer">ยืนยันรับของ ✓</button>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ listIsPurchases }}" hint-placeholder-val="{{ true }}">
+      <div style="padding:12px 16px;display:flex;flex-direction:column;gap:10px">
+        <sc-if value="{{ listEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;padding:30px 20px">
+            <img src="assets/mascots/big_mascot_03.webp" alt="" style="height:130px">
+            <div style="font-size:17px;font-weight:800;color:#8A6D5C;margin-top:10px">ยังไม่มีรายการในหมวดนี้</div>
+          </div>
+        </sc-if>
+        <sc-for list="{{ purchasesView }}" as="p" hint-placeholder-count="5">
+          <div style="background:#fff;border-radius:20px;padding:14px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+            <div style="display:flex;align-items:center;gap:12px">
+              <img src="{{ p.logo }}" alt="" style="width:48px;height:48px;object-fit:contain;border-radius:12px;background:#FFF8F0;padding:3px">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:16px;font-weight:800">{{ p.vendorName }}</div>
+                <div style="font-size:13px;font-weight:600;color:#B08968">{{ p.id }} · {{ p.date }}</div>
+                <div style="font-size:13px;font-weight:700;color:#1971C2">{{ p.route }}</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:18px;font-weight:900">{{ p.totalText }}</div>
+                <div style="font-size:12px;font-weight:800;color:{{ p.statusColor }};background:{{ p.statusBg }};border-radius:999px;padding:3px 10px;display:inline-block">{{ p.status }}</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+              <sc-if value="{{ p.isAsset }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:12px;font-weight:800;color:#5F3DC4;background:#F3F0FF;border-radius:999px;padding:3px 10px">ของถาวร</div>
+              </sc-if>
+              <button onClick="{{ p.openHistory }}" style="margin-left:auto;background:#F8F0FC;color:#9C36B5;border:none;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:800;cursor:pointer">ดูประวัติแก้ไข</button>
+            </div>
+            <sc-if value="{{ p.hasMissing }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:10px;background:#FFF9DB;border-radius:14px;padding:10px 12px">
+                <div style="font-size:14px;font-weight:800;color:#B35C00">ขาดหลักฐาน: {{ p.missingText }}</div>
+                <label style="display:inline-flex;align-items:center;gap:8px;margin-top:6px;background:#fff;border:2px solid #FFD43B;border-radius:12px;padding:8px 14px;cursor:pointer">
+                  <input type="file" accept="image/*" onChange="{{ p.onFill }}" style="display:none">
+                  <img src="assets/icons/icon_camera.webp" alt="" style="width:26px;height:26px">
+                  <span style="font-size:14px;font-weight:800;color:#E67700">เติมหลักฐานเลย</span>
+                </label>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ อนุมัติ + เซ็น ═══════════ -->
+  <sc-if value="{{ isApprove }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="อนุมัติเอกสาร">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 16px 6px 16px">
+      <div>
+        <div style="font-size:24px;font-weight:900">อนุมัติ + เซ็น</div>
+        <div style="font-size:14px;font-weight:600;color:#8A6D5C">เลือกหลายใบแล้วเซ็นทีเดียวได้</div>
+      </div>
+      <sc-if value="{{ showMascots }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;align-items:flex-end">
+          <img src="assets/characters/work_ahia.webp" alt="อาเฮีย" style="height:96px;margin-right:-10px">
+          <img src="assets/characters/adult_maepan.webp" alt="แม่พัน" style="height:96px">
+        </div>
+      </sc-if>
+    </div>
+    <div style="padding:8px 16px;display:flex;flex-direction:column;gap:10px">
+      <sc-if value="{{ approveEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center;padding:30px 20px">
+          <img src="assets/mascots/big_mascot_02.webp" alt="" style="height:140px">
+          <div style="font-size:17px;font-weight:800;color:#8A6D5C;margin-top:10px">เยี่ยม! ไม่มีเอกสารค้างเซ็นแล้ว</div>
+        </div>
+      </sc-if>
+      <sc-for list="{{ draftsView }}" as="d" hint-placeholder-count="3">
+        <div style="background:#fff;border:3px solid {{ d.border }};border-radius:20px;padding:14px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+          <div style="display:flex;align-items:center;gap:12px">
+            <button onClick="{{ d.toggle }}" style="width:34px;height:34px;border-radius:12px;border:3px solid {{ d.cbBorder }};background:{{ d.cbBg }};color:#fff;font-size:18px;font-weight:900;cursor:pointer;flex-shrink:0">{{ d.cbMark }}</button>
+            <img src="{{ d.logo }}" alt="" style="width:44px;height:44px;object-fit:contain;border-radius:12px;background:#FFF8F0;padding:3px">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:16px;font-weight:800">{{ d.type }} · {{ d.id }}</div>
+              <div style="font-size:13px;font-weight:600;color:#B08968">{{ d.entity }} · {{ d.date }}</div>
+              <div style="font-size:14px;font-weight:700;color:#5C4438">จ่ายให้: {{ d.payee }}</div>
+            </div>
+            <div style="font-size:18px;font-weight:900;color:#7048E8">{{ d.amountText }}</div>
+          </div>
+          <sc-if value="{{ d.notReady }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:8px;background:#FFF4E6;border-radius:12px;padding:8px 12px;font-size:14px;font-weight:800;color:#D9480F">ยังเซ็นไม่ได้ — ขาด: {{ d.missingField }}</div>
+          </sc-if>
+          <button onClick="{{ d.view }}" style="margin-top:10px;background:#E7F5FF;color:#1971C2;border:none;border-radius:12px;padding:9px 16px;font-size:14px;font-weight:800;cursor:pointer">ดูตัวอย่างเอกสาร</button>
+        </div>
+      </sc-for>
+      <sc-if value="{{ canSign }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ openSign }}" style="background:linear-gradient(135deg,#7048E8,#9775FA);color:#fff;border:none;border-radius:18px;padding:16px;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 6px 18px rgba(112,72,232,.35)">เซ็นและอนุมัติ ({{ selCount }} ใบ)</button>
+      </sc-if>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ Dashboard ═══════════ -->
+  <sc-if value="{{ isDash }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="สรุปภาพรวม">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 16px 6px 16px">
+      <div>
+        <div style="font-size:24px;font-weight:900">สรุปภาพรวม</div>
+        <div style="font-size:14px;font-weight:600;color:#8A6D5C">ฝั่งซื้อ + เงินออกเท่านั้น</div>
+      </div>
+      <sc-if value="{{ showMascots }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;align-items:flex-end">
+          <img src="assets/poses2/boynavy_04.png" alt="อาเฮีย" style="height:90px;margin-right:-8px">
+          <img src="assets/poses2/girlpink_04.png" alt="แม่พัน" style="height:88px">
+        </div>
+      </sc-if>
+    </div>
+    <sc-if value="{{ dashNoData }}" hint-placeholder-val="{{ false }}">
+      <div style="margin:6px 16px 0;background:#FFF8F0;border:1.5px dashed #F0C9A3;border-radius:20px;padding:22px;text-align:center">
+        <div style="font-size:16px;font-weight:900;color:#B08968">ยังไม่มีข้อมูลเดือนนี้</div>
+        <div style="font-size:13px;font-weight:600;color:#B08968;margin-top:4px">เริ่มบันทึกซื้อ แล้วตัวเลขและกราฟจะขึ้นจากรายการจริงเอง</div>
+      </div>
+    </sc-if>
+    <div style="padding:8px 16px;display:flex;flex-direction:column;gap:12px">
+      <div style="background:linear-gradient(120deg,#5F3DC4,#7048E8);border-radius:24px;padding:18px;color:#fff">
+        <div style="font-size:15px;font-weight:700;opacity:.9">เงินไหลออกเดือนนี้ (ส.ค.)</div>
+        <div style="font-size:36px;font-weight:900;line-height:1.2">{{ monthOutText }}</div>
+        <div style="font-size:14px;font-weight:700;background:rgba(255,255,255,.18);border-radius:999px;padding:4px 12px;display:inline-block;margin-top:6px">ค่าใช้จ่ายสูงขึ้นจากเดือนก่อนช่วงเดียวกัน</div>
+      </div>
+
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="font-size:17px;font-weight:900;margin-bottom:12px">ค่าใช้จ่ายรายเดือน (12 เดือน)</div>
+        <div style="display:flex;align-items:flex-end;gap:4px;height:120px">
+          <sc-for list="{{ expBars }}" as="b" hint-placeholder-count="12">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end">
+              <div style="width:100%;border-radius:6px 6px 0 0;background:{{ b.color }};height:{{ b.h }}"></div>
+              <div style="font-size:10px;font-weight:700;color:{{ b.labelColor }}">{{ b.m }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="font-size:13px;font-weight:600;color:#B08968;margin-top:8px">เดือนนี้ยังไม่จบเดือน · แตะเพื่อดูรายละเอียด (เฟสถัดไป)</div>
+      </div>
+
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <img src="assets/mascots/small_04-mascot-vat.webp" alt="" style="width:44px;height:44px">
+          <div style="font-size:17px;font-weight:900">ภาษีซื้อ (VAT) 12 เดือน</div>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:4px;height:80px">
+          <sc-for list="{{ vatBars }}" as="b" hint-placeholder-count="12">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end">
+              <div style="width:100%;border-radius:6px 6px 0 0;background:{{ b.color }};height:{{ b.h }}"></div>
+              <div style="font-size:10px;font-weight:700;color:{{ b.labelColor }}">{{ b.m }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="font-size:17px;font-weight:900;margin-bottom:4px">ปริมาณซื้อเนื้อสัตว์เดือนนี้</div>
+        <div style="font-size:13px;font-weight:600;color:#B08968;margin-bottom:12px">รายชื่อตามที่ตั้งไว้ เพิ่ม/ลดชนิดได้ในหน้า ร้านค้า</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ meatBars }}" as="m" hint-placeholder-count="6">
+            <div style="display:flex;align-items:center;gap:10px">
+              <img src="{{ m.img }}" alt="" style="width:42px;height:42px;object-fit:contain;background:#FFF8F0;border-radius:10px;flex-shrink:0">
+              <div style="width:82px;font-size:14px;font-weight:800;flex-shrink:0">{{ m.name }}</div>
+              <div style="flex:1;background:#FFF3E6;border-radius:99px;height:22px;overflow:hidden">
+                <div style="height:100%;border-radius:99px;background:{{ m.color }};width:{{ m.w }}"></div>
+              </div>
+              <div style="width:58px;text-align:right;font-size:14px;font-weight:900;flex-shrink:0">{{ m.qtyText }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <img src="assets/mascots/small_04-mascot-ledgers.webp" alt="" style="width:44px;height:44px">
+          <div style="font-size:17px;font-weight:900">งบ 2 ชุด เดือนนี้</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:800"><span>งบส่วนตัว (ทุกรายการ)</span><span>{{ bookPText }}</span></div>
+            <div style="background:#FFF3E6;border-radius:99px;height:18px;margin-top:4px;overflow:hidden"><div style="height:100%;border-radius:99px;background:#FF8A3D;width:100%"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:800"><span>งบจำลองนิติ (เอกสารครบ)</span><span>{{ bookBText }}</span></div>
+            <div style="background:#FFF3E6;border-radius:99px;height:18px;margin-top:4px;overflow:hidden"><div style="height:100%;border-radius:99px;background:#7048E8;width:{{ bookBW }}"></div></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;background:#FFF9DB;border-radius:14px;padding:10px 12px;font-size:14px;font-weight:700;color:#8A6D00">หมายเหตุ: ต้นทุนขายจริงรอเชื่อม App_stock — ตอนนี้เห็นเฉพาะค่าใช้จ่ายฝั่งซื้อ + เงินไหลออก</div>
+        <button onClick="{{ goBooks }}" style="width:100%;margin-top:10px;background:#F3F0FF;color:#5F3DC4;border:none;border-radius:14px;padding:12px;font-size:15px;font-weight:800;cursor:pointer">เปิดงบเต็ม 2 ชุด + ตาราง VAT ›</button>
+      </div>
+
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="font-size:17px;font-weight:900;margin-bottom:12px">Top 5 ร้านที่จ่ายเดือนนี้</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ top5View }}" as="t" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="font-size:15px;font-weight:900;color:#B08968;width:18px">{{ t.rank }}</div>
+              <img src="{{ t.logo }}" alt="" style="width:40px;height:40px;object-fit:contain;background:#FFF8F0;border-radius:10px;flex-shrink:0">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.name }}</div>
+                <div style="background:#FFF3E6;border-radius:99px;height:12px;margin-top:3px;overflow:hidden"><div style="height:100%;border-radius:99px;background:{{ t.color }};width:{{ t.w }}"></div></div>
+              </div>
+              <div style="font-size:14px;font-weight:900;flex-shrink:0">{{ t.amtText }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ ร้านค้า (Data) ═══════════ -->
+  <sc-if value="{{ isData }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="จัดการร้านค้าและสินค้า">
+    <sc-if value="{{ dataAtRoot }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 16px 6px 16px">
+        <div>
+          <div style="font-size:24px;font-weight:900">ร้านค้า</div>
+          <div style="font-size:14px;font-weight:600;color:#8A6D5C">เพิ่ม แก้ไข ลบ สลับตำแหน่งได้หมด</div>
+        </div>
+        <sc-if value="{{ showMascots }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;align-items:flex-end">
+            <img src="assets/poses2/boynavy_05.png" alt="อาเฮีย" style="height:90px;margin-right:-8px">
+            <img src="assets/poses2/girlpink_05.png" alt="แม่พัน" style="height:88px">
+          </div>
+        </sc-if>
+      </div>
+      <div style="padding:8px 16px;display:flex;flex-direction:column;gap:10px">
+        <button onClick="{{ addVendor }}" style="background:linear-gradient(135deg,#FF922B,#F76BB8);color:#fff;border:none;border-radius:18px;padding:14px;font-size:17px;font-weight:800;cursor:pointer">+ เพิ่มร้านใหม่</button>
+        <sc-for list="{{ dataVendors }}" as="v" hint-placeholder-count="6">
+          <div style="background:#fff;border-radius:20px;padding:12px 14px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="display:flex;flex-direction:column;gap:2px">
+                <button onClick="{{ v.up }}" style="border:none;background:#FFF3E6;border-radius:8px;width:30px;height:26px;font-size:14px;font-weight:900;color:#E8590C;cursor:pointer">▲</button>
+                <button onClick="{{ v.down }}" style="border:none;background:#FFF3E6;border-radius:8px;width:30px;height:26px;font-size:14px;font-weight:900;color:#E8590C;cursor:pointer">▼</button>
+              </div>
+              <img src="{{ v.logo }}" alt="" style="width:52px;height:52px;object-fit:contain;border-radius:14px;background:#FFF8F0;padding:3px">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:16px;font-weight:800">{{ v.name }}</div>
+                <div style="font-size:13px;font-weight:600;color:#B08968">{{ v.channel }}</div>
+                <div style="font-size:13px;font-weight:700;color:#F76707">{{ v.meta }}</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <button onClick="{{ v.open }}" style="flex:1;background:#E7F5FF;color:#1971C2;border:none;border-radius:12px;padding:10px;font-size:14px;font-weight:800;cursor:pointer">สินค้า ({{ v.count }})</button>
+              <button onClick="{{ v.edit }}" style="flex:1;background:#FFF9DB;color:#B35C00;border:none;border-radius:12px;padding:10px;font-size:14px;font-weight:800;cursor:pointer">แก้ไขร้าน</button>
+              <button onClick="{{ v.del }}" style="background:#FFF4E6;color:#D9480F;border:none;border-radius:12px;padding:10px 14px;font-size:14px;font-weight:800;cursor:pointer">ลบ</button>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ dataInVendor }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:center;gap:12px;padding:16px 16px 8px 16px">
+        <button onClick="{{ dataBack }}" style="background:#fff;border:none;border-radius:14px;width:44px;height:44px;font-size:22px;font-weight:900;color:#F76707;box-shadow:0 3px 10px rgba(255,140,90,.2);cursor:pointer">‹</button>
+        <img src="{{ dvLogo }}" alt="" style="width:46px;height:46px;object-fit:contain">
+        <div style="flex:1">
+          <div style="font-size:19px;font-weight:900">{{ dvName }}</div>
+          <div style="font-size:13px;font-weight:600;color:#B08968">แตะแก้ไขได้ทุกฟิลด์ · ราคาเป็นตัวอย่าง</div>
+        </div>
+      </div>
+      <div style="padding:0 16px;display:flex;flex-direction:column;gap:10px">
+        <button onClick="{{ addItem }}" style="background:linear-gradient(135deg,#37B24D,#2B8A3E);color:#fff;border:none;border-radius:16px;padding:13px;font-size:16px;font-weight:800;cursor:pointer">+ เพิ่มสินค้าในร้านนี้</button>
+        <sc-if value="{{ dvHasCats }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:2px">
+            <sc-for list="{{ dvCatChips }}" as="c" hint-placeholder-count="4">
+              <button onClick="{{ c.pick }}" style="flex-shrink:0;border:none;border-radius:999px;padding:9px 16px;font-size:15px;font-weight:800;cursor:pointer;background:{{ c.bg }};color:{{ c.fg }}">{{ c.name }}</button>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-for list="{{ dataItems }}" as="it" hint-placeholder-count="6">
+          <div style="background:#fff;border-radius:18px;padding:10px 12px;box-shadow:0 3px 10px rgba(255,140,90,.1);display:flex;align-items:center;gap:10px">
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <button onClick="{{ it.up }}" style="border:none;background:#FFF3E6;border-radius:8px;width:30px;height:26px;font-size:14px;font-weight:900;color:#E8590C;cursor:pointer">▲</button>
+              <button onClick="{{ it.down }}" style="border:none;background:#FFF3E6;border-radius:8px;width:30px;height:26px;font-size:14px;font-weight:900;color:#E8590C;cursor:pointer">▼</button>
+            </div>
+            <label style="cursor:pointer;flex-shrink:0">
+              <input type="file" accept="image/*" onChange="{{ it.onImg }}" style="display:none">
+              <img src="{{ it.img }}" alt="เปลี่ยนรูป" style="width:56px;height:56px;object-fit:contain;border-radius:14px;background:#FFF8F0;border:2px dashed #FFD8A8">
+            </label>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:15px;font-weight:800;line-height:1.25">{{ it.name }}</div>
+              <div style="font-size:13px;font-weight:600;color:#B08968">{{ it.spec }} · {{ it.priceText }}/{{ it.unit }}</div>
+              <sc-if value="{{ it.hasCat }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:12px;font-weight:800;color:#7048E8;background:#F3F0FF;border-radius:999px;padding:2px 10px;display:inline-block;margin-top:2px">{{ it.cat }}</div>
+              </sc-if>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <button onClick="{{ it.edit }}" style="background:#FFF9DB;color:#B35C00;border:none;border-radius:10px;padding:7px 12px;font-size:13px;font-weight:800;cursor:pointer">แก้ไข</button>
+              <button onClick="{{ it.del }}" style="background:#FFF4E6;color:#D9480F;border:none;border-radius:10px;padding:7px 12px;font-size:13px;font-weight:800;cursor:pointer">ลบ</button>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ ตั้งค่า ═══════════ -->
+  <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="ตั้งค่า">
+    <div style="display:flex;align-items:center;gap:12px;padding:16px 16px 8px 16px">
+      <button onClick="{{ goHome }}" style="background:#fff;border:none;border-radius:14px;width:44px;height:44px;font-size:22px;font-weight:900;color:#F76707;box-shadow:0 3px 10px rgba(255,140,90,.2);cursor:pointer">‹</button>
+      <div style="font-size:22px;font-weight:900">ตั้งค่า</div>
+    </div>
+    <div style="padding:8px 16px;display:flex;flex-direction:column;gap:12px">
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1);display:flex;align-items:center;gap:14px">
+        <img src="assets/characters/work_ahia.webp" alt="" style="height:100px">
+        <div style="flex:1">
+          <div style="font-size:18px;font-weight:900">อาเฮีย (Owner)</div>
+          <div style="font-size:14px;font-weight:600;color:#B08968">เข้าผ่าน LINE · สิทธิ์อนุมัติ+เซ็นเอกสาร</div>
+        </div>
+      </div>
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="font-size:17px;font-weight:900;margin-bottom:4px">ลายเซ็นสำหรับเอกสาร</div>
+        <div style="font-size:14px;font-weight:600;color:#B08968;margin-bottom:10px">แปะเมื่อกดยืนยันเท่านั้น + บันทึก log ทุกครั้ง</div>
+        <label style="display:block;border:2px dashed #FFB27D;border-radius:16px;padding:14px;text-align:center;cursor:pointer;background:#FFF8F0">
+          <input type="file" accept="image/*" onChange="{{ onSigFile }}" style="display:none">
+          <sc-if value="{{ hasSig }}" hint-placeholder-val="{{ false }}">
+            <img src="{{ sigThumb }}" alt="ลายเซ็น" style="max-height:70px;max-width:100%">
+          </sc-if>
+          <sc-if value="{{ noSig }}" hint-placeholder-val="{{ true }}">
+            <div style="font-size:15px;font-weight:800;color:#F76707">+ อัปโหลดรูปลายเซ็น</div>
+          </sc-if>
+        </label>
+      </div>
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1);display:flex;align-items:center;gap:12px">
+        <div style="flex:1">
+          <div style="font-size:17px;font-weight:900">แสดงตัวการ์ตูนประกอบ</div>
+          <div style="font-size:14px;font-weight:600;color:#B08968">ปิดได้ถ้าอยากให้หน้าจอโล่งขึ้น</div>
+        </div>
+        <button onClick="{{ toggleChars }}" style="width:64px;height:36px;border:none;border-radius:999px;cursor:pointer;background:{{ charsBg }};position:relative;flex-shrink:0">
+          <div style="position:absolute;top:4px;left:{{ charsKnob }};width:28px;height:28px;border-radius:999px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:left .2s"></div>
+        </button>
+      </div>
+      <button onClick="{{ goRules }}" style="background:#fff;border:none;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1);display:flex;align-items:center;gap:14px;cursor:pointer;text-align:left">
+        <img src="assets/mascots/small_02-mascot-auto-decision.webp" alt="" style="width:52px;height:52px;flex-shrink:0">
+        <div style="flex:1">
+          <div style="font-size:17px;font-weight:900;color:#3D2C29">กฎคัดกรองเอกสาร</div>
+          <div style="font-size:14px;font-weight:600;color:#B08968">แก้เงื่อนไข "เจอเอกสารแบบไหน → ออกเอกสารอะไร" ได้เอง</div>
+        </div>
+        <div style="font-size:22px;color:#FFB27D;font-weight:900">›</div>
+      </button>
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+          <img src="assets/mascots/small_04-mascot-integrations.webp" alt="" style="width:44px;height:44px">
+          <div style="font-size:17px;font-weight:900">บริการภายนอก</div>
+        </div>
+        <div style="font-size:13px;font-weight:600;color:#B08968;margin-bottom:12px">ระบบทำงานได้เต็มแม้ยังไม่ใส่ key — ตัวที่ยังไม่เชื่อมจะถูกปิดไว้ ไม่มี error</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+          <div style="font-size:13px;font-weight:800;color:#fff;background:{{ connBadgeBg }};border-radius:999px;padding:5px 12px">{{ connBadge }}</div>
+          <button onClick="{{ checkConn }}" style="margin-left:auto;background:#F3F0FF;color:#5F3DC4;border:none;border-radius:12px;padding:8px 14px;font-size:14px;font-weight:800;cursor:pointer">ตรวจการเชื่อมต่อ</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ svcList }}" as="s" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:12px;background:#FFF8F0;border-radius:16px;padding:12px 14px">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:15px;font-weight:900">{{ s.name }}</div>
+                <div style="font-size:13px;font-weight:600;color:#B08968">{{ s.need }}</div>
+                <div style="font-size:13px;font-weight:800;color:{{ s.statusColor }};margin-top:2px">{{ s.statusText }}</div>
+              </div>
+              <button onClick="{{ s.toggle }}" style="width:60px;height:34px;border:none;border-radius:999px;cursor:pointer;background:{{ s.bg }};position:relative;flex-shrink:0">
+                <div style="position:absolute;top:4px;left:{{ s.knob }};width:26px;height:26px;border-radius:999px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:left .2s"></div>
+              </button>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <button onClick="{{ resetData }}" style="background:#fff;color:#D9480F;border:3px solid #E5DBFF;border-radius:18px;padding:14px;font-size:16px;font-weight:800;cursor:pointer">ล้างข้อมูลทดลอง กลับค่าตั้งต้น</button>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ MODAL กลาง (ฟอร์ม/เอกสาร/เซ็น) ═══════════ -->
+  <sc-if value="{{ hasModal }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(61,44,41,.55);z-index:80;display:flex;align-items:flex-end;justify-content:center" onClick="{{ closeModal }}">
+      <div style="width:100%;max-width:440px;max-height:86vh;overflow-y:auto;background:#FFF8F0;border-radius:28px 28px 0 0;padding:20px 18px 26px 18px;animation:kkpop .25s ease" onClick="{{ stopClick }}">
+
+        <sc-if value="{{ modalIsForm }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:20px;font-weight:900;margin-bottom:12px">{{ modalTitle }}</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ modalFields }}" as="f" hint-placeholder-count="4">
+              <div>
+                <div style="font-size:14px;font-weight:800;color:#8A6D5C;margin-bottom:4px">{{ f.label }}</div>
+                <sc-if value="{{ f.isSelect }}" hint-placeholder-val="{{ false }}">
+                  <select value="{{ f.val }}" onChange="{{ f.onChange }}" style="width:100%;box-sizing:border-box;border:2px solid #FFD8A8;border-radius:14px;padding:12px 14px;font-size:16px;font-weight:700;background:#fff;outline:none;color:#3D2C29">
+                    <sc-for list="{{ f.opts }}" as="o" hint-placeholder-count="3"><option value="{{ o.v }}">{{ o.t }}</option></sc-for>
+                  </select>
+                </sc-if>
+                <sc-if value="{{ f.isInput }}" hint-placeholder-val="{{ true }}">
+                  <input value="{{ f.val }}" type="{{ f.type }}" onChange="{{ f.onChange }}" style="width:100%;box-sizing:border-box;border:2px solid #FFD8A8;border-radius:14px;padding:12px 14px;font-size:17px;font-weight:700;background:#fff;outline:none">
+                </sc-if>
+              </div>
+            </sc-for>
+            <sc-if value="{{ modalHasImgField }}" hint-placeholder-val="{{ false }}">
+              <label style="display:flex;align-items:center;gap:12px;border:2px dashed #FFB27D;border-radius:14px;padding:10px 14px;cursor:pointer;background:#fff">
+                <input type="file" accept="image/*" onChange="{{ modalOnImg }}" style="display:none">
+                <img src="{{ modalImgThumb }}" alt="" style="width:52px;height:52px;object-fit:contain;border-radius:10px;background:#FFF8F0">
+                <div style="font-size:15px;font-weight:800;color:#F76707">แตะเพื่อเปลี่ยนรูป (บีบ+แปลง WebP อัตโนมัติ)</div>
+              </label>
+            </sc-if>
+            <sc-if value="{{ modalIsPrice }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ togglePriceSave }}" style="display:flex;align-items:center;gap:10px;background:#fff;border:2px solid {{ priceSaveBorder }};border-radius:14px;padding:12px 14px;cursor:pointer;text-align:left">
+                <div style="width:26px;height:26px;border-radius:8px;background:{{ priceSaveBg }};color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center">{{ priceSaveMark }}</div>
+                <div style="font-size:15px;font-weight:800;color:#5C4438">บันทึกเป็นราคาใหม่ของร้านนี้ (เก็บเข้าประวัติราคา)</div>
+              </button>
+            </sc-if>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:16px">
+            <button onClick="{{ closeModal }}" style="flex:1;background:#fff;color:#8A6D5C;border:3px solid #EAD9C8;border-radius:16px;padding:14px;font-size:16px;font-weight:800;cursor:pointer">ยกเลิก</button>
+            <button onClick="{{ modalSave }}" style="flex:1.4;background:linear-gradient(135deg,#FF922B,#F76BB8);color:#fff;border:none;border-radius:16px;padding:14px;font-size:16px;font-weight:800;cursor:pointer">บันทึก ✓</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ modalIsDoc }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#fff;border-radius:18px;padding:18px;border:1px solid #EAD9C8">
+            <div style="text-align:center;border-bottom:2px solid #3D2C29;padding-bottom:10px">
+              <div style="font-size:19px;font-weight:900">{{ docType }}</div>
+              <div style="font-size:14px;font-weight:700;color:#8A6D5C">{{ docEntity }} · เลขที่ {{ docNo }}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;padding:12px 0;font-size:15px;font-weight:700;color:#5C4438">
+              <div>วันที่: {{ docDate }}</div>
+              <div>จ่ายให้: {{ docPayee }}</div>
+              <div style="display:flex;justify-content:space-between;background:#FFF8F0;border-radius:10px;padding:8px 12px"><span>รายการซื้อสินค้า/บริการ</span><span style="font-weight:900">{{ docAmountText }}</span></div>
+              <div>จำนวนเงิน (ตัวอักษร): <span style="font-weight:900">{{ docAmountWords }}</span></div>
+              <div style="font-size:13px;color:#B08968">แนบ: สลิปโอน · แคปแชทคำสั่งซื้อ · รูปสินค้า (ตัวอย่าง)</div>
+            </div>
+            <div style="display:flex;gap:12px;border-top:1px dashed #EAD9C8;padding-top:12px">
+              <div style="flex:1;text-align:center">
+                <div style="height:52px;display:flex;align-items:center;justify-content:center">
+                  <sc-if value="{{ hasSig }}" hint-placeholder-val="{{ false }}"><img src="{{ sigThumb }}" alt="" style="max-height:48px;max-width:100%"></sc-if>
+                  <sc-if value="{{ noSig }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#B08968">(ลายเซ็นจะแปะเมื่อกดอนุมัติ)</div></sc-if>
+                </div>
+                <div style="font-size:13px;font-weight:700;border-top:1px solid #3D2C29;padding-top:4px">ผู้อนุมัติ / ผู้จ่ายเงิน</div>
+              </div>
+              <div style="flex:1;text-align:center">
+                <div style="height:52px"></div>
+                <div style="font-size:13px;font-weight:700;border-top:1px solid #3D2C29;padding-top:4px">ผู้รับเงิน</div>
+              </div>
+            </div>
+          </div>
+          <button onClick="{{ closeModal }}" style="width:100%;margin-top:14px;background:#3D2C29;color:#fff;border:none;border-radius:16px;padding:14px;font-size:16px;font-weight:800;cursor:pointer">ปิด</button>
+        </sc-if>
+
+        <sc-if value="{{ modalIsSign }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center">
+            <img src="assets/mascots/small_02-mascot-approve.webp" alt="" style="height:110px">
+            <div style="font-size:21px;font-weight:900;margin-top:8px">เซ็นและอนุมัติ {{ selCount }} ใบ?</div>
+            <div style="font-size:15px;font-weight:600;color:#8A6D5C;margin-top:4px">ลายเซ็นจะถูกแปะพร้อมบันทึก log (ใคร/เวลา/เอกสาร) — นี่คือเจตนาทางกฎหมาย</div>
+            <div style="margin:14px 0;background:#fff;border-radius:16px;padding:12px;border:2px dashed #D0BFFF;min-height:56px;display:flex;align-items:center;justify-content:center">
+              <sc-if value="{{ hasSig }}" hint-placeholder-val="{{ false }}"><img src="{{ sigThumb }}" alt="ลายเซ็น" style="max-height:60px;max-width:100%"></sc-if>
+              <sc-if value="{{ noSig }}" hint-placeholder-val="{{ true }}"><div style="font-size:14px;font-weight:700;color:#B08968">ยังไม่มีลายเซ็น — อัปโหลดได้ที่ ตั้งค่า › ลายเซ็น (กดยืนยันได้เพื่อทดลอง)</div></sc-if>
+            </div>
+            <div style="display:flex;gap:10px">
+              <button onClick="{{ closeModal }}" style="flex:1;background:#fff;color:#8A6D5C;border:3px solid #EAD9C8;border-radius:16px;padding:14px;font-size:16px;font-weight:800;cursor:pointer">ยกเลิก</button>
+              <button onClick="{{ confirmSign }}" style="flex:1.4;background:linear-gradient(135deg,#7048E8,#9775FA);color:#fff;border:none;border-radius:16px;padding:14px;font-size:16px;font-weight:800;cursor:pointer">ยืนยันเซ็น ✓</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ modalIsCase }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:20px;font-weight:900">{{ caseTitle }}</div>
+          <div style="font-size:13px;font-weight:600;color:#8A6D5C;margin-bottom:10px">{{ caseSub }}</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+            <sc-for list="{{ caseBadges }}" as="b" hint-placeholder-count="2">
+              <div style="font-size:12px;font-weight:800;color:{{ b.fg }};background:{{ b.bg }};border-radius:999px;padding:4px 12px">{{ b.t }}</div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ caseHasPhotos }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:14px;font-weight:900;color:#8A6D5C;margin-bottom:6px">หลักฐานแนบ</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+              <sc-for list="{{ casePhotos }}" as="p" hint-placeholder-count="3">
+                <button onClick="{{ p.open }}" style="border:none;padding:0;background:#FFF8F0;border-radius:14px;overflow:hidden;cursor:pointer;aspect-ratio:1">
+                  <img src="{{ p.src }}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+          <div style="background:#fff;border-radius:16px;padding:12px 14px;border:1px solid #EAD9C8;margin-bottom:12px">
+            <div style="font-size:14px;font-weight:900;margin-bottom:8px">การลงบัญชี (ระบบผูกให้อัตโนมัติ)</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <sc-for list="{{ caseJournal }}" as="j" hint-placeholder-count="2">
+                <div style="display:flex;justify-content:space-between;gap:8px;font-size:13px;font-weight:700;color:#5C4438">
+                  <span style="min-width:0">{{ j.name }}</span>
+                  <span style="flex-shrink:0;font-weight:900;color:{{ j.color }}">{{ j.amtText }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="margin-top:8px;font-size:13px;font-weight:900;color:#2B8A3E;text-align:center">เดบิต = เครดิต สมดุล ✓</div>
+          </div>
+          <sc-if value="{{ caseHasDocs }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:14px;font-weight:900;color:#8A6D5C;margin-bottom:6px">เอกสารในชุดนี้</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+              <sc-for list="{{ caseDocs }}" as="d" hint-placeholder-count="2">
+                <div style="display:flex;align-items:center;gap:10px;background:#fff;border-radius:14px;padding:10px 12px;border:1px solid #EAD9C8">
+                  <img src="assets/icons/icon_tax_invoice.webp" alt="" style="width:34px;height:34px;flex-shrink:0">
+                  <div style="flex:1;min-width:0">
+                    <div style="font-size:14px;font-weight:800">{{ d.name }}</div>
+                    <div style="font-size:12px;font-weight:600;color:#B08968">{{ d.sub }}</div>
+                  </div>
+                  <button onClick="{{ d.pdf }}" style="background:#E7F5FF;color:#1971C2;border:none;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:800;cursor:pointer;flex-shrink:0">PDF ⬇</button>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <button onClick="{{ closeModal }}" style="width:100%;background:#3D2C29;color:#fff;border:none;border-radius:16px;padding:14px;font-size:16px;font-weight:800;cursor:pointer">ปิด</button>
+        </sc-if>
+
+        <sc-if value="{{ modalIsHistory }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:20px;font-weight:900;margin-bottom:2px">{{ histTitle }}</div>
+          <div style="font-size:13px;font-weight:600;color:#8A6D5C;margin-bottom:14px">ทุกการเปลี่ยนแปลงถูกเก็บไว้ · ไม่มีการลบ (append-only)</div>
+          <div style="display:flex;flex-direction:column">
+            <sc-for list="{{ histRows }}" as="h" hint-placeholder-count="4">
+              <div style="display:flex;gap:12px">
+                <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+                  <div style="width:15px;height:15px;border-radius:999px;background:{{ h.dot }};margin-top:3px;border:3px solid #fff;box-shadow:0 0 0 2px {{ h.dot }}"></div>
+                  <div style="width:2px;flex:1;background:#EAD9C8;min-height:14px"></div>
+                </div>
+                <div style="padding-bottom:14px;flex:1">
+                  <div style="font-size:15px;font-weight:800;line-height:1.35">{{ h.what }}</div>
+                  <div style="font-size:13px;font-weight:600;color:#B08968">{{ h.when }} · {{ h.who }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <button onClick="{{ closeModal }}" style="width:100%;margin-top:6px;background:#3D2C29;color:#fff;border:none;border-radius:16px;padding:14px;font-size:16px;font-weight:800;cursor:pointer">ปิด</button>
+        </sc-if>
+
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ═══════════ BOTTOM NAV ═══════════ -->
+  <div style="position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;background:#fff;border-radius:26px 26px 0 0;box-shadow:0 -6px 24px rgba(255,120,80,.18);display:flex;align-items:flex-end;padding:8px 8px 10px 8px;z-index:50">
+    <button onClick="{{ goHome }}" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0">
+      <img src="assets/mascots/big_mascot_01.webp" alt="" style="width:34px;height:34px;object-fit:contain;filter:{{ navHomeF }}">
+      <div style="font-size:12px;font-weight:800;color:{{ navHomeC }}">หน้าหลัก</div>
+    </button>
+    <button onClick="{{ goDiary }}" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0">
+      <img src="assets/icons/icon_po_clipboard.webp" alt="" style="width:34px;height:34px;object-fit:contain;filter:{{ navListF }}">
+      <div style="font-size:12px;font-weight:800;color:{{ navListC }}">สมุดบันทึก</div>
+    </button>
+    <button onClick="{{ startBuy }}" style="flex:1.1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;margin-top:-28px">
+      <div style="width:62px;height:62px;border-radius:999px;background:linear-gradient(135deg,#7AB8F5,#9D8BF3,#FF93C6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:34px;font-weight:900;box-shadow:0 8px 20px rgba(247,107,184,.45);border:4px solid #fff">+</div>
+      <div style="font-size:12px;font-weight:800;color:#F76707;margin-top:2px">บันทึกซื้อ</div>
+    </button>
+    <button onClick="{{ goData }}" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0">
+      <img src="assets/icons/icon_stock_shelf.webp" alt="" style="width:34px;height:34px;object-fit:contain;filter:{{ navDataF }}">
+      <div style="font-size:12px;font-weight:800;color:{{ navDataC }}">ร้านค้า</div>
+    </button>
+    <button onClick="{{ goDash }}" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0">
+      <img src="assets/mascots/small_03-mascot-profit-loss.webp" alt="" style="width:34px;height:34px;object-fit:contain;filter:{{ navDashF }}">
+      <div style="font-size:12px;font-weight:800;color:{{ navDashC }}">สรุป</div>
+    </button>
+  </div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:430,&quot;height&quot;:900},&quot;showMascots&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;หน้าตา&quot;}}">
+/* ============================================================
+   KodKlean LIFF — logic ทั้งหมดของ UI mockup
+   โครง: state.screen เป็นตัวสลับหน้า / ข้อมูลอยู่ window.KK_DATA (data.js)
+   ที่ผู้ใช้แก้ (ร้าน/สินค้า/รายการใหม่/ลายเซ็น) เก็บ localStorage 'kk_liff_v1'
+   ============================================================ */
+class Component extends DCLogic {
+  state = {
+    screen: 'home', buyStep: 0, modal: null, toast: '',
+    db: null, drafts: [], receives: [],
+    cart: { vendorId: null, qty: {}, priceOv: {}, ship: '', box: '', route: null, sub: null, ev: {} },
+    listTab: 'ทั้งหมด', search: '', listSearch: '', catFilter: 'ทั้งหมด',
+    dataVendorId: null, dataCat: 'ทั้งหมด',
+    recv: {}, sel: {}, sig: '', success: null,
+    multi: { total: '', rows: [] }, expense: { cat: '', amount: '', note: '', isAsset: false }, svc: {}, aiRunning: false, aiFilled: false,
+    // สมุดบันทึก (ปฏิทิน) / งบ 2 ชุด / กฎคัดกรอง / cache ข้อมูลจริงรายเดือน
+    diary: { ym: '', sel: '', vFilter: '' }, books: { ym: '', tab: 'p' },
+    rules: null, monthLive: {}, thumbs: {}, agg: null
+  };
+
+  componentDidMount() {
+    const ym = (window.KK_HELPERS ? KK_HELPERS.thisYm() : new Date().toISOString().slice(0, 7));
+    const today = (window.KK_HELPERS ? KK_HELPERS.todayIso() : new Date().toISOString().slice(0, 10));
+    this.setState({ diary: { ym, sel: today, vFilter: '' }, books: { ym, tab: 'p' } });
+    this.loadDB(); this.initBackend();
+  }
+
+  /* ---------- เชื่อม backend จริง (kk-finance-line) · ไม่ตั้งค่า = โหมดสาธิต ไม่พัง ---------- */
+  async initBackend() {
+    const c = window.KK_CONFIG || {};
+    // health เช็คได้เสมอ (ไม่ต้อง login) — บอกว่า backend/secret พร้อมแค่ไหน
+    this.refreshHealth();
+    if (!c.LIFF_ID || !window.liff) { this.setState({ liveMode: false }); return; }
+    try {
+      await window.liff.init({ liffId: c.LIFF_ID });
+      // auto-login เฉพาะเมื่อรันในแอป LINE จริง — นอก LINE (พรีวิว/เว็บ) ตกลงโหมดสาธิต ไม่เด้งออก
+      if (!window.liff.isLoggedIn()) {
+        if (window.liff.isInClient && window.liff.isInClient()) { window.liff.login(); return; }
+        this.setState({ liveMode: false }); return;
+      }
+      this._idToken = window.liff.getIDToken();
+      const prof = await window.liff.getProfile().catch(() => null);
+      this.setState({ liveMode: true, lineName: prof?.displayName || null });
+      this.bootstrapLive();
+    } catch (e) {
+      this.setState({ liveMode: false, liveError: String(e?.message || e) });
+    }
+  }
+
+  async api(action, payload = {}) {
+    const c = window.KK_CONFIG || {};
+    if (!c.FN_GATEWAY) return { ok: false, error: 'no gateway' };
+    try {
+      const res = await fetch(c.FN_GATEWAY, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': c.ANON_KEY || '',
+          'Authorization': 'Bearer ' + (c.ANON_KEY || ''),
+          ...(this._idToken ? { 'x-line-id-token': this._idToken } : {}),
+        },
+        body: JSON.stringify({ action, payload }),
+      });
+      return await res.json();
+    } catch (e) { return { ok: false, error: String(e?.message || e) }; }
+  }
+
+  async refreshHealth() {
+    const r = await this.api('health');
+    if (r && r.ok && r.data) this.setState({ health: r.data });
+    else this.setState({ health: null });
+  }
+
+  /* ---------- ต่อ backend จริง: แมป mockup id/route → รหัสจริง (fin_*) + อ่าน/เขียน ---------- */
+  // แก้ปัญหา "รหัสร้าน/route ฝั่ง mockup ไม่ตรง backend": ใช้ mockup_id ที่ผูกไว้ใน fin_vendors
+  // กฎคัดกรอง (เจ้าของแก้ได้ในหน้า "กฎคัดกรอง" — เก็บใน fin_rules + localStorage)
+  rulesList() { const r = this.state.rules; if (r && r.length) return r; return window.KK_HELPERS ? KK_HELPERS.defaultRules() : []; }
+  ruleById(id) { return this.rulesList().find(r => r.id === id) || null; }
+  mainRules() { return this.rulesList().filter(r => (r.group || 'main') !== 'none'); }
+  subRules() { return this.rulesList().filter(r => r.group === 'none'); }
+  // 🔒 ล็อก: กฎ → รหัส route ฝั่งบัญชี (สูตรเดบิต-เครดิต/VAT ผูกอัตโนมัติที่ backend)
+  beRoute() {
+    const { route, sub } = this.state.cart;
+    const rule = route === 'none' ? this.ruleById(sub) : this.ruleById(route);
+    return window.KK_HELPERS ? KK_HELPERS.backendRoute(rule) : '2a';
+  }
+  beVendorId(mockupId) { return (this._vmap || {})[mockupId] || null; }
+  liveLines() { return this.cartLines().map(l => ({ name: l.it.name, qty: l.qty, unit: l.it.unit, price: l.price })); }
+
+  async bootstrapLive() {
+    try {
+      const r = await this.api('bootstrap');
+      if (!r || !r.ok || !r.data) return;
+      const d = r.data;
+      // แมป mockup_id → uuid: ใช้ฟิลด์ mockup_id ถ้ามี ไม่งั้น fallback จับคู่ด้วยชื่อร้าน
+      const byName = { 'Makro': 'makro', 'Freshket': 'freshket', 'Shopee': 'shopee', 'ฟ้าซีฟู้ด': 'fah', 'PP Food': 'ppfood', 'หลอยไก่สด': 'loy', 'Supplier เนื้อ (FB)': 'meatfb', 'Supplier เนื้อ ป๋าพุธ': 'papud', 'Supplier แซลมอน (Nu Tai Toto)': 'salmon' };
+      this._vmap = {}; this._vmapRev = {}; this._vendorsLive = {};
+      (d.vendors || []).forEach(v => {
+        const mid = v.mockup_id || byName[v.name];
+        if (mid) { this._vmap[mid] = v.id; this._vmapRev[v.id] = mid; }
+        this._vendorsLive[v.id] = v;
+      });
+      this._accounts = {};
+      (d.accounts || []).forEach(a => { this._accounts[a.code] = a.name; });
+      // กฎคัดกรองที่เจ้าของแก้ไว้ (เก็บใน fin_rules) — โหลดมาทับค่าตั้งต้น
+      const savedRules = (d.rules || []).find(r => r.key === 'liff_screening_rules');
+      if (savedRules && Array.isArray(savedRules.value) && savedRules.value.length) this.setState({ rules: savedRules.value });
+      this._entityId = (d.entities && d.entities[0] && d.entities[0].id) || 'fe9257df-915a-46e3-8661-d26253924de1';
+      this._entityName = (d.entities && d.entities[0] && d.entities[0].name) || 'กิจการ';
+      // แคตตาล็อกสินค้าจริงจากฐานข้อมูล (fin_vendor_items ผ่าน RPC liff_catalog) — แทน mock ทั้งหมด
+      const cat = await this.api('liff_catalog');
+      if (cat && cat.ok && Array.isArray(cat.data) && cat.data.length) {
+        const db = Object.assign({}, this.state.db);
+        db.vendors = cat.data.map(v => ({
+          id: v.id, name: v.name, channel: v.channel || '', logo: v.logo || 'assets/logos/other.png',
+          color: v.color || '#8A6D5C', shipping: +v.shipping || 0, box: +v.box || 0, freq: v.freq || '',
+          doc: Array.isArray(v.doc) ? v.doc : [], cats: Array.isArray(v.cats) ? v.cats : [],
+          items: Array.isArray(v.items) ? v.items : []
+        }));
+        db.purchases = []; // ตัดรายการซื้อตัวอย่างออก — โหมดจริงใช้ข้อมูลจากสมุดบันทึก (liff_month)
+        this.setState({ db, receives: [] });
+        this.save();
+      }
+      // กราฟ Dashboard + สมุดบันทึกเดือนปัจจุบัน ดึงจาก fin จริง
+      this.api('liff_dashboard').then(g => { if (g && g.ok && g.data) this.setState({ agg: g.data }); });
+      this.ensureMonth(this.state.diary.ym, true);
+      // ดึงเอกสารรออนุมัติจริงมาแทนตัวอย่าง (ได้ backendId ไว้ใช้ตอนเซ็น) — ว่าง = ยังไม่มีเอกสารรอ
+      const a = await this.api('approve_list');
+      const docs = (a && a.ok && a.data && Array.isArray(a.data.docs)) ? a.data.docs : [];
+      this.setState({ drafts: docs.map(x => {
+        const pl = x.payload || {};
+        return { id: x.doc_no || x.id, backendId: x.id,
+          type: x.type === 'expense_certificate' ? 'ใบรับรองแทนใบเสร็จ' : 'ใบสำคัญจ่าย',
+          entity: pl.entity_name || this._entityName || 'กิจการ', vendorId: null, amount: +pl.total || 0,
+          date: pl.date || '', payee: pl.payee || pl.vendor_name || '', ready: true, missingField: '' };
+      }) });
+    } catch (e) { /* never block — โหมดสาธิตทำงานต่อได้ */ }
+  }
+  // โหลดข้อมูลเดือน (ปฏิทิน/ไดอารี่/งบ) จาก fin จริง — โหมดสาธิตคำนวณจากรายการในเครื่องแทน
+  async ensureMonth(ym, force) {
+    if (!this.state.liveMode || !ym) return;
+    if (!force && this.state.monthLive[ym]) return;
+    const r = await this.api('liff_month', { ym });
+    if (r && r.ok && r.data) {
+      const monthLive = Object.assign({}, this.state.monthLive); monthLive[ym] = r.data;
+      this.setState({ monthLive });
+      // ขอ URL รูปย่อล่วงหน้า (Supabase thumbnail — เร็ว) ให้ไดอารี่โชว์ได้ทันที
+      (r.data.files || []).slice(0, 24).forEach(f => { if (f.thumb) this.signThumb(f.thumb); });
+    }
+  }
+  // ขอ URL รูปย่อจาก Supabase (เร็ว) — รูปต้นฉบับอยู่ Google Drive กดดูตัวจริงค่อยเปิด
+  async signThumb(path) {
+    if (!path || this.state.thumbs[path]) return;
+    const r = await this.api('signed_url', { path });
+    const thumbs = Object.assign({}, this.state.thumbs);
+    thumbs[path] = (r && r.ok && r.data && r.data.url) ? r.data.url : '';
+    this.setState({ thumbs });
+  }
+  async pushLive(action, payload, okMsg) {
+    if (!this.state.liveMode) return;
+    try {
+      const r = await this.api(action, payload);
+      if (r && r.ok) this.pop(okMsg || 'บันทึกขึ้นระบบจริงแล้ว ✓');
+      else this.pop('ต่อระบบไม่ติด: ' + ((r && r.error) ? r.error : 'ไม่ทราบสาเหตุ') + ' · บันทึกในเครื่องไว้ก่อน');
+    } catch (e) { this.pop('บันทึกในเครื่องไว้ก่อน — ต่อระบบไม่ติด'); }
+  }
+
+  /* ---------- โหลด/บันทึกข้อมูล ---------- */
+  loadDB() {
+    const base = window.KK_DATA;
+    if (!base) { setTimeout(() => this.loadDB(), 120); return; }
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem('kk_liff_v1') || 'null'); } catch (e) {}
+    const db = {
+      vendors: (saved && saved.vendors) || JSON.parse(JSON.stringify(base.vendors)),
+      purchases: (saved && saved.purchases) || JSON.parse(JSON.stringify(base.purchases))
+    };
+    this.setState({ db, sig: (saved && saved.sig) || '', prefsChars: !(saved && saved.prefsChars === false), svc: (saved && saved.svc) || {}, rules: (saved && saved.rules && saved.rules.length) ? saved.rules : null, drafts: JSON.parse(JSON.stringify(base.drafts)), receives: JSON.parse(JSON.stringify(base.receives)) });
+  }
+  save() {
+    try { localStorage.setItem('kk_liff_v1', JSON.stringify({ vendors: this.state.db.vendors, purchases: this.state.db.purchases, sig: this.state.sig, prefsChars: this.state.prefsChars !== false, svc: this.state.svc || {}, rules: this.state.rules || null })); } catch (e) {}
+  }
+  fmt(n) { return '฿' + Math.round(n).toLocaleString('th-TH'); }
+  pop(msg) {
+    this.setState({ toast: msg });
+    clearTimeout(this._tt); this._tt = setTimeout(() => this.setState({ toast: '' }), 2200);
+  }
+  vendorById(id) { return (this.state.db ? this.state.db.vendors : []).find(v => v.id === id) || { name: '?', logo: 'assets/logos/other.png', items: [], doc: [], cats: [], shipping: 0, box: 0 }; }
+  // บีบ+แปลง WebP ฝั่ง client ก่อนเก็บ (ของจริงทำก่อนอัปโหลด Supabase)
+  compressOne(f, cb) {
+    const r = new FileReader();
+    r.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const c = document.createElement('canvas');
+        const s = Math.min(1, 640 / Math.max(img.width, img.height));
+        c.width = img.width * s; c.height = img.height * s;
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        cb(c.toDataURL('image/webp', 0.8));
+      };
+      img.src = r.result;
+    };
+    r.readAsDataURL(f);
+  }
+  // แนบได้หลายรูปต่อครั้ง — เรียก cb ทีละรูปตามลำดับ
+  readFiles(e, cb) {
+    const fs = Array.prototype.slice.call((e.target.files || [])); if (!fs.length) return;
+    fs.forEach(f => this.compressOne(f, cb));
+    e.target.value = '';
+  }
+  readFile(e, cb) {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    this.compressOne(f, cb);
+  }
+
+  /* ---------- คัดกรองเอกสาร (ห้ามโชว์รหัส route ให้ผู้ใช้) ----------
+     ตัวเลือกทั้งหมดมาจาก "กฎคัดกรอง" ที่เจ้าของแก้เองได้ — ไม่ hardcode แล้ว */
+  routeDefs() {
+    const H = window.KK_HELPERS;
+    const list = this.mainRules().map(r => ({
+      key: r.id, icon: H ? H.ruleIcon(r) : 'assets/icons/icon_document_folder.webp',
+      title: r.title, desc: r.desc, result: H ? H.ruleResult(r) : '', book: H ? H.bookLabel(r) : '', rule: r
+    }));
+    if (this.subRules().length) list.push({ key: 'none', icon: 'assets/icons/icon_warning.webp', title: 'ไม่มีเอกสารเลย', desc: 'ถามต่ออีกนิดว่าจ่ายยังไง', result: '', book: '' });
+    return list;
+  }
+  subDefs() {
+    const H = window.KK_HELPERS;
+    return this.subRules().map(r => ({ key: r.id, title: r.title, desc: r.desc, result: H ? H.ruleResult(r) : '', book: H ? H.bookLabel(r) : '', rule: r }));
+  }
+  currentRouteInfo() {
+    const { route, sub } = this.state.cart;
+    if (!route) return null;
+    if (route !== 'none') return this.routeDefs().find(r => r.key === route);
+    if (!sub) return null;
+    return this.subDefs().find(s => s.key === sub);
+  }
+  routeLabel() {
+    const { route, sub } = this.state.cart;
+    const r = this.routeDefs().find(x => x.key === route);
+    if (!r) return 'ยังไม่ระบุ';
+    if (route !== 'none') return r.title;
+    const s = this.subDefs().find(x => x.key === sub);
+    return s ? 'ไม่มีเอกสาร · ' + s.title : r.title;
+  }
+  evidenceList() {
+    const v = this.vendorById(this.state.cart.vendorId);
+    const list = (v.doc || []).slice();
+    const info = this.currentRouteInfo();
+    if (info && info.rule && info.rule.doc === 'cert' && list.indexOf('รูป/ข้อมูลผู้รับเงิน') < 0) list.push('รูป/ข้อมูลผู้รับเงิน');
+    return list;
+  }
+  // หลักฐานแนบได้หลายรูปต่อช่อง — คืน array เสมอ (รองรับข้อมูลเก่าที่เป็นรูปเดียว)
+  evArr(l) { const v = this.state.cart.ev[l]; return Array.isArray(v) ? v : (v ? [v] : []); }
+  evMissing() { return this.evidenceList().filter(l => this.evArr(l).length === 0); }
+
+  /* ---------- flow ซื้อ ---------- */
+  resetCart() { return { vendorId: null, qty: {}, priceOv: {}, ship: '', box: '', route: null, sub: null, ev: {}, isAsset: false }; }
+  startBuy = () => this.setState({ screen: 'buy', buyStep: 1, cart: this.resetCart(), search: '', catFilter: 'ทั้งหมด', aiFilled: false });
+  buyBack = () => {
+    const s = this.state.buyStep;
+    if (s <= 1) this.setState({ screen: 'home', buyStep: 0 });
+    else this.setState({ buyStep: s - 1 });
+  };
+  buyNextFn = () => {
+    const st = this.state; const s = st.buyStep;
+    if (s === 2 && this.cartCount() === 0) { this.pop('เลือกสินค้าอย่างน้อย 1 รายการก่อนนะ'); return; }
+    if (s === 4) {
+      const info = this.currentRouteInfo();
+      if (!info) { this.pop('เลือกประเภทเอกสารก่อนนะ'); return; }
+    }
+    if (s === 5) { this.submitBuy(false); return; }
+    this.setState({ buyStep: s + 1 });
+  };
+  cartLines() {
+    const v = this.vendorById(this.state.cart.vendorId);
+    const q = this.state.cart.qty, ov = this.state.cart.priceOv;
+    return (v.items || []).filter(it => q[it.id] > 0).map(it => ({ it, qty: q[it.id], price: ov[it.id] != null ? ov[it.id] : it.price }));
+  }
+  cartCount() { return this.cartLines().reduce((a, l) => a + l.qty, 0); }
+  cartSub() { return this.cartLines().reduce((a, l) => a + l.qty * l.price, 0); }
+  grandTotal() { return this.cartSub() + (+this.state.cart.ship || 0) + (+this.state.cart.box || 0); }
+
+  submitBuy(draft) {
+    const missing = this.evMissing();
+    if (!draft) { this.setState({ buyStep: 6 }); return; }
+    this.createPurchase('ร่าง', missing);
+    this.setState({ screen: 'list', buyStep: 0, listTab: 'ร่าง' });
+    this.pop('บันทึกร่างแล้ว ไปรอที่ตะกร้ารอจับคู่');
+  }
+  saveDraft = () => this.submitBuy(true);
+  confirmBuy = () => {
+    const info = this.currentRouteInfo();
+    const missing = this.evMissing();
+    const needDoc = !!(info && info.rule && info.rule.doc !== 'none');
+    const status = missing.length ? 'ร่าง' : (needDoc ? 'รออนุมัติ' : 'เสร็จสมบูรณ์');
+    this.createPurchase(status, missing);
+    // 🔴 กด "ยืนยัน" = เขียนขึ้นระบบจริงเสมอ (ยกเลิกกติกาเก่าที่ถ้าหลักฐานไม่ครบจะเก็บในเครื่องอย่างเดียว)
+    if (this.state.liveMode) {
+      // ส่ง payload ให้ตรง contract ของ backend kk-finance (summaryConfirm อ่าน route/total/vat/category_account)
+      const vid = this.beVendorId(this.state.cart.vendorId);
+      const vn = this.vendorById(this.state.cart.vendorId).name;
+      const beR = this.beRoute();
+      const total = this.grandTotal();
+      const vat = beR === '1a' ? Math.round((total - total / 1.07) * 100) / 100 : 0; // ใบกำกับ = แยกภาษีซื้อ 7%
+      const isAsset = !!this.state.cart.isAsset;
+      if (vid) this.pushLive('summary_confirm', {
+        entity_id: this._entityId, vendor_id: vid, vendor_name: vn,
+        route: beR, total, vat, is_stock: !isAsset, is_asset: isAsset,
+        category_account: '5010', // ต้นทุนขาย-วัตถุดิบ (ใช้เมื่อไม่ใช่ของถาวร)
+        description: this.routeLabel() + ' — ' + vn,
+        items: this.cartLines().map(l => ({ item_name: l.it.name, qty: l.qty, unit: l.it.unit, unit_price: l.price })),
+        ...(isAsset ? { asset: { name: vn + ' (ของถาวร)' } } : {})
+      }, 'ลงบัญชีขึ้นระบบจริงแล้ว ✓ (เดบิต=เครดิต)');
+      else this.pop('ยังจับคู่ร้านนี้กับระบบจริงไม่ได้ (ลองปิด-เปิดแอปใหม่) — บันทึกในเครื่องไว้ก่อน');
+    } else {
+      this.pop('ตอนนี้เป็นโหมดสาธิต (ยังไม่ได้เข้าผ่าน LINE) — ยังไม่เขียนขึ้นระบบจริง');
+    }
+    if (!missing.length && needDoc) {
+      const docType = info.rule.doc === 'cert' ? 'ใบรับรองแทนใบเสร็จ' : 'ใบสำคัญจ่าย';
+      const v = this.vendorById(this.state.cart.vendorId);
+      const drafts = this.state.drafts.slice();
+      drafts.unshift({ id: 'PV-2569-' + String(44 + drafts.length).padStart(4, '0'), type: docType, entity: 'กะเพราโคตรคลีน', vendorId: v.id, amount: this.grandTotal(), date: 'วันนี้', payee: v.name + ' (โอนธนาคาร)', ready: true });
+      this.setState({ drafts });
+    }
+    this.setState({
+      screen: 'success', buyStep: 0,
+      success: {
+        title: status === 'ร่าง' ? 'บันทึกร่างเรียบร้อย!' : 'ส่งเข้าระบบเรียบร้อย!',
+        desc: status === 'รออนุมัติ' ? 'ระบบลงบัญชี + สร้าง' + (info.rule && info.rule.doc === 'cert' ? 'ใบรับรองแทนใบเสร็จ' : 'ใบสำคัญจ่าย') + 'ให้แล้ว รอเซ็นอนุมัติ' :
+          status === 'ร่าง' ? 'หลักฐานยังไม่ครบ ระบบพักไว้ที่ตะกร้ารอจับคู่ เติมทีหลังได้' :
+          'ระบบลงบัญชีให้เรียบร้อย ไม่ต้องสร้างเอกสารเพิ่ม'
+      }
+    });
+  };
+  createPurchase(status, missing) {
+    const st = this.state; const v = this.vendorById(st.cart.vendorId);
+    const db = st.db;
+    const photos = [];
+    this.evidenceList().forEach(l => this.evArr(l).slice(0, 3).forEach(u => { if (photos.length < 6) photos.push(u); }));
+    const p = {
+      id: 'PC-' + (913 + db.purchases.filter(x => x.id.indexOf('PC-') === 0).length),
+      vendorId: v.id, date: 'วันนี้', iso: (window.KK_HELPERS ? KK_HELPERS.todayIso() : new Date().toISOString().slice(0, 10)),
+      total: this.grandTotal(), status,
+      route: this.routeLabel(), missing: missing.slice(), isAsset: !!st.cart.isAsset, photos
+    };
+    db.purchases = [p].concat(db.purchases);
+    this.setState({ db }); this.save();
+  }
+
+  /* ---------- modal ทั่วไป ---------- */
+  openModal(m) { this.setState({ modal: m }); }
+  closeModal = () => this.setState({ modal: null });
+  stopClick = (e) => e.stopPropagation();
+  modalSave = () => {
+    const m = this.state.modal; if (!m) return;
+    if (m.kind === 'vendor') this.saveVendorForm(m);
+    else if (m.kind === 'item') this.saveItemForm(m);
+    else if (m.kind === 'price') this.savePriceForm(m);
+    else if (m.kind === 'rule') this.saveRuleForm(m);
+    this.setState({ modal: null });
+  };
+
+  /* ---------- กฎคัดกรอง: เพิ่ม/แก้/ลบ/สลับลำดับ (เก็บ fin_rules — มีผลจริง ไม่ hardcode) ---------- */
+  persistRules(rules, msg) {
+    this.setState({ rules }, () => this.save());
+    if (this.state.liveMode) this.pushLive('settings_save', { rule_key: 'liff_screening_rules', value: rules, description: 'กฎคัดกรองเอกสาร LIFF (เจ้าของแก้เอง)' }, msg || 'บันทึกกฎขึ้นระบบจริงแล้ว ✓');
+    else if (msg) this.pop(msg);
+  }
+  ruleForm(r) {
+    this.openModal({
+      kind: 'rule', title: r ? 'แก้ไขกฎ' : 'เพิ่มกฎใหม่', targetId: r ? r.id : null,
+      vals: { title: r ? r.title : '', desc: r ? r.desc : '', doc: r ? r.doc : 'pv', vat: r && r.vat ? 'y' : 'n', book: r ? r.book : 'both', group: r ? (r.group || 'main') : 'main' },
+      fields: [
+        { key: 'title', label: 'เงื่อนไข — เจอเอกสาร/สถานการณ์แบบไหน', type: 'text' },
+        { key: 'desc', label: 'คำอธิบายสั้นๆ (โชว์ตอนบันทึกซื้อ)', type: 'text' },
+        { key: 'doc', label: 'ระบบต้องออกเอกสารชนิดไหนให้', type: 'select', opts: [{ v: 'none', t: 'ไม่ต้องสร้างเอกสารเพิ่ม' }, { v: 'pv', t: 'ใบสำคัญจ่าย' }, { v: 'cert', t: 'ใบรับรองแทนใบเสร็จ' }] },
+        { key: 'vat', label: 'มีภาษีซื้อ (VAT 7%) ไหม', type: 'select', opts: [{ v: 'n', t: 'ไม่มี VAT' }, { v: 'y', t: 'มี VAT 7% — ระบบแยกภาษีซื้อให้' }] },
+        { key: 'book', label: 'เข้างบชุดไหน', type: 'select', opts: [{ v: 'both', t: 'เข้าทั้ง 2 งบ (ส่วนตัว + จำลองนิติ)' }, { v: 'inhouse', t: 'เฉพาะงบส่วนตัว (เอกสารไม่พอสำหรับงบนิติ)' }] },
+        { key: 'group', label: 'ตำแหน่งตัวเลือกตอนบันทึกซื้อ', type: 'select', opts: [{ v: 'main', t: 'ตัวเลือกหลัก' }, { v: 'none', t: 'อยู่ใต้ "ไม่มีเอกสารเลย"' }] }
+      ]
+    });
+  }
+  saveRuleForm(m) {
+    const vals = m.vals;
+    if (!vals.title) { this.pop('ใส่ชื่อเงื่อนไขก่อนนะ'); return; }
+    const rules = this.rulesList().slice();
+    const rule = { id: m.targetId || ('r' + Date.now()), group: vals.group, title: vals.title, desc: vals.desc || '', doc: vals.doc, vat: vals.vat === 'y', book: vals.book };
+    const i = rules.findIndex(x => x.id === rule.id);
+    if (i >= 0) rules[i] = rule; else rules.push(rule);
+    this.persistRules(rules, i >= 0 ? 'แก้กฎแล้ว — มีผลตอนบันทึกซื้อทันที' : 'เพิ่มกฎใหม่แล้ว — ระบบผูกสูตรบัญชีให้อัตโนมัติ');
+  }
+  delRule(r) {
+    const rules = this.rulesList().filter(x => x.id !== r.id);
+    if (!rules.filter(x => (x.group || 'main') !== 'none').length) { this.pop('ต้องเหลือตัวเลือกหลักอย่างน้อย 1 ข้อ'); return; }
+    if (!window.confirm('ลบกฎ "' + r.title + '"?')) return;
+    this.persistRules(rules, 'ลบกฎแล้ว');
+  }
+  moveRule(r, dir) {
+    const rules = this.rulesList().slice();
+    const i = rules.findIndex(x => x.id === r.id); const j = i + dir;
+    if (i < 0 || j < 0 || j >= rules.length) return;
+    rules.splice(i, 1); rules.splice(j, 0, r);
+    this.persistRules(rules);
+  }
+
+  /* ---------- จัดการร้าน ---------- */
+  vendorForm(v, afterPickInBuy) {
+    // ตัวเลือก "เอกสารที่ร้านออกให้ได้" — ผูกกับ default route อัตโนมัติ
+    const docOpts = [{ v: '', t: 'ไม่ตั้งค่า (เลือกเองตอนบันทึก)' }].concat(this.mainRules().map(r => ({ v: r.id, t: r.title })));
+    this.openModal({
+      kind: 'vendor', title: v ? 'แก้ไขร้าน' : 'เพิ่มร้านใหม่', targetId: v ? v.id : null, afterPickInBuy: !!afterPickInBuy, img: v ? v.logo : 'assets/logos/other.png',
+      vals: {
+        name: v ? v.name : '', channel: v ? v.channel : 'แชท',
+        taxId: v ? (v.taxId || '') : '', address: v ? (v.address || '') : '', contact: v ? (v.contact || '') : '',
+        docType: v ? (v.docType || '') : '',
+        ship: v ? String(v.shipping) : '0', box: v ? String(v.box) : '0',
+        doc: v ? (v.doc || []).join(', ') : 'แคปแชทคำสั่งซื้อ, สลิปโอนเงิน, รูปสินค้าที่รับ'
+      },
+      fields: [
+        { key: 'name', label: 'ชื่อร้าน', type: 'text' },
+        { key: 'channel', label: 'ช่องทาง (เช่น แชท / ออนไลน์ / สาขา)', type: 'text' },
+        { key: 'taxId', label: 'เลขประจำตัวผู้เสียภาษี 13 หลัก (สำหรับออกเอกสาร · เว้นว่างได้)', type: 'text' },
+        { key: 'address', label: 'ที่อยู่ร้าน (สำหรับออกเอกสาร · เว้นว่างได้)', type: 'text' },
+        { key: 'contact', label: 'ช่องทางติดต่อ (เบอร์ / LINE / FB)', type: 'text' },
+        { key: 'docType', label: 'เอกสารที่ร้านนี้ออกให้ได้ (เด้งตัวเลือกอัตโนมัติตอนซื้อ)', type: 'select', opts: docOpts },
+        { key: 'ship', label: 'ค่าส่งปกติ (บาท)', type: 'number' },
+        { key: 'box', label: 'ค่าลังโฟมปกติ (บาท)', type: 'number' },
+        { key: 'doc', label: 'เช็คลิสต์เอกสาร (คั่นด้วย , )', type: 'text' }
+      ]
+    });
+  }
+  saveVendorForm(m) {
+    const db = this.state.db; const vals = m.vals;
+    if (!vals.name) { this.pop('ใส่ชื่อร้านก่อนนะ'); return; }
+    const extra = { taxId: (vals.taxId || '').trim(), address: (vals.address || '').trim(), contact: (vals.contact || '').trim(), docType: vals.docType || '' };
+    let vid = m.targetId;
+    if (m.targetId) {
+      const v = db.vendors.find(x => x.id === m.targetId);
+      Object.assign(v, extra, { name: vals.name, channel: vals.channel, shipping: +vals.ship || 0, box: +vals.box || 0, doc: vals.doc.split(',').map(s => s.trim()).filter(Boolean), logo: m.img });
+      this.pop('แก้ไขร้านแล้ว');
+    } else {
+      const nv = Object.assign({ id: 'v' + Date.now(), name: vals.name, channel: vals.channel, logo: m.img, color: '#F76707', shipping: +vals.ship || 0, box: +vals.box || 0, freq: '', doc: vals.doc.split(',').map(s => s.trim()).filter(Boolean), cats: [], items: [] }, extra);
+      db.vendors = db.vendors.concat([nv]);
+      vid = nv.id;
+      this.pop('เพิ่มร้านใหม่แล้ว ใช้ได้ทันที');
+      if (m.afterPickInBuy) this.setState({ cart: Object.assign({}, this.state.cart, { vendorId: nv.id }), buyStep: 2 });
+    }
+    this.setState({ db }); this.save();
+    this.pushVendorLive(vid);
+  }
+  // ส่งข้อมูลร้านขึ้น fin_vendors จริง (tax_id / default_route / ที่อยู่+ติดต่อใน memory)
+  pushVendorLive(mockupId) {
+    if (!this.state.liveMode) return;
+    const v = this.vendorById(mockupId); if (!v || !v.name) return;
+    const H = window.KK_HELPERS;
+    const uuid = this.beVendorId(mockupId);
+    const rule = v.docType ? this.ruleById(v.docType) : null;
+    const oldMem = (uuid && this._vendorsLive && this._vendorsLive[uuid] && this._vendorsLive[uuid].memory) || {};
+    const vendor = Object.assign(
+      uuid ? { id: uuid } : { mockup_id: mockupId, active: true },
+      { name: v.name, channel: v.channel || null, tax_id: v.taxId || null,
+        memory: Object.assign({}, oldMem, { address: v.address || null, contact: v.contact || null, doc_capability: v.docType || null }) },
+      rule && H ? { default_route: H.backendRoute(rule) } : {}
+    );
+    this.pushLive('vendor_save', { vendor }, 'บันทึกข้อมูลร้านขึ้นระบบจริงแล้ว ✓');
+  }
+  delVendor(v) {
+    if (!window.confirm('ลบร้าน "' + v.name + '"? (รายการเก่าที่อ้างถึงยังอยู่ — เป็นการซ่อนร้าน ไม่ลบข้อมูลเงิน)')) return;
+    const db = this.state.db;
+    db.vendors = db.vendors.filter(x => x.id !== v.id);
+    this.setState({ db }); this.save(); this.pop('ซ่อนร้านแล้ว');
+  }
+  moveVendor(v, dir) {
+    const db = this.state.db; const i = db.vendors.indexOf(v); const j = i + dir;
+    if (j < 0 || j >= db.vendors.length) return;
+    db.vendors.splice(i, 1); db.vendors.splice(j, 0, v);
+    this.setState({ db }); this.save();
+  }
+
+  /* ---------- จัดการสินค้า ---------- */
+  itemForm(v, it, inBuy) {
+    this.openModal({
+      kind: 'item', title: it ? 'แก้ไขสินค้า' : 'เพิ่มสินค้า — ' + v.name, vendorId: v.id, targetId: it ? it.id : null, inBuy: !!inBuy, img: it ? (it.img || 'assets/logos/other.png') : 'assets/logos/other.png',
+      vals: { name: it ? it.name : '', spec: it ? it.spec : '', unit: it ? it.unit : 'กก.', price: it ? String(it.price) : '', cat: it ? (it.cat || '') : '' },
+      fields: [
+        { key: 'name', label: 'ชื่อสินค้า', type: 'text' },
+        { key: 'spec', label: 'สเปค (เช่น 16/20 · NW80%)', type: 'text' },
+        { key: 'unit', label: 'หน่วยขาย (กก. / แพ็ก / ถุง)', type: 'text' },
+        { key: 'price', label: 'ราคาล่าสุด (บาท)', type: 'number' },
+        { key: 'cat', label: 'หมวดในร้าน (เว้นว่างได้)', type: 'text' }
+      ]
+    });
+  }
+  saveItemForm(m) {
+    const db = this.state.db; const v = db.vendors.find(x => x.id === m.vendorId); const vals = m.vals;
+    if (!vals.name) { this.pop('ใส่ชื่อสินค้าก่อนนะ'); return; }
+    if (m.targetId) {
+      const it = v.items.find(x => x.id === m.targetId);
+      Object.assign(it, { name: vals.name, spec: vals.spec, unit: vals.unit || 'กก.', price: +vals.price || 0, cat: vals.cat, img: m.img === 'assets/logos/other.png' ? it.img : m.img });
+      this.pop('แก้ไขสินค้าแล้ว');
+    } else {
+      v.items = v.items.concat([{ id: 'i' + Date.now(), name: vals.name, spec: vals.spec, unit: vals.unit || 'กก.', price: +vals.price || 0, cat: vals.cat, img: m.img === 'assets/logos/other.png' ? '' : m.img }]);
+      if (vals.cat && (v.cats || []).indexOf(vals.cat) < 0) v.cats = (v.cats || []).concat([vals.cat]);
+      this.pop('เพิ่มสินค้าแล้ว');
+    }
+    this.setState({ db }); this.save();
+  }
+  delItem(v, it) {
+    if (!window.confirm('ลบสินค้า "' + it.name + '" ออกจากร้าน ' + v.name + '?')) return;
+    const db = this.state.db;
+    v.items = v.items.filter(x => x.id !== it.id);
+    this.setState({ db }); this.save(); this.pop('ลบสินค้าแล้ว');
+  }
+  moveItem(v, it, dir) {
+    const db = this.state.db; const i = v.items.indexOf(it); const j = i + dir;
+    if (j < 0 || j >= v.items.length) return;
+    v.items.splice(i, 1); v.items.splice(j, 0, it);
+    this.setState({ db }); this.save();
+  }
+  savePriceForm(m) {
+    const np = +m.vals.price || 0;
+    const cart = this.state.cart;
+    cart.priceOv = Object.assign({}, cart.priceOv); cart.priceOv[m.itemId] = np;
+    if (m.saveToVendor) {
+      const db = this.state.db; const v = db.vendors.find(x => x.id === cart.vendorId);
+      const it = v.items.find(x => x.id === m.itemId);
+      it.price = np; this.setState({ db }); this.save();
+      this.pop('บันทึกราคาใหม่เข้าประวัติราคาของร้านแล้ว');
+    } else this.pop('ใช้ราคานี้เฉพาะบิลนี้');
+    this.setState({ cart });
+  }
+
+  /* ---------- อนุมัติ ---------- */
+  confirmSign = () => {
+    const sel = this.state.sel;
+    const left = this.state.drafts.filter(d => !sel[d.id]);
+    const n = this.state.drafts.length - left.length;
+    const db = this.state.db;
+    db.purchases.forEach(p => { if (p.status === 'รออนุมัติ') p.status = 'เสร็จสมบูรณ์'; });
+    if (this.state.liveMode) {
+      const ids = this.state.drafts.filter(d => sel[d.id] && d.backendId).map(d => d.backendId);
+      if (ids.length) this.pushLive('approve_sign', { doc_ids: ids, signature: this.state.sig || null }, 'เซ็นอนุมัติขึ้นระบบจริงแล้ว ✓');
+    }
+    this.setState({ drafts: left, sel: {}, modal: null, db }); this.save();
+    this.pop('เซ็นและอนุมัติแล้ว ' + n + ' ใบ · เก็บไฟล์เข้าระบบ');
+  };
+
+  /* ---------- สลิปเดียว หลายร้าน ---------- */
+  startMulti = () => this.setState({ screen: 'multi', multi: { total: '', rows: [{ vendorId: null, amount: '', route: 'slip' }] } });
+  multiSet = (patch) => this.setState({ multi: Object.assign({}, this.state.multi, patch) });
+  multiRowSet = (i, patch) => { const rows = this.state.multi.rows.slice(); rows[i] = Object.assign({}, rows[i], patch); this.multiSet({ rows }); };
+  multiAddRow = () => this.multiSet({ rows: this.state.multi.rows.concat([{ vendorId: null, amount: '', route: 'slip' }]) });
+  multiDelRow = (i) => { const rows = this.state.multi.rows.slice(); rows.splice(i, 1); this.multiSet({ rows: rows.length ? rows : [{ vendorId: null, amount: '', route: 'slip' }] }); };
+  confirmMulti = () => {
+    const m = this.state.multi; const total = +m.total || 0;
+    const sum = (m.rows || []).reduce((a, r) => a + (+r.amount || 0), 0);
+    if (total <= 0) { this.pop('ใส่ยอดรวมของสลิปก่อนนะ'); return; }
+    if (m.rows.some(r => !r.vendorId || !(+r.amount > 0))) { this.pop('เลือกร้านและใส่ยอดให้ครบทุกบรรทัด'); return; }
+    if (Math.round(sum) !== Math.round(total)) { this.pop('ยอดรวมรายร้าน (' + this.fmt(sum) + ') ต้องเท่ากับยอดสลิป (' + this.fmt(total) + ') ก่อนถึงยืนยันได้'); return; }
+    const db = this.state.db;
+    const rmap = { slip: 'ใบสำคัญจ่าย + สลิป', tax: 'ใบกำกับภาษี (มี VAT)', bill: 'บิล/ใบเสร็จ' };
+    m.rows.forEach(r => {
+      db.purchases = [{ id: 'PC-' + (913 + db.purchases.filter(x => x.id.indexOf('PC-') === 0).length), vendorId: r.vendorId, date: 'วันนี้', total: +r.amount || 0, status: r.route === 'slip' ? 'รออนุมัติ' : 'เสร็จสมบูรณ์', route: (rmap[r.route] || rmap.slip) + ' · จากสลิปรวม', missing: [] }].concat(db.purchases);
+    });
+    if (this.state.liveMode) {
+      // backend paymentSplitSave อ่าน total + lines[] (ไม่ใช่ slip_total/rows) · ผลรวม lines ต้อง = total
+      const lines = m.rows.map(r => ({ vendor_id: this.beVendorId(r.vendorId), vendor_name: this.vendorById(r.vendorId).name, amount: +r.amount || 0, entity_id: this._entityId, expect_goods: true })).filter(x => x.vendor_id);
+      this.pushLive('payment_split_save', { entity_id: this._entityId, total, lines }, 'แตกสลิปหลายร้านขึ้นระบบจริงแล้ว ✓');
+    }
+    this.setState({ db, screen: 'success', success: { title: 'แตกสลิปเข้าหลายร้านแล้ว!', desc: 'สลิปรวมใบเดียว แนบให้ทุกร้าน · แต่ละร้านแยกเข้า route ของตัวเอง + ลงบัญชีให้อัตโนมัติ' } });
+    this.save();
+  };
+
+  /* ---------- ค่าใช้จ่ายไม่ใช่สินค้า ---------- */
+  startExpense = () => this.setState({ screen: 'expense', expense: { cat: '', amount: '', note: '', isAsset: false } });
+  expSet = (patch) => this.setState({ expense: Object.assign({}, this.state.expense, patch) });
+  confirmExpense = () => {
+    const ex = this.state.expense;
+    if (!ex.cat) { this.pop('เลือกประเภทค่าใช้จ่ายก่อนนะ'); return; }
+    if (!(+ex.amount > 0)) { this.pop('ใส่จำนวนเงินก่อนนะ'); return; }
+    const db = this.state.db;
+    db.purchases = [{ id: 'EX-' + (101 + db.purchases.filter(x => x.id.indexOf('EX-') === 0).length), vendorId: null, expName: ex.cat, date: 'วันนี้', total: +ex.amount || 0, status: 'รออนุมัติ', route: 'ใบสำคัญจ่าย (ค่าใช้จ่าย)', missing: [], isExpense: true, isAsset: !!ex.isAsset }].concat(db.purchases);
+    if (this.state.liveMode) {
+      // ผังบัญชีจริง (fin_accounts): 5210 การตลาด · 5220 เบ็ดเตล็ด · 5900 ค่าใช้จ่ายอื่น (ไม่มีเลข 5410 ในผังจริง)
+      const accByCat = { 'ค่าไฟฟ้า': '5220', 'ค่าน้ำประปา': '5220', 'ค่าเช่า': '5220', 'ค่าขนส่ง/เดินทาง': '5220', 'ค่าการตลาด': '5210', 'ค่าธรรมเนียมธนาคาร': '5900', 'เบ็ดเตล็ด': '5220' };
+      const isAsset = !!ex.isAsset;
+      this.pushLive('summary_confirm', {
+        entity_id: this._entityId, route: '1b', total: +ex.amount || 0, // 1b = มีบิล/ไม่มี VAT · เข้าทั้ง 2 งบ · ไม่สร้างเอกสารเพิ่ม
+        category_account: accByCat[ex.cat] || '5220', is_stock: false, is_asset: isAsset,
+        vendor_name: ex.cat, description: ex.cat + (ex.note ? ' · ' + ex.note : ''),
+        ...(isAsset ? { asset: { name: ex.cat } } : {})
+      }, 'ลงบัญชีค่าใช้จ่ายขึ้นระบบจริงแล้ว ✓');
+    }
+    this.setState({ db, screen: 'success', success: { title: 'บันทึกค่าใช้จ่ายแล้ว!', desc: ex.isAsset ? 'ทำเครื่องหมาย "ของถาวร" ไว้ · ลงค่าใช้จ่ายทันทีทั้ง 2 งบ (ยังไม่คิดค่าเสื่อม เก็บ flag ไว้เปิดทีหลัง)' : 'ระบบลงบัญชี + สร้างใบสำคัญจ่ายให้ รอเซ็นอนุมัติ' } });
+    this.save();
+  };
+
+  /* ---------- AI อ่านบิล (ผู้ช่วยกรอก · never block) ---------- */
+  aiEnabled() { const s = this.state.svc || {}; return !!s.gemini; }
+  aiScanBlocked = () => this.pop('ยังไม่ได้ใส่ Gemini key — ไปเปิดที่ ตั้งค่า › บริการภายนอก (ระหว่างนี้กรอกมือได้ตามปกติ)');
+  aiScan = (e) => {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    this.setState({ aiRunning: true, aiFilled: false });
+    const bv = this.vendorById(this.state.cart.vendorId);
+    clearTimeout(this._ai); this._ai = setTimeout(() => {
+      const cart = Object.assign({}, this.state.cart); cart.qty = Object.assign({}, cart.qty);
+      (bv.items || []).slice(0, 3).forEach((it, i) => { cart.qty[it.id] = [2, 1, 3][i] || 1; });
+      if (!cart.route) cart.route = (this.mainRules()[0] || {}).id || null;
+      this.setState({ aiRunning: false, aiFilled: true, cart });
+      this.pop('AI อ่านให้แล้ว — ตรวจ/แก้จำนวนก่อนยืนยันได้เลย');
+    }, 1300);
+  };
+
+  /* ---------- ประวัติการแก้ไข (edit_history) ---------- */
+  openHistory = (p) => this.openModal({ kind: 'history', title: 'ประวัติ · ' + p.id, hist: this.historyFor(p) });
+  historyFor(p) {
+    const rows = [
+      { when: 'วันนี้ 14:32 น.', who: 'อาเฮีย', what: 'สร้างรายการ · ' + this.fmt(p.total), dot: '#37B24D' },
+      { when: 'วันนี้ 14:32 น.', who: 'ระบบ', what: 'ลงบัญชีคู่อัตโนมัติ (เดบิต 5010 / เครดิต 1010) + book_scope', dot: '#7048E8' }
+    ];
+    if (p.route && p.route.indexOf('ใบสำคัญจ่าย') >= 0) rows.push({ when: 'วันนี้ 14:33 น.', who: 'ระบบ', what: 'สร้างใบสำคัญจ่าย (สถานะ: ร่าง รอเซ็น)', dot: '#F76707' });
+    if (p.status === 'เสร็จสมบูรณ์') rows.push({ when: 'วันนี้ 15:02 น.', who: 'อาเฮีย', what: 'เซ็นอนุมัติ · แปะลายเซ็น + บันทึก hash เอกสาร', dot: '#2B8A3E' });
+    if (p.missing && p.missing.length) rows.push({ when: 'กำลังรอ', who: 'ระบบ', what: 'รอเติมหลักฐาน: ' + p.missing.join(', '), dot: '#D9480F' });
+    rows.push({ when: '', who: '', what: 'แก้ได้เสมอ · ยังไม่ลงบัญชี = แก้ทับ / ลงแล้ว = reversal / เซ็นแล้ว = ออกใบใหม่ (ไม่มีการลบ)', dot: '#B08968' });
+    return rows;
+  }
+
+  /* ---------- บริการภายนอก ---------- */
+  toggleSvc = (k) => { const svc = Object.assign({}, this.state.svc || {}); svc[k] = !svc[k]; this.setState({ svc }, () => this.save()); };
+
+  /* ---------- ส่งออกสรุปรายการทั้งเดือนเป็น Excel/CSV (ยอด/VAT/หมวด) ---------- */
+  exportCsv = () => {
+    const db = this.state.db || { purchases: [], vendors: [] };
+    const rows = db.purchases.filter(p => this.state.listTab === 'ทั้งหมด' || p.status === this.state.listTab);
+    if (!rows.length) { this.pop('ไม่มีรายการให้ส่งออกในแท็บนี้'); return; }
+    const esc = (s) => '"' + String(s == null ? '' : s).replace(/"/g, '""') + '"';
+    const head = ['เลขที่', 'วันที่', 'ร้าน/รายการ', 'ประเภทเอกสาร', 'สถานะ', 'ของถาวร', 'ยอดรวม(บาท)', 'VAT โดยประมาณ'];
+    const body = rows.map(p => {
+      const name = p.isExpense ? (p.expName || 'ค่าใช้จ่าย') : this.vendorById(p.vendorId).name;
+      const vat = (p.route && p.route.indexOf('VAT') >= 0) ? Math.round((p.total - p.total / 1.07) * 100) / 100 : 0;
+      return [p.id, p.date, name, p.route, p.status, p.isAsset ? 'ใช่' : '', Math.round(p.total), vat].map(esc).join(',');
+    });
+    const csv = '\ufeff' + [head.map(esc).join(','), ...body].join('\r\n'); // ใส่ BOM ให้ Excel อ่านภาษาไทยได้
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'KodKlean_รายการ_' + this.state.listTab + '.csv';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    this.pop('ส่งออก ' + rows.length + ' รายการเป็นไฟล์ CSV แล้ว (เปิดใน Excel ได้)');
+  };
+
+  /* ════════ สมุดบันทึก / งบ 2 ชุด / กฎคัดกรอง / CASE view ════════
+     โหมดจริง: ดึงจาก fin_match_groups + fin_journal (ผ่าน liff_month / ledger_detail)
+     โหมดสาธิต: คำนวณจากรายการในเครื่อง — UI เดียวกันเป๊ะ */
+  statusTone(s) {
+    return s === 'เสร็จสมบูรณ์' || s === 'ออกเอกสารแล้ว' ? ['#2B8A3E', '#EBFBEE']
+      : s === 'รออนุมัติ' || s === 'รอหลักฐาน' ? ['#E67700', '#FFF9DB']
+      : s === 'รอรับของ' || s === 'หลักฐานครบ' ? ['#1971C2', '#E7F5FF'] : ['#9C36B5', '#F8F0FC'];
+  }
+  caseStatusTh(s) { return { waiting: 'รอหลักฐาน', complete: 'หลักฐานครบ', doc_created: 'ออกเอกสารแล้ว', closed: 'เสร็จสมบูรณ์' }[s] || (s || 'บันทึกแล้ว'); }
+  beRouteLabel(code) { return { '1a': 'ใบกำกับภาษี (มี VAT)', '1b': 'บิล/ใบเสร็จ', '2a': 'ใบสำคัญจ่าย + สลิป', '2b_travel': 'ใบรับรองแทนใบเสร็จ', '2b_inhouse': 'เฉพาะงบส่วนตัว' }[code] || (code || ''); }
+  monthRows(ym) {
+    const H = window.KK_HELPERS; if (!H) return { rows: [], days: {}, live: false };
+    if (this.state.liveMode) {
+      const md = this.state.monthLive[ym];
+      if (!md) return { rows: null, days: {}, live: true, md: null };
+      const days = {};
+      (md.days || []).forEach(d => { days[d.d] = { n: +d.n || 0, total: +d.total || 0 }; });
+      const filesByCase = {};
+      (md.files || []).forEach(f => { if (f.case_id && f.thumb) (filesByCase[f.case_id] = filesByCase[f.case_id] || []).push(f.thumb); });
+      const rows = (md.cases || []).map(c => {
+        const mid = this._vmapRev ? this._vmapRev[c.vendor_id] : null;
+        const v = mid ? this.vendorById(mid) : null;
+        return { live: c, iso: c.d, vendorName: c.vendor_name || (v && v.name !== '?' ? v.name : 'ไม่ระบุร้าน'),
+          logo: (v && v.name !== '?' && v.logo) || 'assets/icons/icon_document_folder.webp',
+          total: +c.total || 0, status: this.caseStatusTh(c.status), route: this.beRouteLabel(c.intake_route),
+          thumbPaths: filesByCase[c.id] || [] };
+      });
+      return { rows, days, live: true, md };
+    }
+    const db = this.state.db || { purchases: [] };
+    const dm = H.demoMonth(db.purchases, ym);
+    const days = dm.days;
+    const rows = dm.rows.map(x => {
+      const p = x.p; const v = this.vendorById(p.vendorId);
+      return { p, iso: x.iso, vendorName: p.isExpense ? (p.expName || 'ค่าใช้จ่าย') : v.name,
+        logo: p.isExpense ? 'assets/icons/icon_document_folder.webp' : v.logo,
+        total: p.total || 0, status: p.status, route: p.route || '', thumbs: p.photos || [] };
+    });
+    return { rows, days, live: false, md: null };
+  }
+  selectDay(iso) {
+    const D = this.state.diary; const ym = iso.slice(0, 7);
+    this.setState({ diary: Object.assign({}, D, { sel: iso, ym }) });
+    if (ym !== D.ym) this.ensureMonth(ym);
+  }
+  openCase(r) {
+    const H = window.KK_HELPERS; if (!H) return;
+    if (r.p) {
+      const p = r.p; const route = p.route || '';
+      const code = route.indexOf('VAT') >= 0 ? '1a' : route.indexOf('พิสูจน์') >= 0 ? '2b_inhouse' : route.indexOf('ใบรับรอง') >= 0 ? '2b_travel' : route.indexOf('ใบสำคัญจ่าย') >= 0 ? '2a' : '1b';
+      this.openModal({ kind: 'case',
+        title: r.vendorName + ' · ' + p.id, sub: H.dayLabel(r.iso) + ' · ' + route,
+        badges: [p.status].concat(p.isAsset ? ['ของถาวร'] : []).concat(code === '2b_inhouse' ? ['เฉพาะงบส่วนตัว'] : ['เข้าทั้ง 2 งบ']),
+        photos: (p.photos || []).map(u => ({ src: u, full: u })),
+        journal: H.journalPreview(code, p.total || 0, !!p.isAsset),
+        docs: route.indexOf('ใบสำคัญจ่าย') >= 0 ? [{ name: 'ใบสำคัญจ่าย', sub: 'ระบบสร้างอัตโนมัติ · ' + p.status }]
+          : route.indexOf('ใบรับรอง') >= 0 ? [{ name: 'ใบรับรองแทนใบเสร็จ', sub: 'ระบบสร้างอัตโนมัติ' }] : []
+      });
+      return;
+    }
+    const c = r.live; if (!c) return;
+    this.openModal({ kind: 'case', caseId: c.id,
+      title: r.vendorName + ' · ' + (c.case_no || ''), sub: H.dayLabel(r.iso) + ' · ' + r.route,
+      badges: [r.status], photos: [], journal: H.journalPreview(c.intake_route, +c.total || 0, false), docs: [] });
+    // ดึงชุดเต็มจริง (รูป+journal+เอกสาร) มาเติมใน modal
+    this.api('ledger_detail', { case_id: c.id }).then(res => {
+      const m = this.state.modal;
+      if (!m || m.kind !== 'case' || m.caseId !== c.id || !res || !res.ok || !res.data) return;
+      const d = res.data;
+      const photos = (d.files || []).filter(f => f.thumb_url).map(f => ({ src: f.thumb_url, full: f.thumb_url, drive: f.drive_file_id || null }));
+      const journal = [];
+      (d.journal || []).forEach(e => (e.fin_journal_lines || []).forEach(l => journal.push({
+        name: ((this._accounts && this._accounts[l.account_code]) || l.account_code) + (l.book_scope === 'inhouse_only' ? ' (งบร้าน)' : l.book_scope === 'statutory_only' ? ' (งบนิติ)' : ''),
+        dr: +l.debit || 0, cr: +l.credit || 0
+      })));
+      const DOCL = { payment_voucher: 'ใบสำคัญจ่าย', expense_certificate: 'ใบรับรองแทนใบเสร็จ' };
+      const docs = (d.documents || []).map(x => ({ name: (DOCL[x.type] || x.type) + ' ' + (x.doc_no || ''), sub: x.status === 'approved' ? 'เซ็นแล้ว ✓' : 'ร่าง รอเซ็น', pdfId: x.pdf_gdrive_id || null }));
+      this.setState({ modal: Object.assign({}, m, { photos, journal: journal.length ? journal : m.journal, docs }) });
+    });
+  }
+  casePdf(d) {
+    if (d.pdfId) { window.open('https://drive.google.com/file/d/' + d.pdfId + '/view', '_blank'); return; }
+    this.pop('PDF ตัวจริงพร้อมโหลดทันทีหลังเชื่อม LINE + Google Drive (โค้ดต่อไว้แล้ว)');
+  }
+  caseOpenFull(p) {
+    if (p.full && p.full.indexOf('data:') === 0) { const w = window.open(); if (w) { w.document.write('<img src="' + p.full + '" style="max-width:100%">'); } return; }
+    if (p.drive) { window.open('https://drive.google.com/file/d/' + p.drive + '/view', '_blank'); return; }
+    if (p.full) window.open(p.full, '_blank');
+  }
+  // งบ 2 ชุด — โหมดสาธิตคำนวณจากรายการในเครื่อง (ตามกติกา: งบนิติ = เฉพาะเอกสารครบ/พิสูจน์ได้)
+  demoBooks(ym) {
+    const db = this.state.db || { purchases: [] };
+    const H = window.KK_HELPERS;
+    const rows = (db.purchases || []).map(p => ({ p, iso: p.iso || H.parseThaiDate(p.date) })).filter(x => x.iso && x.iso.slice(0, 7) === ym && x.p.status !== 'ร่าง');
+    const grp = (list) => {
+      const g = {};
+      list.forEach(x => {
+        const p = x.p;
+        const k = p.isAsset ? 'ของถาวร (งบร้านลงค่าใช้จ่ายทันที)' : p.isExpense ? (p.expName || 'ค่าใช้จ่ายอื่น') : 'วัตถุดิบ/สินค้า (ฝั่งซื้อ)';
+        g[k] = (g[k] || 0) + (p.total || 0);
+      });
+      return Object.keys(g).map(k => ({ name: k, amt: g[k] })).sort((a, b) => b.amt - a.amt);
+    };
+    const inhouseOnly = (p) => (p.route || '').indexOf('พิสูจน์') >= 0 || (p.route || '') === 'ยังไม่ระบุ';
+    const statRows = rows.filter(x => !inhouseOnly(x.p) && !x.p.isAsset);
+    const vatRows = rows.filter(x => (x.p.route || '').indexOf('VAT') >= 0).map(x => ({
+      date: H.dayLabel(x.iso), name: x.p.isExpense ? (x.p.expName || 'ค่าใช้จ่าย') : this.vendorById(x.p.vendorId).name,
+      vat: Math.round((x.p.total - x.p.total / 1.07) * 100) / 100
+    }));
+    return { personal: grp(rows), statutory: grp(statRows), vatRows, moneyOut: rows.reduce((a, x) => a + (x.p.total || 0), 0) };
+  }
+  pageVals() {
+    const st = this.state; const H = window.KK_HELPERS;
+    const fmt = (n) => this.fmt(n);
+    if (!H) return { isDiary: false, isBooks: false, isRules: false, modalIsCase: false };
+    const db = st.db || { vendors: [], purchases: [] };
+    const today = H.todayIso();
+
+    /* ---- สมุดบันทึก ---- */
+    const D = st.diary || { ym: H.thisYm(), sel: today, vFilter: '' };
+    const ym = D.ym || H.thisYm();
+    const md = this.monthRows(ym);
+    const loading = md.rows === null;
+    const rows = md.rows || [];
+    const sel = D.sel || '';
+    const calCells = H.monthGrid(ym).map(c => {
+      const info = md.days[c.iso]; const isSel = c.iso === sel;
+      return {
+        day: c.day, hasN: !!(info && info.n), n: info ? info.n : 0,
+        bg: isSel ? '#FF8A3D' : (c.inMonth ? '#FFF8F0' : '#FFFDF9'),
+        fg: isSel ? '#fff' : (c.inMonth ? '#3D2C29' : '#E8DCCD'),
+        border: c.iso === today && !isSel ? '#B197FC' : (isSel ? '#FF8A3D' : 'transparent'),
+        badgeBg: isSel ? '#3D2C29' : '#7048E8',
+        pick: () => this.selectDay(c.iso)
+      };
+    });
+    const [yy, mm] = ym.split('-').map(Number);
+    const dim = new Date(yy, mm, 0).getDate();
+    const jumpDays = []; for (let i = 1; i <= dim; i++) jumpDays.push(String(i));
+    const jumpMonths = H.TH_M.map((t, i) => ({ v: String(i + 1), t }));
+    const nowY = new Date().getFullYear();
+    const jumpYears = []; for (let y = nowY - 3; y <= nowY + 1; y++) jumpYears.push({ v: String(y), t: String(y + 543) });
+    const jump = (ny, nm, nd) => {
+      const nym = ny + '-' + String(nm).padStart(2, '0');
+      const maxD = new Date(+ny, +nm, 0).getDate();
+      const day = Math.min(nd || (sel ? +sel.slice(8, 10) : 1) || 1, maxD);
+      const nsel = nym + '-' + String(day).padStart(2, '0');
+      this.setState({ diary: Object.assign({}, D, { ym: nym, sel: nsel }) });
+      this.ensureMonth(nym);
+    };
+    const vf = D.vFilter || '';
+    const nameSet = {}; rows.forEach(r => { nameSet[r.vendorName] = 1; });
+    const diaryVendorChips = [{ n: 'ทุกร้าน', k: '' }].concat(Object.keys(nameSet).map(n => ({ n, k: n }))).map(x => ({
+      name: x.n, bg: vf === x.k ? '#FF8A3D' : '#fff', fg: vf === x.k ? '#fff' : '#8A6D5C',
+      pick: () => this.setState({ diary: Object.assign({}, D, { vFilter: x.k }) })
+    }));
+    const fRows = rows.filter(r => !vf || r.vendorName === vf);
+    const dayRows = fRows.filter(r => r.iso === sel);
+    const diaryEntries = dayRows.map(r => {
+      const [c, b] = this.statusTone(r.status);
+      const thumbs = md.live ? (r.thumbPaths || []).map(p => st.thumbs[p]).filter(Boolean).slice(0, 6) : (r.thumbs || []).slice(0, 6);
+      return { name: r.vendorName, logo: r.logo, sub: r.route || '—', totalText: fmt(r.total), status: r.status, statusColor: c, statusBg: b, hasThumbs: thumbs.length > 0, thumbs, open: () => this.openCase(r) };
+    });
+    const byV = {}; let mTotal = 0;
+    fRows.forEach(r => { byV[r.vendorName] = (byV[r.vendorName] || 0) + r.total; mTotal += r.total; });
+    const pctColors = ['#FF8A3D', '#F783AC', '#9775FA', '#4DABF7', '#38D9A9', '#FFC24D', '#B08968'];
+    const diaryVendorPct = Object.keys(byV).map(n => ({ n, a: byV[n] })).sort((a, b) => b.a - a.a).slice(0, 7).map((x, i) => ({
+      name: x.n, color: pctColors[i % 7], w: Math.round(x.a / Math.max(mTotal, 1) * 100) + '%', pctText: Math.round(x.a / Math.max(mTotal, 1) * 100) + '%'
+    }));
+
+    /* ---- งบ 2 ชุด ---- */
+    const B = st.books || { ym, tab: 'p' };
+    const bym = B.ym || ym;
+    const isP = B.tab !== 'b';
+    let bkRows = [], bkVatRows = [], bkMoney = 0;
+    if (st.liveMode) {
+      const bmd = st.monthLive[bym];
+      const pl = (bmd && bmd.pl) || [];
+      bkRows = pl.map(r => ({ name: r.name || r.account_code, amt: +(isP ? r.personal : r.statutory) || 0 })).filter(r => r.amt !== 0).sort((a, b) => b.amt - a.amt);
+      bkVatRows = ((bmd && bmd.vat_rows) || []).map(r => ({ date: H.dayLabel(r.date), name: r.description || '', vat: +r.vat || 0 }));
+      bkMoney = +((bmd && bmd.money_out) || 0);
+    } else {
+      const dbk = this.demoBooks(bym);
+      bkRows = (isP ? dbk.personal : dbk.statutory).map(r => ({ name: r.name, amt: r.amt }));
+      bkVatRows = dbk.vatRows;
+      bkMoney = dbk.moneyOut;
+    }
+    const bkTotal = bkRows.reduce((a, r) => a + r.amt, 0);
+    const bkVatTotal = bkVatRows.reduce((a, r) => a + r.vat, 0);
+    const setBooksYm = (nym) => { this.setState({ books: Object.assign({}, B, { ym: nym }) }); this.ensureMonth(nym); };
+
+    /* ---- กฎคัดกรอง ---- */
+    const ruleCards = this.rulesList().map(r => ({
+      icon: H.ruleIcon(r), title: r.title,
+      groupLabel: (r.group === 'none' ? 'อยู่ใต้ "ไม่มีเอกสารเลย"' : 'ตัวเลือกหลัก') + (r.vat ? ' · มี VAT' : ''),
+      resultLine: H.docLabel(r) + ' · ' + H.bookLabel(r) + (r.vat ? ' · แยกภาษีซื้อ 7% ให้' : ''),
+      edit: () => this.ruleForm(r), del: () => this.delRule(r),
+      up: () => this.moveRule(r, -1), down: () => this.moveRule(r, 1)
+    }));
+    const cycleOrder = [''].concat(this.mainRules().map(r => r.id));
+    const ruleVendorRows = db.vendors.map(v => {
+      const cur = v.docType && this.ruleById(v.docType) ? v.docType : '';
+      const rr = cur ? this.ruleById(cur) : null;
+      return {
+        name: v.name, logo: v.logo, routeLabel: rr ? rr.title : 'ถามทุกครั้ง',
+        cycle: () => {
+          const i = cycleOrder.indexOf(cur);
+          v.docType = cycleOrder[(i + 1) % cycleOrder.length];
+          this.setState({ db }); this.save(); this.pushVendorLive(v.id);
+        }
+      };
+    });
+
+    /* ---- CASE modal ---- */
+    const m = st.modal; const isCase = !!m && m.kind === 'case';
+    const caseJournal = isCase ? (m.journal || []).map(j => ({
+      name: j.name, amtText: (j.dr ? 'Dr ' + fmt(j.dr) : 'Cr ' + fmt(j.cr)), color: j.dr ? '#2B8A3E' : '#D9480F'
+    })) : [];
+    const casePhotos = isCase ? (m.photos || []).map(p => ({ src: p.src, open: () => this.caseOpenFull(p) })) : [];
+    const caseDocs = isCase ? (m.docs || []).map(d => ({ name: d.name, sub: d.sub, pdf: () => this.casePdf(d) })) : [];
+    const caseBadges = isCase ? (m.badges || []).map(t => { const [fg, bg] = this.statusTone(t); return { t, fg, bg }; }) : [];
+
+    return {
+      /* nav + flags */
+      isDiary: st.screen === 'diary', isBooks: st.screen === 'books', isRules: st.screen === 'rules',
+      goDiary: () => { this.setState({ screen: 'diary', buyStep: 0, dataVendorId: null }); this.ensureMonth(ym); },
+      goBooks: () => { this.setState({ screen: 'books', buyStep: 0, dataVendorId: null }); this.ensureMonth(bym); },
+      goRules: () => this.setState({ screen: 'rules', buyStep: 0, dataVendorId: null, modal: null }),
+      /* diary */
+      diaryMonthLabel: H.ymLabel(ym),
+      diaryPrev: () => jump(...H.addMonths(ym, -1).split('-')),
+      diaryNext: () => jump(...H.addMonths(ym, 1).split('-')),
+      jumpDayVal: sel && sel.slice(0, 7) === ym ? String(+sel.slice(8, 10)) : '',
+      jumpMonthVal: String(mm), jumpYearVal: String(yy),
+      jumpDays, jumpMonths, jumpYears,
+      onJumpDay: (e) => jump(yy, mm, +e.target.value || 1),
+      onJumpMonth: (e) => jump(yy, +e.target.value, sel ? +sel.slice(8, 10) : 1),
+      onJumpYear: (e) => jump(+e.target.value, mm, sel ? +sel.slice(8, 10) : 1),
+      weekDays: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+      calCells, diaryVendorChips,
+      diaryDayTitle: (sel ? 'วันที่ ' + H.dayLabel(sel) : 'เลือกวัน') + (loading ? ' · กำลังโหลดจากระบบจริง…' : '') + (vf ? ' · ' + vf : ''),
+      diaryDayEmpty: !loading && diaryEntries.length === 0, diaryEntries,
+      diaryMonthCount: fRows.length, diaryMonthTotalText: fmt(mTotal), diaryVendorPct,
+      diaryExportCsv: () => this.exportDiaryCsv(ym, fRows),
+      diaryExportZip: () => this.exportDiaryZip(ym, fRows),
+      /* books */
+      booksMonthLabel: H.ymLabel(bym),
+      booksPrev: () => setBooksYm(H.addMonths(bym, -1)), booksNext: () => setBooksYm(H.addMonths(bym, 1)),
+      bookIsB: !isP,
+      bookPickP: () => this.setState({ books: Object.assign({}, B, { tab: 'p' }) }),
+      bookPickB: () => this.setState({ books: Object.assign({}, B, { tab: 'b' }) }),
+      bookTabPBg: isP ? '#FF8A3D' : '#fff', bookTabPFg: isP ? '#fff' : '#8A6D5C',
+      bookTabBBg: !isP ? '#7048E8' : '#fff', bookTabBFg: !isP ? '#fff' : '#8A6D5C',
+      bkMoneyLabel: isP ? 'เงินไหลออกเดือนนี้ (ทุกรายการ)' : 'ค่าใช้จ่ายที่ใช้ได้ในงบนิติ (เอกสารครบ)',
+      bkMoneyText: fmt(isP ? bkMoney : bkTotal),
+      bkMoneySub: isP ? 'จาก journal งบส่วนตัว — เงินออกเพิ่ม = ค่าใช้จ่ายสูงขึ้น' : 'P&L แบบภาษี · รายการพิสูจน์ผู้รับไม่ได้ถูกกันออกอัตโนมัติ',
+      bkPlTitle: isP ? 'ค่าใช้จ่ายตามหมวด (งบส่วนตัว)' : 'P&L แบบภาษี (งบจำลองนิติ)',
+      bkRows: bkRows.map(r => ({ name: r.name, amtText: fmt(r.amt) })), bkEmpty: bkRows.length === 0,
+      bkTotalText: fmt(bkTotal),
+      bkVatRows: bkVatRows.map(r => ({ date: r.date, name: r.name, vatText: fmt(r.vat) })),
+      bkVatEmpty: bkVatRows.length === 0, bkVatTotalText: fmt(bkVatTotal),
+      booksExport: () => this.exportBooksCsv(bym),
+      /* rules */
+      ruleCards, addRule: () => this.ruleForm(null), ruleVendorRows,
+      /* case modal */
+      modalIsCase: isCase,
+      caseTitle: isCase ? m.title : '', caseSub: isCase ? m.sub : '',
+      caseBadges, casePhotos, caseHasPhotos: casePhotos.length > 0,
+      caseJournal, caseDocs, caseHasDocs: caseDocs.length > 0
+    };
+  }
+  exportDiaryCsv(ym, rows) {
+    const H = window.KK_HELPERS;
+    if (!rows.length) { this.pop('เดือนนี้ยังไม่มีรายการให้ส่งออก'); return; }
+    const body = rows.map(r => [r.iso, r.vendorName, (r.p && r.p.id) || (r.live && r.live.case_no) || '', r.route, r.status, Math.round(r.total)]);
+    const csv = H.csv([['วันที่', 'ร้าน/รายการ', 'เลขที่', 'เอกสาร', 'สถานะ', 'ยอด(บาท)']].concat(body));
+    H.download('KodKlean_สมุดบันทึก_' + ym + '.csv', new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    this.pop('ส่งออก ' + rows.length + ' รายการเป็น Excel/CSV แล้ว');
+  }
+  async exportDiaryZip(ym, rows) {
+    const H = window.KK_HELPERS;
+    if (!rows.length) { this.pop('เดือนนี้ยังไม่มีรายการให้รวม ZIP'); return; }
+    this.pop('กำลังรวมไฟล์ทั้งเดือน…');
+    try {
+      const files = [];
+      const csv = H.csv([['วันที่', 'ร้าน/รายการ', 'เลขที่', 'เอกสาร', 'สถานะ', 'ยอด(บาท)']].concat(rows.map(r => [r.iso, r.vendorName, (r.p && r.p.id) || (r.live && r.live.case_no) || '', r.route, r.status, Math.round(r.total)])));
+      files.push({ name: 'สรุปรายการ_' + ym + '.csv', data: new TextEncoder().encode(csv) });
+      let n = 0;
+      for (const r of rows) {
+        const urls = r.p ? (r.p.photos || []) : (r.thumbPaths || []).map(p => this.state.thumbs[p]).filter(Boolean);
+        for (const u of urls) {
+          if (n >= 60) break;
+          try {
+            const data = u.indexOf('data:') === 0 ? H.dataUrlBytes(u) : new Uint8Array(await (await fetch(u)).arrayBuffer());
+            files.push({ name: r.iso + '_' + r.vendorName.replace(/[\\/:*?"<>|]/g, '') + '_' + (++n) + '.webp', data });
+          } catch (e) { /* ข้ามรูปที่ดึงไม่ได้ */ }
+        }
+      }
+      H.download('KodKlean_หลักฐาน_' + ym + '.zip', H.makeZip(files));
+      this.pop('รวม ZIP แล้ว: สรุป CSV + รูปหลักฐาน ' + n + ' รูป' + (this.state.liveMode ? ' (ตัวจริงความละเอียดเต็มอยู่ Google Drive)' : ''));
+    } catch (e) { this.pop('รวม ZIP ไม่สำเร็จ: ' + String(e && e.message || e)); }
+  }
+  exportBooksCsv(ym) {
+    const H = window.KK_HELPERS;
+    const rows = [['งบ 2 ชุด — เดือน ' + H.ymLabel(ym)], []];
+    const build = (tab) => {
+      let out = [];
+      if (this.state.liveMode) {
+        const bmd = this.state.monthLive[ym]; const pl = (bmd && bmd.pl) || [];
+        out = pl.map(r => ({ name: r.name || r.account_code, amt: +(tab === 'p' ? r.personal : r.statutory) || 0 })).filter(r => r.amt !== 0);
+      } else {
+        const dbk = this.demoBooks(ym); out = tab === 'p' ? dbk.personal : dbk.statutory;
+      }
+      return out;
+    };
+    const p = build('p'), b = build('b');
+    rows.push(['— งบส่วนตัว (ทุกรายการ) —']);
+    p.forEach(r => rows.push([r.name, Math.round(r.amt)]));
+    rows.push(['รวม', Math.round(p.reduce((a, r) => a + r.amt, 0))], []);
+    rows.push(['— งบจำลองถ้าจดนิติ (เฉพาะเอกสารครบ) —']);
+    b.forEach(r => rows.push([r.name, Math.round(r.amt)]));
+    rows.push(['รวม', Math.round(b.reduce((a, r) => a + r.amt, 0))], []);
+    const vat = this.state.liveMode ? ((this.state.monthLive[ym] || {}).vat_rows || []).map(r => ({ date: r.date, name: r.description, vat: +r.vat || 0 })) : this.demoBooks(ym).vatRows;
+    rows.push(['— ตาราง VAT ซื้อ —']);
+    vat.forEach(r => rows.push([r.date, r.name, r.vat]));
+    rows.push(['รวม VAT ซื้อ', '', Math.round(vat.reduce((a, r) => a + r.vat, 0) * 100) / 100], []);
+    rows.push(['หมายเหตุ: ต้นทุนขายจริงรอเชื่อม App_stock']);
+    H.download('KodKlean_งบ2ชุด_' + ym + '.csv', new Blob([H.csv(rows)], { type: 'text/csv;charset=utf-8' }));
+    this.pop('ส่งออกงบ 2 ชุด + VAT เป็น Excel/CSV แล้ว');
+  }
+  extraVals() {
+    const st = this.state;
+    const db = st.db || { vendors: [], purchases: [] };
+    const fmt = (n) => this.fmt(n);
+
+    const M = st.multi || { total: '', rows: [] };
+    const mSum = (M.rows || []).reduce((a, r) => a + (+r.amount || 0), 0);
+    const mTot = +M.total || 0;
+    const rShort = [{ key: 'slip', label: 'สลิปโอน' }, { key: 'tax', label: 'ใบกำกับภาษี' }, { key: 'bill', label: 'บิล/ใบเสร็จ' }];
+    const multiRows = (M.rows || []).map((r, i) => ({
+      vendorId: r.vendorId || '', opts: db.vendors.map(v => ({ id: v.id, name: v.name })),
+      logo: r.vendorId ? this.vendorById(r.vendorId).logo : 'assets/logos/other.png',
+      onVendor: (e) => this.multiRowSet(i, { vendorId: e.target.value }),
+      amountVal: r.amount, onAmount: (e) => this.multiRowSet(i, { amount: e.target.value }),
+      routeLabel: (rShort.find(x => x.key === r.route) || rShort[0]).label,
+      cycleRoute: () => { const idx = rShort.findIndex(x => x.key === r.route); this.multiRowSet(i, { route: rShort[(idx + 1) % rShort.length].key }); },
+      del: () => this.multiDelRow(i)
+    }));
+    const mMatch = mTot > 0 && Math.round(mSum) === Math.round(mTot);
+
+    const EX = st.expense || { cat: '', amount: '', note: '', isAsset: false };
+    const expCats = ['ค่าไฟฟ้า', 'ค่าน้ำประปา', 'ค่าเช่า', 'ค่าขนส่ง/เดินทาง', 'ค่าการตลาด', 'ค่าธรรมเนียมธนาคาร', 'เบ็ดเตล็ด'].map(c => ({ name: c, bg: EX.cat === c ? '#7048E8' : '#fff', fg: EX.cat === c ? '#fff' : '#8A6D5C', pick: () => this.expSet({ cat: c }) }));
+
+    const svc = st.svc || {};
+    const H = st.health || null;
+    const healthKey = { line: 'line_configured', supabase: '__sb', drive: 'drive_configured', gemini: 'ai_configured' };
+    const svcDefs = [
+      { key: 'line', name: 'LINE LIFF', need: 'LIFF ID + Channel token · จำเป็นตอน deploy' },
+      { key: 'supabase', name: 'Supabase', need: 'ฐานข้อมูล + ไฟล์ย่อ WebP · แกนระบบ' },
+      { key: 'drive', name: 'Google Drive', need: 'เก็บไฟล์ต้นฉบับ ≥5 ปี' },
+      { key: 'gemini', name: 'Gemini · AI อ่านบิล', need: 'เสริม — ไม่ใส่ก็ใช้ระบบได้เต็ม' }
+    ];
+    const svcList = svcDefs.map(s => {
+      const real = H ? (healthKey[s.key] === '__sb' ? true : !!H[healthKey[s.key]]) : null;
+      const on = real === null ? !!svc[s.key] : real;
+      return {
+        name: s.name, need: s.need,
+        statusText: real === null
+          ? (svc[s.key] ? 'เชื่อมต่อแล้ว ✓ (สาธิต)' : 'ยังไม่เชื่อม (ระบบทำงานได้)')
+          : (on ? 'เชื่อมต่อจริงแล้ว ✓' : 'ยังไม่ตั้งค่า key (ระบบทำงานได้)'),
+        statusColor: on ? '#2B8A3E' : '#B08968',
+        bg: on ? '#37B24D' : '#D9C6B2', knob: on ? '32px' : '4px',
+        toggle: () => this.toggleSvc(s.key)
+      };
+    });
+
+    const m = st.modal; const isHist = !!m && m.kind === 'history';
+    return {
+      startMulti: this.startMulti, startExpense: this.startExpense,
+      isMulti: st.screen === 'multi', isExpense: st.screen === 'expense',
+      backHome: () => this.setState({ screen: 'home' }),
+      multiTotalVal: M.total, onMultiTotal: (e) => this.multiSet({ total: e.target.value }),
+      multiRows, multiAddRow: this.multiAddRow,
+      multiSumText: fmt(mSum), multiTargetText: fmt(mTot),
+      multiMatch: mMatch, multiDiffText: mMatch ? 'ยอดตรงกันเป๊ะ พร้อมยืนยัน ✓' : (mTot > 0 ? 'ต่างกัน ' + fmt(Math.abs(mTot - mSum)) + ' — ปรับให้ตรงก่อน' : 'ใส่ยอดสลิปรวมก่อนนะ'),
+      multiMatchColor: mMatch ? '#2B8A3E' : '#D9480F',
+      multiConfirmBg: mMatch ? 'linear-gradient(135deg,#37B24D,#2B8A3E)' : '#8B7767',
+      confirmMulti: this.confirmMulti,
+      expCats, expAmountVal: EX.amount, onExpAmount: (e) => this.expSet({ amount: e.target.value }),
+      expNoteVal: EX.note, onExpNote: (e) => this.expSet({ note: e.target.value }),
+      expAssetOn: !!EX.isAsset, toggleExpAsset: () => this.expSet({ isAsset: !EX.isAsset }),
+      expAssetBg: EX.isAsset ? '#37B24D' : '#D9C6B2', expAssetKnob: EX.isAsset ? '32px' : '4px',
+      confirmExpense: this.confirmExpense,
+      aiRunning: !!st.aiRunning, aiFilled: !!st.aiFilled, aiScan: this.aiScan,
+      aiEnabled: this.aiEnabled(), aiDisabled: !this.aiEnabled(), aiScanBlocked: this.aiScanBlocked,
+      cartAssetOn: !!st.cart.isAsset,
+      toggleCartAsset: () => this.setState({ cart: Object.assign({}, st.cart, { isAsset: !st.cart.isAsset }) }),
+      cartAssetBg: st.cart.isAsset ? '#37B24D' : '#D9C6B2', cartAssetKnob: st.cart.isAsset ? '32px' : '4px',
+      svcList,
+      liveMode: !!st.liveMode, lineName: st.lineName || null,
+      connBadge: st.liveMode ? ('เชื่อมระบบจริง' + (st.lineName ? ' · ' + st.lineName : '')) : 'โหมดสาธิต (ยังไม่ตั้ง LIFF ID)',
+      connBadgeBg: st.liveMode ? '#37B24D' : '#B08968',
+      checkConn: () => { this.refreshHealth(); this.pop('กำลังตรวจการเชื่อมต่อ backend…'); },
+      modalIsHistory: isHist, histTitle: isHist ? m.title : '', histRows: isHist ? m.hist : []
+    };
+  }
+
+  /* ---------- renderVals ---------- */
+  renderVals() {
+    const st = this.state;
+    const db = st.db || { vendors: [], purchases: [] };
+    const showMascots = (this.props.showMascots ?? true) && (st.prefsChars !== false);
+    const go = (screen) => () => this.setState({ screen, buyStep: 0, dataVendorId: null });
+    const orange = '#F76707', dim = '#C9AD97';
+
+    /* ---- home ---- */
+    const monthOut = (st.liveMode && st.agg) ? (+st.agg.month_out || 0)
+      : 48620 + db.purchases.filter(p => p.date === 'วันนี้' && p.status !== 'ร่าง').reduce((a, p) => a + p.total, 0);
+    const statusStyle = (s) => s === 'เสร็จสมบูรณ์' ? ['#2B8A3E', '#EBFBEE'] : s === 'รออนุมัติ' ? ['#E67700', '#FFF9DB'] : s === 'รอรับของ' ? ['#1971C2', '#E7F5FF'] : ['#9C36B5', '#F8F0FC'];
+    const pView = (p) => {
+      const v = this.vendorById(p.vendorId); const [c, b] = statusStyle(p.status);
+      return {
+        id: p.id, logo: p.isExpense ? 'assets/icons/icon_document_folder.webp' : v.logo, vendorName: p.isExpense ? (p.expName || 'ค่าใช้จ่าย') : v.name, date: p.date, route: p.route, totalText: this.fmt(p.total),
+        status: p.status, statusColor: c, statusBg: b, isAsset: !!p.isAsset,
+        openHistory: () => this.openHistory(p),
+        hasMissing: p.missing.length > 0, missingText: p.missing.join(' · '),
+        onFill: (e) => this.readFiles(e, (url) => {
+          if (p.missing.length) p.missing.shift();
+          p.photos = (p.photos || []).concat([url]).slice(0, 8);
+          if (!p.missing.length && p.status === 'ร่าง') p.status = 'รออนุมัติ';
+          this.setState({ db }); this.save();
+          this.pop(p.missing.length ? 'เติมหลักฐานแล้ว เหลืออีก ' + p.missing.length + ' ชิ้น' : 'หลักฐานครบแล้ว! สร้างเอกสารต่อได้');
+        })
+      };
+    };
+
+    /* ---- buy flow ---- */
+    const step = st.buyStep;
+    const pairAges = { 1: 'young', 2: 'young', 3: 'young', 4: 'young', 5: 'young', 6: 'young' };
+    const buyTitles = { 1: 'ซื้อจากร้านไหน?', 2: 'ซื้ออะไรบ้าง?', 3: 'ค่าส่ง + ค่าลัง', 4: 'เอกสารจากผู้ขาย', 5: 'แนบหลักฐาน', 6: 'สรุปก่อนยืนยัน' };
+    const vSearch = st.search.trim();
+    const vendorsView = db.vendors.filter(v => !vSearch || v.name.indexOf(vSearch) >= 0).map(v => ({
+      id: v.id, name: v.name, channel: v.channel, logo: v.logo, isFreq: v.freq === 'ซื้อบ่อย',
+      meta: 'สินค้า ' + v.items.length + ' รายการ' + (v.shipping ? ' · ค่าส่ง ' + this.fmt(v.shipping) : ''),
+      pick: () => this.setState({ cart: Object.assign({}, this.resetCart(), { vendorId: v.id, ship: String(v.shipping || 0), box: String(v.box || 0), route: (v.docType && this.ruleById(v.docType)) ? v.docType : null }), buyStep: 2, catFilter: 'ทั้งหมด' })
+    }));
+    const bv = this.vendorById(st.cart.vendorId);
+    const cats = ['ทั้งหมด'].concat(bv.cats || []);
+    const catChips = cats.map(c => ({ name: c, bg: st.catFilter === c ? '#FF8A3D' : '#fff', fg: st.catFilter === c ? '#fff' : '#8A6D5C', pick: () => this.setState({ catFilter: c }) }));
+    const buyItems = (bv.items || []).filter(it => st.catFilter === 'ทั้งหมด' || it.cat === st.catFilter).map(it => {
+      const qty = st.cart.qty[it.id] || 0;
+      const price = st.cart.priceOv[it.id] != null ? st.cart.priceOv[it.id] : it.price;
+      const setQty = (n) => {
+        const cart = st.cart; cart.qty = Object.assign({}, cart.qty); cart.qty[it.id] = Math.max(0, n);
+        this.setState({ cart });
+      };
+      return {
+        id: it.id, name: it.name, spec: it.spec || '—', unit: it.unit, img: it.img || 'assets/logos/other.png',
+        priceText: this.fmt(price), qty, hasQty: qty > 0, lineText: this.fmt(qty * price),
+        inc: () => setQty(qty + 1), dec: () => setQty(qty - 1),
+        editPrice: () => this.openModal({
+          kind: 'price', title: 'แก้ราคา — ' + it.name, itemId: it.id, saveToVendor: true,
+          vals: { price: String(price) }, fields: [{ key: 'price', label: 'ราคาใหม่ (บาท/' + it.unit + ')', type: 'number' }]
+        })
+      };
+    });
+    const cartCount = this.cartCount();
+
+    const routeCards = this.routeDefs().map(r => ({
+      icon: r.icon, title: r.title, desc: r.desc,
+      border: st.cart.route === r.key ? '#FF8A3D' : '#FFEEDD',
+      checkBg: st.cart.route === r.key ? '#FF8A3D' : '#F1E4D4', check: st.cart.route === r.key ? '✓' : '',
+      pick: () => this.setState({ cart: Object.assign({}, st.cart, { route: r.key, sub: null }) })
+    }));
+    const subCards = this.subDefs().map(s => ({
+      title: s.title, desc: s.desc,
+      border: st.cart.sub === s.key ? '#7048E8' : '#EDE6FF',
+      pick: () => this.setState({ cart: Object.assign({}, st.cart, { sub: s.key }) })
+    }));
+    const rInfo = this.currentRouteInfo();
+    const routeWarn = (st.cart.route === 'none' && (st.cart.sub === 'cashid' || st.cart.sub === 'cashno')) ? 'ถ้าโอนได้ แนะนำโอนนะ — จะมีสลิปพิสูจน์ผู้รับ ลงภาษีได้เต็มที่' : '';
+
+    const evList = this.evidenceList();
+    const evIcon = (l) => l.indexOf('สลิป') >= 0 ? 'assets/icons/icon_payment_slip.webp' : l.indexOf('ใบกำกับ') >= 0 || l.indexOf('ใบเสร็จ') >= 0 || l.indexOf('บิล') >= 0 ? 'assets/icons/icon_tax_invoice.webp' : l.indexOf('แชท') >= 0 || l.indexOf('คำสั่งซื้อ') >= 0 ? 'assets/icons/icon_po_clipboard.webp' : 'assets/icons/icon_camera.webp';
+    // แนบได้หลายรูปต่อช่อง (บิลหลายหน้า/สลิปหลายใบ/ของหลายลัง) — เลื่อนดู + ลบทีละรูป
+    const evSlots = evList.map(l => {
+      const arr = this.evArr(l);
+      const done = arr.length > 0;
+      return {
+        label: l, icon: evIcon(l),
+        hasThumbs: done,
+        thumbs: arr.map((u, i) => ({
+          src: u,
+          del: () => {
+            const cart = this.state.cart; cart.ev = Object.assign({}, cart.ev);
+            const a = this.evArr(l).slice(); a.splice(i, 1); cart.ev[l] = a;
+            this.setState({ cart });
+          }
+        })),
+        sub: done ? 'แนบแล้ว ' + arr.length + ' รูป ✓' : 'สั่งหลายอย่าง/บิลหลายหน้า แนบทีเดียวหลายรูปได้',
+        addLabel: done ? '+ เพิ่มรูปอีก (เลือกได้หลายรูป)' : '+ ถ่ายรูป / เลือกรูป (หลายรูปพร้อมกันได้)',
+        subColor: done ? '#2B8A3E' : '#B08968',
+        border: done ? '#8CE99A' : '#FFEEDD', checkBg: done ? '#37B24D' : '#F1E4D4', check: done ? '✓' : '',
+        onFile: (e) => this.readFiles(e, (url) => {
+          const cart = this.state.cart; cart.ev = Object.assign({}, cart.ev);
+          cart.ev[l] = this.evArr(l).concat([url]);
+          this.setState({ cart });
+        })
+      };
+    });
+    const evAllDone = evList.every(l => this.evArr(l).length > 0);
+
+    const lines = this.cartLines();
+    const summaryLines = lines.map(l => ({ name: l.it.name, qtyText: l.qty + ' ' + l.it.unit, amtText: this.fmt(l.qty * l.price) }));
+
+    /* ---- list ---- */
+    const tabs = ['ทั้งหมด', 'ร่าง', 'รับของ', 'เสร็จสมบูรณ์'];
+    const tabCount = (t) => t === 'รับของ' ? st.receives.length : db.purchases.filter(p => t === 'ทั้งหมด' || p.status === t).length;
+    const listTabs = tabs.map(t => ({
+      name: (t === 'ร่าง' ? 'ตะกร้ารอจับคู่' : t) + ' (' + tabCount(t) + ')',
+      bg: st.listTab === t ? '#FF8A3D' : '#fff', fg: st.listTab === t ? '#fff' : '#8A6D5C',
+      pick: () => this.setState({ listTab: t })
+    }));
+    const listIsReceive = st.listTab === 'รับของ';
+    const lsearch = (st.listSearch || '').trim();
+    const purchasesView = db.purchases
+      .filter(p => (st.listTab === 'ทั้งหมด' || p.status === st.listTab)
+        && (!lsearch || [p.id, p.route || '', (p.isExpense ? (p.expName || '') : this.vendorById(p.vendorId).name)].join(' ').indexOf(lsearch) >= 0))
+      .map(pView);
+
+    const receivesView = st.receives.map(j => {
+      const v = this.vendorById(j.vendorId);
+      const rj = st.recv[j.id] || {};
+      return {
+        id: j.id, logo: v.logo, vendorName: v.name, date: j.date,
+        waitBadge: j.waitDays >= 3 ? 'ค้าง ' + j.waitDays + ' วัน!' : 'รอ ' + j.waitDays + ' วัน',
+        waitFg: j.waitDays >= 3 ? '#D9480F' : '#1971C2', waitBg: j.waitDays >= 3 ? '#FFF4E6' : '#E7F5FF',
+        photoLabel: rj.nPhotos ? ('ถ่ายรูปของที่มาส่งแล้ว ' + rj.nPhotos + ' รูป ✓ (เพิ่มได้อีก)') : 'ถ่ายรูปของที่มาส่งจริง (หลายรูปได้)',
+        onPhoto: (e) => this.readFiles(e, () => { const recv = this.state.recv; const cur = recv[j.id] || {}; recv[j.id] = Object.assign({}, cur, { nPhotos: (cur.nPhotos || 0) + 1 }); this.setState({ recv }); }),
+        confirm: () => {
+          this.setState({ receives: st.receives.filter(x => x.id !== j.id) });
+          const anyShort = j.lines.some((ln, i) => (rj['q' + i] != null ? +rj['q' + i] : ln.ordered) < ln.ordered);
+          this.pop(anyShort ? 'รับของแล้ว · เปิดเคสติดตามของขาดให้' : 'รับของครบ เรียบร้อย!');
+        },
+        lines: j.lines.map((ln, i) => {
+          const val = rj['q' + i] != null ? rj['q' + i] : ln.ordered;
+          const short = Math.max(0, ln.ordered - (+val || 0));
+          const choice = rj['c' + i] || '';
+          const mk = (label) => ({
+            label, bg: choice === label ? '#D9480F' : '#fff', fg: choice === label ? '#fff' : '#D9480F',
+            pick: () => { const recv = st.recv; recv[j.id] = Object.assign({}, recv[j.id] || {}, { ['c' + i]: label }); this.setState({ recv }); }
+          });
+          return {
+            name: ln.name, orderedText: ln.ordered + ' ' + ln.unit, unit: ln.unit, val: String(val),
+            onVal: (e) => { const recv = st.recv; recv[j.id] = Object.assign({}, recv[j.id] || {}, { ['q' + i]: e.target.value }); this.setState({ recv }); },
+            isShort: short > 0, shortText: short + ' ' + ln.unit + ' (' + this.fmt(short * ln.price) + ')',
+            choices: [mk('ร้านส่งเติม'), mk('ร้านคืนเงิน'), mk('ลงเป็น Loss')]
+          };
+        })
+      };
+    });
+
+    /* ---- approve ---- */
+    const draftsView = st.drafts.map(d => {
+      const v = this.vendorById(d.vendorId);
+      const on = !!st.sel[d.id];
+      return {
+        id: d.id, type: d.type, entity: d.entity, date: d.date, payee: d.payee, logo: v.logo,
+        amountText: this.fmt(d.amount), notReady: !d.ready, missingField: d.missingField || '',
+        border: on ? '#B197FC' : '#F1E4D4', cbBorder: on ? '#7048E8' : '#D9C6B2', cbBg: on ? '#7048E8' : '#fff', cbMark: on ? '✓' : '',
+        toggle: () => {
+          if (!d.ready) { this.pop('ใบนี้ยังเซ็นไม่ได้ — ขาด: ' + d.missingField); return; }
+          const sel = Object.assign({}, st.sel); sel[d.id] = !sel[d.id]; this.setState({ sel });
+        },
+        view: () => this.openModal({ kind: 'doc', d })
+      };
+    });
+    const selCount = Object.keys(st.sel).filter(k => st.sel[k]).length;
+
+    /* ---- dashboard ---- */
+    const base = window.KK_DATA || { exp12: [], vat12: [], meat: [], top5: [], books: { personal: 0, biz: 0 } };
+    const HH = window.KK_HELPERS;
+    // โหมดจริง: กราฟทุกตัวดึงจาก fin (liff_dashboard) · ยังไม่มีรายการ = ว่าง (ไม่โชว์ตัวเลขปลอม) · โหมดสาธิตใช้ตัวอย่างจาก data.js
+    const live = st.liveMode;
+    const agg = (live && st.agg) ? st.agg : null;
+    const exp12src = (agg && HH) ? (agg.exp12 || []).map(x => ({ m: HH.ymShort(x.ym), v: +x.v || 0 })) : (live ? [] : base.exp12);
+    const vat12src = (agg && HH) ? (agg.vat12 || []).map(x => ({ m: HH.ymShort(x.ym), v: +x.v || 0 })) : (live ? [] : base.vat12);
+    const meatSrc = agg ? base.meat.map(mt => {
+      const q = (agg.item_qty || []).filter(x => x.item_name && (x.item_name.indexOf(mt.name) >= 0 || mt.name.indexOf(x.item_name) >= 0)).reduce((a, x) => a + (+x.qty || 0), 0);
+      return Object.assign({}, mt, { qty: Math.round(q * 10) / 10 });
+    }) : (live ? [] : base.meat);
+    const top5Src = agg ? (agg.top5 || []).map(t => {
+      const mid = this._vmapRev ? this._vmapRev[t.vendor_id] : null;
+      const v = mid ? this.vendorById(mid) : null;
+      return { name: t.vendor_name || (v && v.name) || 'ไม่ระบุร้าน', logo: (v && v.name !== '?' && v.logo) || 'assets/icons/icon_document_folder.webp', amount: +t.amount || 0 };
+    }) : (live ? [] : base.top5.map(t => { const v = this.vendorById(t.vendorId); return { name: v.name, logo: v.logo, amount: t.amount }; }));
+    const booksSrc = agg ? { personal: +agg.books.personal || 0, biz: +agg.books.statutory || 0 } : (live ? { personal: 0, biz: 0 } : base.books);
+    const dashNoData = live && exp12src.every(x => !x.v) && top5Src.length === 0 && !booksSrc.personal && !booksSrc.biz;
+    const mkBars = (arr) => {
+      const mx = Math.max(...arr.map(x => x.v), 1);
+      return arr.map((x, i) => ({
+        m: x.m, h: Math.max(6, Math.round(x.v / mx * 100)) + '%',
+        color: i === arr.length - 1 ? '#7048E8' : '#FFC9A3',
+        labelColor: i === arr.length - 1 ? '#7048E8' : '#B08968'
+      }));
+    };
+    const meatMax = Math.max(...meatSrc.map(m => m.qty), 1);
+    const top5Max = Math.max(...top5Src.map(t => t.amount), 1);
+    const t5colors = ['#FF8A3D', '#F783AC', '#9775FA', '#4DABF7', '#38D9A9'];
+
+    /* ---- data page ---- */
+    const dv = st.dataVendorId ? this.vendorById(st.dataVendorId) : null;
+    const dataVendors = db.vendors.map(v => ({
+      name: v.name, channel: v.channel, logo: v.logo, count: v.items.length,
+      meta: (v.shipping ? 'ค่าส่ง ' + this.fmt(v.shipping) + ' · ค่าลัง ' + this.fmt(v.box) : 'ไม่มีค่าส่งปกติ'),
+      open: () => this.setState({ dataVendorId: v.id, dataCat: 'ทั้งหมด' }),
+      edit: () => this.vendorForm(v), del: () => this.delVendor(v),
+      up: () => this.moveVendor(v, -1), down: () => this.moveVendor(v, 1)
+    }));
+    const dvCats = dv ? ['ทั้งหมด'].concat(dv.cats || []) : [];
+    const dvCatChips = dvCats.map(c => ({ name: c, bg: st.dataCat === c ? '#7048E8' : '#fff', fg: st.dataCat === c ? '#fff' : '#8A6D5C', pick: () => this.setState({ dataCat: c }) }));
+    const dataItems = dv ? dv.items.filter(it => st.dataCat === 'ทั้งหมด' || it.cat === st.dataCat).map(it => ({
+      name: it.name, spec: it.spec || '—', unit: it.unit, priceText: this.fmt(it.price), img: it.img || 'assets/logos/other.png',
+      hasCat: !!it.cat, cat: it.cat,
+      edit: () => this.itemForm(dv, it), del: () => this.delItem(dv, it),
+      up: () => this.moveItem(dv, it, -1), down: () => this.moveItem(dv, it, 1),
+      onImg: (e) => this.readFile(e, (url) => { it.img = url; this.setState({ db }); this.save(); this.pop('เปลี่ยนรูปสินค้าแล้ว (บีบ+WebP ให้แล้ว)'); })
+    })) : [];
+
+    /* ---- modal ---- */
+    const m = st.modal;
+    const modalFields = (m && m.fields) ? m.fields.map(f => ({
+      label: f.label, type: f.type === 'select' ? 'text' : f.type, val: m.vals[f.key],
+      isSelect: f.type === 'select', isInput: f.type !== 'select', opts: f.opts || [],
+      onChange: (e) => { m.vals[f.key] = e.target.value; this.forceUpdate(); }
+    })) : [];
+    const thaiBaht = (n) => Math.round(n).toLocaleString('th-TH') + ' บาทถ้วน';
+
+    const navC = (s) => st.screen === s ? '#F76707' : '#B8A08D';
+    const navF = (s) => st.screen === s ? 'none' : 'grayscale(1) opacity(.55)';
+
+    return {
+      ...this.extraVals(),
+      ...this.pageVals(),
+      showMascots, hasToast: !!st.toast, toast: st.toast,
+      todayText: 'วันจันทร์ที่ 3 ส.ค. 2569',
+
+      isHome: st.screen === 'home', isList: st.screen === 'list', isApprove: st.screen === 'approve',
+      isDash: st.screen === 'dash', isData: st.screen === 'data', isSettings: st.screen === 'settings',
+      isSuccess: st.screen === 'success', inBuy: st.screen === 'buy',
+      goHome: go('home'), goList: go('list'), goApprove: go('approve'), goDash: go('dash'), goData: go('data'), goSettings: go('settings'),
+      goReceive: () => this.setState({ screen: 'list', listTab: 'รับของ' }),
+      goDraftTab: () => this.setState({ screen: 'list', listTab: 'ร่าง' }),
+      startBuy: this.startBuy,
+
+      monthOutText: this.fmt(monthOut),
+      nApprove: st.drafts.length, nReceive: st.receives.length, nDraft: db.purchases.filter(p => p.status === 'ร่าง').length,
+      recent3: db.purchases.slice(0, 3).map(pView),
+
+      buyTitle: buyTitles[step] || '', inBuyPair: pairAges[step],
+      buyPairA: 'assets/poses2/boypink_07.png', buyPairB: 'assets/poses2/girlbaby_08.png',
+      buyDots: [1, 2, 3, 4, 5, 6].map(n => ({ bg: n < step ? '#37B24D' : n === step ? '#FF8A3D' : '#FFE3C7' })),
+      buyBack: this.buyBack, buyNext: this.buyNextFn,
+      isBuy1: step === 1, isBuy2: step === 2, isBuy3: step === 3, isBuy4: step === 4, isBuy5: step === 5, isBuy6: step === 6,
+      searchVal: st.search, onSearch: (e) => this.setState({ search: e.target.value }),
+      vendorsView, addVendorFromBuy: () => this.vendorForm(null, true),
+      buyVendorName: bv.name, buyVendorLogo: bv.logo, hasCats: (bv.cats || []).length > 0, catChips, buyItems,
+      addItemFromBuy: () => this.itemForm(bv, null, true),
+      cartCountText: cartCount + ' รายการ', cartTotalText: this.fmt(this.cartSub()),
+      next2Bg: cartCount > 0 ? 'linear-gradient(135deg,#FF922B,#F76BB8)' : '#8B7767',
+      shipVal: st.cart.ship, boxVal: st.cart.box,
+      onShip: (e) => this.setState({ cart: Object.assign({}, st.cart, { ship: e.target.value }) }),
+      onBox: (e) => this.setState({ cart: Object.assign({}, st.cart, { box: e.target.value }) }),
+      grandTotalText: this.fmt(this.grandTotal()),
+      routeCards, showSub: st.cart.route === 'none', subCards,
+      routeHasResult: !!rInfo, routeResultTitle: rInfo ? rInfo.result : '', routeResultDesc: rInfo ? 'เข้างบ: ' + rInfo.book : '',
+      routeHasWarn: !!routeWarn, routeWarn,
+      next4Bg: rInfo ? 'linear-gradient(135deg,#FF922B,#F76BB8)' : '#8B7767',
+      evSlots, next5Bg: evAllDone ? 'linear-gradient(135deg,#37B24D,#2B8A3E)' : 'linear-gradient(135deg,#FF922B,#F76BB8)',
+      next5Label: evAllDone ? 'หลักฐานครบ ไปสรุป ›' : 'ไปสรุป (ขาด ' + this.evMissing().length + ' ชิ้น) ›',
+      saveDraft: this.saveDraft,
+      summaryLines, sumShipText: this.fmt(+st.cart.ship || 0), sumBoxText: this.fmt(+st.cart.box || 0),
+      sumDocText: rInfo ? rInfo.result : '—', sumBookText: rInfo ? rInfo.book : '—',
+      sumEvText: evAllDone ? 'ครบทุกชิ้น ✓' : 'ขาด ' + this.evMissing().length + ' ชิ้น (จะบันทึกเป็นร่าง)',
+      confirmBuy: this.confirmBuy,
+      successTitle: st.success ? st.success.title : '', successDesc: st.success ? st.success.desc : '',
+
+      listTabs, listIsReceive, listIsPurchases: !listIsReceive,
+      listSearchVal: st.listSearch || '', onListSearch: (e) => this.setState({ listSearch: e.target.value }), exportCsv: this.exportCsv,
+      purchasesView, listEmpty: purchasesView.length === 0, receivesView,
+
+      draftsView, approveEmpty: st.drafts.length === 0, canSign: selCount > 0, selCount,
+      openSign: () => this.openModal({ kind: 'sign' }),
+      confirmSign: this.confirmSign,
+
+      expBars: mkBars(exp12src), vatBars: mkBars(vat12src), dashNoData,
+      meatBars: meatSrc.map(mt => ({ name: mt.name, img: mt.img, color: mt.color, qtyText: mt.qty + ' กก.', w: Math.round(mt.qty / meatMax * 100) + '%' })),
+      top5View: top5Src.map((t, i) => ({ rank: i + 1, logo: t.logo, name: t.name, amtText: this.fmt(t.amount), w: Math.round(t.amount / top5Max * 100) + '%', color: t5colors[i % 5] })),
+      bookPText: this.fmt(booksSrc.personal), bookBText: this.fmt(booksSrc.biz),
+      bookBW: Math.round(booksSrc.biz / Math.max(booksSrc.personal, 1) * 100) + '%',
+
+      dataAtRoot: !dv, dataInVendor: !!dv, dataBack: () => this.setState({ dataVendorId: null }),
+      dataVendors, addVendor: () => this.vendorForm(null),
+      dvName: dv ? dv.name : '', dvLogo: dv ? dv.logo : '', dvHasCats: dv ? (dv.cats || []).length > 0 : false, dvCatChips, dataItems,
+      addItem: () => this.itemForm(dv, null),
+
+      hasSig: !!st.sig, noSig: !st.sig, sigThumb: st.sig,
+      onSigFile: (e) => this.readFile(e, (url) => { this.setState({ sig: url }); this.save(); this.pop('บันทึกลายเซ็นแล้ว'); }),
+      toggleChars: () => this.setState({ prefsChars: st.prefsChars === false }, () => this.save()),
+      charsBg: st.prefsChars !== false ? '#37B24D' : '#D9C6B2',
+      charsKnob: st.prefsChars !== false ? '32px' : '4px',
+      connections: [{ name: 'LINE LIFF' }, { name: 'Supabase (ฐานข้อมูล+ไฟล์ย่อ)' }, { name: 'Google Drive (ไฟล์ต้นฉบับ)' }, { name: 'App_stock (ต้นทุนขายจริง)' }],
+      resetData: () => { if (window.confirm('ล้างข้อมูลทดลองทั้งหมด กลับค่าตั้งต้น?')) { localStorage.removeItem('kk_liff_v1'); this.loadDB(); this.pop('กลับค่าตั้งต้นแล้ว'); } },
+
+      hasModal: !!m, closeModal: this.closeModal, stopClick: this.stopClick, modalSave: this.modalSave,
+      modalIsForm: !!m && (m.kind === 'vendor' || m.kind === 'item' || m.kind === 'price' || m.kind === 'rule'),
+      modalIsDoc: !!m && m.kind === 'doc', modalIsSign: !!m && m.kind === 'sign',
+      modalTitle: m ? m.title : '', modalFields,
+      modalHasImgField: !!m && (m.kind === 'vendor' || m.kind === 'item'),
+      modalImgThumb: m ? (m.img || 'assets/logos/other.png') : '',
+      modalOnImg: (e) => this.readFile(e, (url) => { m.img = url; this.forceUpdate(); }),
+      modalIsPrice: !!m && m.kind === 'price',
+      priceSaveBorder: m && m.saveToVendor ? '#37B24D' : '#EAD9C8',
+      priceSaveBg: m && m.saveToVendor ? '#37B24D' : '#E4D5C3', priceSaveMark: m && m.saveToVendor ? '✓' : '',
+      togglePriceSave: () => { m.saveToVendor = !m.saveToVendor; this.forceUpdate(); },
+      docType: m && m.d ? m.d.type : '', docNo: m && m.d ? m.d.id : '', docEntity: m && m.d ? m.d.entity : '',
+      docDate: m && m.d ? m.d.date : '', docPayee: m && m.d ? m.d.payee : '',
+      docAmountText: m && m.d ? this.fmt(m.d.amount) : '', docAmountWords: m && m.d ? thaiBaht(m.d.amount) : '',
+
+      navHomeC: navC('home'), navHomeF: navF('home'),
+      navListC: (st.screen === 'diary' || st.screen === 'list') ? '#F76707' : '#B8A08D',
+      navListF: (st.screen === 'diary' || st.screen === 'list') ? 'none' : 'grayscale(1) opacity(.55)',
+      navDataC: navC('data'), navDataF: navF('data'),
+      navDashC: navC('dash'), navDashF: navF('dash')
+    };
+  }
+}
+</script>
+</body>
+</html>
