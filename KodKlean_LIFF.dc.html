@@ -12,6 +12,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#FFB25A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="KodKlean_Money">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="assets/app/apple-touch-icon.png">
+<link rel="icon" href="assets/app/icon-192.png" sizes="192x192">
 <script src="data.js"></script>
 <script src="config.js"></script>
 <script src="kk-helpers.js"></script>
@@ -1192,6 +1200,35 @@
       </div>
 
       <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="display:flex;align-items:center;gap:12px">
+          <img src="assets/app/icon-192.png" alt="" style="width:52px;height:52px;border-radius:14px;flex-shrink:0">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:17px;font-weight:900">แอป KodKlean_Money</div>
+            <div style="font-size:13px;font-weight:600;color:#B08968">{{ appModeText }}</div>
+          </div>
+        </div>
+        <div style="font-size:13px;font-weight:800;color:#fff;background:{{ loginBadgeBg }};border-radius:999px;padding:6px 14px;display:inline-block;margin:12px 0">{{ loginBadge }}</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-if value="{{ showLogin }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ doLogin }}" style="background:#06C755;color:#fff;border:none;border-radius:16px;padding:15px;font-size:16px;font-weight:900;cursor:pointer">เข้าสู่ระบบด้วย LINE</button>
+            <div style="font-size:13px;font-weight:600;color:#B08968">เข้าสู่ระบบครั้งเดียว แล้วเปิดจากไอคอนบนหน้าจอได้เลย ไม่ต้องเข้าผ่าน LINE ทุกครั้ง</div>
+          </sc-if>
+          <sc-if value="{{ showLogout }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ doLogout }}" style="background:#fff;color:#8A6D5C;border:3px solid #EAD9C8;border-radius:16px;padding:13px;font-size:15px;font-weight:800;cursor:pointer">ออกจากระบบ LINE</button>
+          </sc-if>
+          <sc-if value="{{ showInstall }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ doInstall }}" style="background:linear-gradient(135deg,#FF922B,#F76BB8);color:#fff;border:none;border-radius:16px;padding:15px;font-size:16px;font-weight:900;cursor:pointer">ติดตั้งลงหน้าจอ (KodKlean_Money)</button>
+          </sc-if>
+          <sc-if value="{{ showIOSHint }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#FFF8F0;border:2px dashed #FFB27D;border-radius:16px;padding:12px 14px;font-size:14px;font-weight:700;color:#8A6D5C">iPhone / iPad: กดปุ่มแชร์ใน Safari → เลือก “เพิ่มไปที่หน้าจอโฮม” จะได้ไอคอนชื่อ KodKlean_Money</div>
+          </sc-if>
+          <sc-if value="{{ isInstalled }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#EBFBEE;border-radius:16px;padding:12px 14px;font-size:14px;font-weight:800;color:#2B8A3E">ตอนนี้เปิดจากไอคอนบนหน้าจอแล้ว ✓</div>
+          </sc-if>
+        </div>
+      </div>
+
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
         <div style="font-size:17px;font-weight:900;margin-bottom:2px">ผู้จ่ายเงิน / กิจการ</div>
         <div style="font-size:13px;font-weight:600;color:#B08968;margin-bottom:12px">เพิ่มได้หลายราย (บุคคลธรรมดา / หสม. / นิติบุคคล) · ตอนบันทึกซื้อเลือกได้ว่าจ่ายในนามไหน · เอกสารดึงชื่อ+เลขภาษีจากรายที่เลือก (ไม่เดา ไม่ใส่ชื่อแบรนด์เอง)</div>
         <div style="display:flex;flex-direction:column;gap:10px">
@@ -1546,29 +1583,56 @@ class Component extends DCLogic {
     diary: { ym: '', sel: '', vFilter: '' }, books: { ym: '', tab: 'p' },
     rules: null, monthLive: {}, thumbs: {}, agg: null,
     // ผู้จ่ายเงิน/กิจการ (เก็บใน fin_entities จริง · ค่าเริ่มต้น/ซ่อน เก็บใน fin_rules)
-    entities: [], hiddenEntities: [], defaultEntityId: null, geminiModel: 'gemini-3.5-flash-lite'
+    entities: [], hiddenEntities: [], defaultEntityId: null, geminiModel: 'gemini-3.5-flash-lite',
+    // แอปบนหน้าจอ (PWA) + สถานะเข้าสู่ระบบ LINE — เว็บเป็นฐาน เข้าผ่าน LINE ก็ยังได้เหมือนเดิม
+    canInstall: false, installed: false, isIOS: false, inLine: false, canLogin: true
   };
 
   componentDidMount() {
     const ym = (window.KK_HELPERS ? KK_HELPERS.thisYm() : new Date().toISOString().slice(0, 7));
     const today = (window.KK_HELPERS ? KK_HELPERS.todayIso() : new Date().toISOString().slice(0, 10));
     this.setState({ diary: { ym, sel: today, vFilter: '' }, books: { ym, tab: 'p' } });
-    this.loadDB(); this.initBackend();
+    this.loadDB(); this.initBackend(); this.initPWA();
   }
+
+  /* ---------- ติดตั้งเป็นแอปบนหน้าจอ ชื่อ KodKlean_Money (ใช้ได้ทั้ง Android/iOS/คอม) ---------- */
+  initPWA() {
+    const standalone = !!((window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true);
+    const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent || '');
+    this.setState({ installed: standalone, isIOS: iOS && !standalone });
+    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); this._installEvt = e; this.setState({ canInstall: true }); });
+    window.addEventListener('appinstalled', () => this.setState({ canInstall: false, installed: true }));
+    // ลง service worker เฉพาะตอนเปิดเว็บจริง (ไม่ทำในหน้าพรีวิวที่ฝังใน iframe)
+    const topLevel = (() => { try { return window.top === window.self; } catch (e) { return false; } })();
+    if (topLevel && 'serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+  }
+  installApp = async () => {
+    if (!this._installEvt) { this.pop('เครื่องนี้ให้ติดตั้งจากเมนูเบราว์เซอร์ → เพิ่มลงหน้าจอโฮม'); return; }
+    this._installEvt.prompt();
+    const r = await this._installEvt.userChoice.catch(() => null);
+    this._installEvt = null; this.setState({ canInstall: false });
+    if (r && r.outcome === 'accepted') this.pop('ติดตั้ง KodKlean_Money ลงหน้าจอแล้ว ✓');
+  };
 
   /* ---------- เชื่อม backend จริง (kk-finance-line) · ไม่ตั้งค่า = โหมดสาธิต ไม่พัง ---------- */
   async initBackend() {
     const c = window.KK_CONFIG || {};
     // health เช็คได้เสมอ (ไม่ต้อง login) — บอกว่า backend/secret พร้อมแค่ไหน
     this.refreshHealth();
-    if (!c.LIFF_ID || !window.liff) { this.setState({ liveMode: false }); return; }
+    if (!c.LIFF_ID || !window.liff) { this.setState({ liveMode: false, canLogin: false }); return; }
     try {
       await window.liff.init({ liffId: c.LIFF_ID });
-      // auto-login เฉพาะเมื่อรันในแอป LINE จริง — นอก LINE (พรีวิว/เว็บ) ตกลงโหมดสาธิต ไม่เด้งออก
+      const inLine = !!(window.liff.isInClient && window.liff.isInClient());
+      this.setState({ inLine, canLogin: true });
+      // เว็บเป็นฐาน: เปิดในแอป LINE = ล็อกอินให้เลย · เปิดบนเว็บ/ไอคอนหน้าจอ = ล็อกอินเองครั้งแรก แล้วระบบจำไว้
       if (!window.liff.isLoggedIn()) {
-        if (window.liff.isInClient && window.liff.isInClient()) { window.liff.login(); return; }
+        const remembered = (() => { try { return localStorage.getItem('kk_web_login') === '1'; } catch (e) { return false; } })();
+        if (inLine || remembered) { this.loginLine(); return; }
         this.setState({ liveMode: false }); return;
       }
+      try { localStorage.setItem('kk_web_login', '1'); } catch (e) {}
       this._idToken = window.liff.getIDToken();
       const prof = await window.liff.getProfile().catch(() => null);
       this.setState({ liveMode: true, lineName: prof?.displayName || null });
@@ -1577,6 +1641,21 @@ class Component extends DCLogic {
       this.setState({ liveMode: false, liveError: String(e?.message || e) });
     }
   }
+
+  // เข้าสู่ระบบด้วย LINE — ใช้ได้ทั้งในแอป LINE และบนเว็บ/ไอคอนที่ติดตั้งบนหน้าจอ
+  loginLine = () => {
+    if (!window.liff) { this.pop('ยังโหลดตัวเชื่อม LINE ไม่เสร็จ ลองใหม่อีกครั้ง'); return; }
+    try { localStorage.setItem('kk_web_login', '1'); } catch (e) {}
+    try { window.liff.login({ redirectUri: location.href }); }
+    catch (e) { this.pop('เข้าสู่ระบบไม่สำเร็จ: ' + String((e && e.message) || e)); }
+  };
+  logoutLine = () => {
+    try { localStorage.setItem('kk_web_login', '0'); } catch (e) {}
+    try { if (window.liff && window.liff.isLoggedIn()) window.liff.logout(); } catch (e) {}
+    this._idToken = null;
+    this.setState({ liveMode: false, lineName: null });
+    this.pop('ออกจากระบบแล้ว — กลับเป็นโหมดสาธิต');
+  };
 
   async api(action, payload = {}) {
     const c = window.KK_CONFIG || {};
@@ -1605,7 +1684,15 @@ class Component extends DCLogic {
   /* ---------- ต่อ backend จริง: แมป mockup id/route → รหัสจริง (fin_*) + อ่าน/เขียน ---------- */
   // แก้ปัญหา "รหัสร้าน/route ฝั่ง mockup ไม่ตรง backend": ใช้ mockup_id ที่ผูกไว้ใน fin_vendors
   // กฎคัดกรอง (เจ้าของแก้ได้ในหน้า "กฎคัดกรอง" — เก็บใน fin_rules + localStorage)
-  rulesList() { const r = this.state.rules; if (r && r.length) return r; return window.KK_HELPERS ? KK_HELPERS.defaultRules() : []; }
+  rulesList() {
+    const D = window.KK_HELPERS ? KK_HELPERS.defaultRules() : [];
+    const r = this.state.rules;
+    if (!r || !r.length) return D;
+    // กฎใหม่ที่ระบบเพิ่มทีหลัง (เช่น "ไม่มีบิลเลย") เติมต่อท้ายให้อัตโนมัติ — ของที่เจ้าของแก้ไว้ไม่หาย
+    const have = {}; r.forEach(x => { if (x && x.id) have[x.id] = true; });
+    const add = D.filter(x => !have[x.id]);
+    return add.length ? r.concat(add) : r;
+  }
   ruleById(id) { return this.rulesList().find(r => r.id === id) || null; }
   mainRules() { return this.rulesList().filter(r => (r.group || 'main') !== 'none'); }
   subRules() { return this.rulesList().filter(r => r.group === 'none'); }
@@ -1648,6 +1735,7 @@ class Component extends DCLogic {
           id: v.id, name: v.name, channel: v.channel || '', logo: v.logo || 'assets/logos/other.png',
           color: v.color || '#8A6D5C', shipping: +v.shipping || 0, box: +v.box || 0, freq: v.freq || '',
           doc: Array.isArray(v.doc) ? v.doc : [], cats: Array.isArray(v.cats) ? v.cats : [],
+          docType: v.docType || '', taxId: v.tax_id || '', address: v.address || '', contact: v.contact || '',
           items: Array.isArray(v.items) ? v.items : []
         }));
         db.purchases = []; // ตัดรายการซื้อตัวอย่างออก — โหมดจริงใช้ข้อมูลจากสมุดบันทึก (liff_month)
@@ -1908,6 +1996,12 @@ class Component extends DCLogic {
     const H = window.KK_HELPERS;
     return this.subRules().map(r => ({ key: r.id, title: r.title, desc: r.desc, result: H ? H.ruleResult(r) : '', book: H ? H.bookLabel(r) : '', rule: r }));
   }
+  // กฎของร้าน → ค่าตั้งต้นตอนซื้อ · กฎกลุ่ม "ไม่มีเอกสาร" ต้องติ๊กที่ route='none' + ตัวเลือกย่อย (sub)
+  prefillRoute(v) {
+    const r = (v && v.docType) ? this.ruleById(v.docType) : null;
+    if (!r) return { route: null, sub: null };
+    return (r.group === 'none') ? { route: 'none', sub: r.id } : { route: r.id, sub: null };
+  }
   currentRouteInfo() {
     const { route, sub } = this.state.cart;
     if (!route) return null;
@@ -1946,7 +2040,7 @@ class Component extends DCLogic {
     const v = this.vendorById(id);
     this.setState({
       screen: 'buy', buyStep: 2, search: '', catFilter: 'ทั้งหมด', aiFilled: false,
-      cart: Object.assign({}, this.resetCart(), { vendorId: id, ship: String(v.shipping || 0), box: String(v.box || 0), route: (v.docType && this.ruleById(v.docType)) ? v.docType : null })
+      cart: Object.assign({}, this.resetCart(), { vendorId: id, ship: String(v.shipping || 0), box: String(v.box || 0) }, this.prefillRoute(v))
     });
   }
   buyBack = () => {
@@ -1957,6 +2051,8 @@ class Component extends DCLogic {
   buyNextFn = () => {
     const st = this.state; const s = st.buyStep;
     if (s === 2 && this.cartCount() === 0) { this.pop('เลือกสินค้าอย่างน้อย 1 รายการก่อนนะ'); return; }
+    // รายการที่ต้องใส่ยอดเอง (ร้านไม่มีบิล/ค่าเดินทาง) — กันไม่ให้ผ่านด้วยยอด 0 บาท
+    if (s === 2 && this.grandTotal() <= 0) { this.pop('แตะที่ราคาของแต่ละรายการ ใส่ยอดจริงก่อนนะ'); return; }
     if (s === 4) {
       const info = this.currentRouteInfo();
       if (!info) { this.pop('เลือกประเภทเอกสารก่อนนะ'); return; }
@@ -2044,6 +2140,8 @@ class Component extends DCLogic {
     } else this.pop('ยกเลิกไม่สำเร็จ: ' + ((r && r.error) || 'ไม่ทราบสาเหตุ'));
   }
   confirmBuy = () => {
+    // กันบันทึกยอด 0 (รายการที่ต้องพิมพ์ราคาเอง) — เขียนขึ้นระบบจริงไม่ผ่านอยู่แล้ว จะกลายเป็นรายการค้างในเครื่อง
+    if (this.grandTotal() <= 0) { this.pop('ยอดรวมยังเป็น 0 — แตะที่ราคาของแต่ละรายการ ใส่ยอดจริงก่อนนะ'); return; }
     const info = this.currentRouteInfo();
     const missing = this.evMissing();
     const needDoc = !!(info && info.rule && info.rule.doc !== 'none');
@@ -2082,19 +2180,23 @@ class Component extends DCLogic {
       this.pop('ตอนนี้เป็นโหมดสาธิต (ยังไม่ได้เข้าผ่าน LINE) — ยังไม่เขียนขึ้นระบบจริง');
     }
     if (!missing.length && needDoc) {
-      const docType = info.rule.doc === 'cert' ? 'ใบรับรองแทนใบเสร็จ' : 'ใบสำคัญจ่าย';
       const v = this.vendorById(this.state.cart.vendorId);
       const pe = this.payerEntity() || {};
       const drafts = this.state.drafts.slice();
       // ชื่อผู้จ่าย = กิจการที่ผู้ใช้เลือก (ไม่ใส่ชื่อแบรนด์เอง) · ใบรับรองฯ เซ็นได้เลย ไม่ต้องมีเลขบัตรผู้รับ
-      drafts.unshift({ id: (info.rule.doc === 'cert' ? 'RC-2569-' : 'PV-2569-') + String(44 + drafts.length).padStart(4, '0'), type: docType, entity: pe.name || this._entityName || 'กิจการ', entityTaxId: pe.tax_id || '', vendorId: v.id, amount: this.grandTotal(), date: 'วันนี้', payee: v.name + (info.rule.doc === 'cert' ? ' (จ่ายสด)' : ' (โอนธนาคาร)'), ready: true });
+      // กฎ 'pv_cert' (ไม่มีบิลเลย — ค่าเดินทาง/ค่าส่ง) = ออกให้ 2 ใบ: ใบสำคัญจ่าย + ใบรับรองแทนใบเสร็จ
+      const kinds = info.rule.doc === 'pv_cert' ? ['pv', 'cert'] : [info.rule.doc];
+      kinds.forEach((k) => {
+        const isCert = k === 'cert';
+        drafts.unshift({ id: (isCert ? 'RC-2569-' : 'PV-2569-') + String(44 + drafts.length).padStart(4, '0'), type: isCert ? 'ใบรับรองแทนใบเสร็จ' : 'ใบสำคัญจ่าย', entity: pe.name || this._entityName || 'กิจการ', entityTaxId: pe.tax_id || '', vendorId: v.id, amount: this.grandTotal(), date: 'วันนี้', payee: v.name + (isCert ? ' (จ่ายสด)' : ' (โอนธนาคาร)'), ready: true });
+      });
       this.setState({ drafts });
     }
     this.setState({
       screen: 'success', buyStep: 0,
       success: {
         title: status === 'ร่าง' ? 'บันทึกร่างเรียบร้อย!' : 'ส่งเข้าระบบเรียบร้อย!',
-        desc: status === 'รออนุมัติ' ? 'ระบบลงบัญชี + สร้าง' + (info.rule && info.rule.doc === 'cert' ? 'ใบรับรองแทนใบเสร็จ' : 'ใบสำคัญจ่าย') + 'ให้แล้ว รอเซ็นอนุมัติ' :
+        desc: status === 'รออนุมัติ' ? 'ระบบลงบัญชี + สร้าง' + (info.rule && info.rule.doc === 'pv_cert' ? 'ใบสำคัญจ่าย + ใบรับรองแทนใบเสร็จ' : (info.rule && info.rule.doc === 'cert' ? 'ใบรับรองแทนใบเสร็จ' : 'ใบสำคัญจ่าย')) + 'ให้แล้ว รอเซ็นอนุมัติ' :
           status === 'ร่าง' ? 'หลักฐานยังไม่ครบ ระบบพักไว้ที่ตะกร้ารอจับคู่ เติมทีหลังได้' :
           'ระบบลงบัญชีให้เรียบร้อย ไม่ต้องสร้างเอกสารเพิ่ม'
       }
@@ -2898,7 +3000,16 @@ class Component extends DCLogic {
       cartAssetBg: st.cart.isAsset ? '#37B24D' : '#D9C6B2', cartAssetKnob: st.cart.isAsset ? '32px' : '4px',
       svcList,
       liveMode: !!st.liveMode, lineName: st.lineName || null,
-      connBadge: st.liveMode ? ('เชื่อมระบบจริง' + (st.lineName ? ' · ' + st.lineName : '')) : 'โหมดสาธิต (ยังไม่ตั้ง LIFF ID)',
+      connBadge: st.liveMode ? ('เชื่อมระบบจริง' + (st.lineName ? ' · ' + st.lineName : '')) : 'โหมดสาธิต (ยังไม่ได้เข้าสู่ระบบ)',
+      appModeText: st.inLine ? 'เปิดผ่านแอป LINE อยู่' : (st.installed ? 'เปิดจากไอคอนบนหน้าจอ' : 'เปิดบนเว็บเบราว์เซอร์'),
+      loginBadge: st.liveMode ? ('เข้าสู่ระบบแล้ว' + (st.lineName ? ' · ' + st.lineName : '')) : 'ยังไม่ได้เข้าสู่ระบบ (โหมดสาธิต)',
+      loginBadgeBg: st.liveMode ? '#37B24D' : '#B08968',
+      showLogin: !st.liveMode && st.canLogin !== false,
+      showLogout: !!st.liveMode,
+      showInstall: !!st.canInstall,
+      showIOSHint: !!st.isIOS && !st.canInstall && !st.installed,
+      isInstalled: !!st.installed,
+      doLogin: this.loginLine, doLogout: this.logoutLine, doInstall: this.installApp,
       connBadgeBg: st.liveMode ? '#37B24D' : '#B08968',
       checkConn: () => { this.refreshHealth(); this.pop('กำลังตรวจการเชื่อมต่อ backend…'); },
       modalIsHistory: isHist, histTitle: isHist ? m.title : '', histRows: isHist ? m.hist : []
@@ -2943,7 +3054,7 @@ class Component extends DCLogic {
     const vendorsView = db.vendors.filter(v => !vSearch || v.name.indexOf(vSearch) >= 0).map(v => ({
       id: v.id, name: v.name, channel: v.channel, logo: v.logo, isFreq: v.freq === 'ซื้อบ่อย',
       meta: 'สินค้า ' + v.items.length + ' รายการ' + (v.shipping ? ' · ค่าส่ง ' + this.fmt(v.shipping) : ''),
-      pick: () => this.setState({ cart: Object.assign({}, this.resetCart(), { vendorId: v.id, ship: String(v.shipping || 0), box: String(v.box || 0), route: (v.docType && this.ruleById(v.docType)) ? v.docType : null }), buyStep: 2, catFilter: 'ทั้งหมด' })
+      pick: () => this.setState({ cart: Object.assign({}, this.resetCart(), { vendorId: v.id, ship: String(v.shipping || 0), box: String(v.box || 0) }, this.prefillRoute(v)), buyStep: 2, catFilter: 'ทั้งหมด' })
     }));
     const bv = this.vendorById(st.cart.vendorId);
     const cats = ['ทั้งหมด'].concat(bv.cats || []);

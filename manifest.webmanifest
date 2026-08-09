@@ -1,0 +1,25 @@
+{
+  "name": "KodKlean_Money",
+  "short_name": "KodKlean_Money",
+  "description": "บันทึกค่าใช้จ่าย ซื้อของ และลงบัญชีอัตโนมัติ — KodKlean",
+  "lang": "th",
+  "dir": "ltr",
+  "id": "kodklean-money",
+  "start_url": "./KodKlean_LIFF.dc.html?src=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#FFF4E6",
+  "theme_color": "#FFB25A",
+  "categories": ["business", "finance", "productivity"],
+  "icons": [
+    { "src": "assets/app/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/app/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/app/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "ซื้อของ", "short_name": "ซื้อของ", "url": "./KodKlean_LIFF.dc.html?go=buy", "icons": [{ "src": "assets/app/icon-192.png", "sizes": "192x192" }] },
+    { "name": "เอกสารรออนุมัติ", "short_name": "อนุมัติ", "url": "./KodKlean_LIFF.dc.html?go=approve", "icons": [{ "src": "assets/app/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

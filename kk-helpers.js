@@ -53,21 +53,24 @@ window.KK_HELPERS = (function () {
       { id: 'bill', group: 'main', title: 'มีบิล / ใบเสร็จ (ไม่มี VAT)', desc: 'ไม่ต้องสร้างเอกสารเพิ่ม', doc: 'none', vat: false, book: 'both' },
       { id: 'slip', group: 'main', title: 'มีแค่สลิปโอน', desc: 'พบบ่อยสุด · ระบบสร้างใบสำคัญจ่ายให้', doc: 'pv', vat: false, book: 'both' },
       { id: 'none_transfer', group: 'none', title: 'โอนเงิน (มีสลิป)', desc: 'พิสูจน์ผู้รับได้ → ระบบสร้างใบสำคัญจ่าย · ลงภาษีได้', doc: 'pv', vat: false, book: 'both' },
-      { id: 'none_cashid', group: 'none', title: 'จ่ายสด · ระบุตัวผู้รับได้', desc: 'เช่นแท็กซี่/วิน → ใบรับรองแทนใบเสร็จ · ลงภาษีได้', doc: 'cert', vat: false, book: 'both' },
+      { id: 'none_cashid', group: 'none', title: 'จ่ายสด · ระบุชื่อผู้รับได้', desc: 'เช่น วิน/ค่าส่ง/แผงลอย → ใบรับรองแทนใบเสร็จ · กรอกแค่ชื่อผู้รับ ไม่ต้องใช้เลขบัตร · ลงภาษีได้', doc: 'cert', vat: false, book: 'both' },
+      { id: 'none_cash_pvcert', group: 'none', title: 'จ่ายสด · ไม่มีบิลเลย (ค่าเดินทาง/ค่าส่ง)', desc: 'ระบบออกให้ 2 ใบ: ใบสำคัญจ่าย + ใบรับรองแทนใบเสร็จ · ต้องเซ็นอนุมัติก่อนปิดงาน · ลงภาษีได้', doc: 'pv_cert', vat: false, book: 'both' },
       { id: 'none_cashno', group: 'none', title: 'จ่ายสด · พิสูจน์ผู้รับไม่ได้เลย', desc: 'เข้าเฉพาะงบส่วนตัว ระบบกันไม่ให้เข้างบจำลองนิติ', doc: 'none', vat: false, book: 'inhouse' },
     ];
   }
-  const DOC_LABEL = { none: 'ไม่สร้างเอกสารเพิ่ม', pv: 'ใบสำคัญจ่าย', cert: 'ใบรับรองแทนใบเสร็จ' };
+  const DOC_LABEL = { none: 'ไม่สร้างเอกสารเพิ่ม', pv: 'ใบสำคัญจ่าย', cert: 'ใบรับรองแทนใบเสร็จ', pv_cert: 'ใบสำคัญจ่าย + ใบรับรองแทนใบเสร็จ' };
   function docLabel(r) { return DOC_LABEL[r.doc] || DOC_LABEL.none; }
   function bookLabel(r) { return r.book === 'inhouse' ? 'เฉพาะงบส่วนตัว' : 'เข้าทั้ง 2 งบ'; }
   function ruleResult(r) {
+    if (r.doc === 'pv_cert') return 'ระบบสร้าง "ใบสำคัญจ่าย" + "ใบรับรองแทนใบเสร็จ" ให้ครบทั้ง 2 ใบ — กรอกแค่ชื่อผู้รับ แล้วเซ็นอนุมัติ';
     if (r.doc === 'pv') return 'ระบบสร้าง "ใบสำคัญจ่าย" ให้อัตโนมัติ + แนบหลักฐาน';
-    if (r.doc === 'cert') return 'ระบบสร้าง "ใบรับรองแทนใบเสร็จ" ให้กรอกผู้รับ';
+    if (r.doc === 'cert') return 'ระบบสร้าง "ใบรับรองแทนใบเสร็จ" — กรอกแค่ชื่อผู้รับ (ไม่ต้องใช้เลขบัตร)';
     if (r.book === 'inhouse') return 'บันทึกเข้าเฉพาะงบส่วนตัว (ระบบกันอัตโนมัติ)';
     if (r.vat) return 'ไม่สร้างเอกสารเพิ่ม + แยกภาษีซื้อเข้า VAT (ใช้ในงบจำลองนิติ)';
     return 'ใช้เอกสารจากร้านเป็นหลักฐานได้เลย ไม่สร้างเอกสารเพิ่ม';
   }
   function ruleIcon(r) {
+    if (r.doc === 'pv_cert') return 'assets/icons/icon_payment_slip.webp';
     if (r.vat) return 'assets/icons/icon_tax_invoice.webp';
     if (r.doc === 'pv') return 'assets/icons/icon_payment_slip.webp';
     if (r.doc === 'cert') return 'assets/icons/icon_tax_invoice.webp';
@@ -79,6 +82,7 @@ window.KK_HELPERS = (function () {
     if (!r) return '2b_inhouse';
     if (r.vat) return '1a';
     if (r.book === 'inhouse') return '2b_inhouse';
+    if (r.doc === 'pv_cert') return '2b_both';
     if (r.doc === 'pv') return '2a';
     if (r.doc === 'cert') return '2b_travel';
     return '1b';

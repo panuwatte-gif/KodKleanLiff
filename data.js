@@ -12,7 +12,7 @@ window.KK_DATA = (function () {
     {
       id: 'makro', name: 'Makro', channel: 'สาขา / ออนไลน์', logo: L + 'makro.webp', color: '#4DABF7',
       shipping: 0, box: 0, freq: 'ซื้อบ่อย',
-      doc: ['ใบกำกับภาษี / ใบเสร็จ', 'รูปสินค้าที่รับ'],
+      doc: ['ใบกำกับภาษี / ใบเสร็จ'],
       cats: ['หมู', 'ไข่+เต้าหู้', 'ผัก+อื่นๆ', 'เครื่องปรุง'],
       items: [
         { id: 'mk01', name: 'หมูสันนอก', spec: 'สไลซ์ · แพ็กเย็น', unit: 'กก.', price: 165, img: P + 'pork-sliced.webp', cat: 'หมู' },
@@ -90,37 +90,66 @@ window.KK_DATA = (function () {
     },
     {
       id: 'loy', name: 'หลอยไก่สด', channel: 'แชท Facebook/LINE · มีค่าส่ง/ค่าลัง', logo: L + 'loy-chicken.webp', color: '#F2C94C',
-      shipping: 120, box: 60, freq: '', doc: ['แคปแชทคำสั่งซื้อ', 'สลิปโอนเงิน', 'รูปสินค้าที่รับ'], cats: [],
+      shipping: 120, box: 60, freq: '', doc: ['แคปแชทคำสั่งซื้อ', 'สลิปโอนเงิน', 'รูปสินค้าที่รับ'], cats: ['Set ไก่'],
       items: [
-        { id: 'ly01', name: 'สันในไก่', spec: 'สดรายวัน', unit: 'กก.', price: 82, img: P + 'chicken-breast.webp', cat: '' },
-        { id: 'ly02', name: 'อกไก่ติดหนัง', spec: 'สดรายวัน', unit: 'กก.', price: 75, img: P + 'chicken-breast.webp', cat: '' },
-        { id: 'ly03', name: 'อกไก่ BB', spec: 'สดรายวัน', unit: 'กก.', price: 78, img: P + 'chicken-breast.webp', cat: '' },
-        { id: 'ly04', name: 'อกลอก', spec: 'สดรายวัน', unit: 'กก.', price: 80, img: P + 'chicken-breast.webp', cat: '' }
+        { id: 'ly01', name: 'สันในไก่', spec: 'สดรายวัน', unit: 'กก.', price: 82, img: P + 'chicken-breast.webp', cat: 'Set ไก่' },
+        { id: 'ly02', name: 'อกไก่ติดหนัง', spec: 'สดรายวัน', unit: 'กก.', price: 75, img: P + 'chicken-breast-fillet.webp', cat: 'Set ไก่' },
+        { id: 'ly03', name: 'อกไก่ BB', spec: 'สดรายวัน', unit: 'กก.', price: 78, img: P + 'chicken-breast-fillet.webp', cat: 'Set ไก่' },
+        { id: 'ly04', name: 'อกลอก', spec: 'สดรายวัน', unit: 'กก.', price: 80, img: P + 'chicken-breast-fillet.webp', cat: 'Set ไก่' },
+        { id: 'ly05', name: 'สะโพกไก่', spec: 'สดรายวัน · เลาะกระดูก', unit: 'กก.', price: 78, img: P + 'chicken-thigh.webp', cat: 'Set ไก่' },
+        { id: 'ly06', name: 'อกไก่', spec: 'สดรายวัน', unit: 'กก.', price: 75, img: P + 'chicken-breast-fillet.webp', cat: 'Set ไก่' },
+        { id: 'ly07', name: 'น่องติดสะโพก', spec: 'สดรายวัน', unit: 'กก.', price: 72, img: P + 'chicken-leg-quarter.webp', cat: 'Set ไก่' },
+        { id: 'ly08', name: 'น่องไก่', spec: 'สดรายวัน', unit: 'กก.', price: 70, img: P + 'chicken-drumstick.webp', cat: 'Set ไก่' }
       ]
     },
     {
       id: 'meatfb', name: 'Supplier เนื้อ (FB)', channel: 'แชท Facebook', logo: L + '13-supplier-meat.webp', color: '#219653',
-      shipping: 0, box: 0, freq: '', doc: ['แคปแชทคำสั่งซื้อ', 'สลิปโอนเงิน', 'รูปสินค้าที่รับ'], cats: [],
+      shipping: 0, box: 0, freq: '', doc: ['แคปแชทคำสั่งซื้อ', 'สลิปโอนเงิน', 'รูปสินค้าที่รับ'], cats: ['Set เนื้อ'],
       items: [
-        { id: 'mf01', name: 'เนื้อแดง', spec: 'ตัดสด', unit: 'กก.', price: 285, img: P + 'beef-minced.webp', cat: '' },
-        { id: 'mf02', name: 'เนื้อลูกมะพร้าว', spec: 'ตัดสด', unit: 'กก.', price: 295, img: P + 'beef-minced.webp', cat: '' },
-        { id: 'mf03', name: 'สันใน', spec: 'ตัดสด', unit: 'กก.', price: 340, img: P + 'beef-minced.webp', cat: '' },
-        { id: 'mf04', name: 'แก้มวัว', spec: 'ตัดสด', unit: 'กก.', price: 310, img: P + 'beef-minced.webp', cat: '' }
+        { id: 'mf01', name: 'เนื้อแดง', spec: 'ตัดสด', unit: 'กก.', price: 285, img: P + 'beef-red.webp', cat: 'Set เนื้อ' },
+        { id: 'mf02', name: 'เนื้อลูกมะพร้าว', spec: 'ตัดสด', unit: 'กก.', price: 295, img: P + 'beef-round.webp', cat: 'Set เนื้อ' },
+        { id: 'mf03', name: 'สันใน', spec: 'ตัดสด', unit: 'กก.', price: 340, img: P + 'beef-minced.webp', cat: 'Set เนื้อ' },
+        { id: 'mf04', name: 'แก้มวัว', spec: 'ตัดสด', unit: 'กก.', price: 310, img: P + 'beef-cheek.webp', cat: 'Set เนื้อ' }
       ]
     },
     {
       id: 'papud', name: 'Supplier เนื้อ ป๋าพุธ', channel: 'แชท', logo: L + 'papud.png', color: '#C0392B',
       shipping: 0, box: 0, freq: '', doc: ['แคปแชทคำสั่งซื้อ', 'สลิปโอนเงิน'], cats: [],
       items: [
-        { id: 'pw01', name: 'เนื้อแดง', spec: 'ตัดสด', unit: 'กก.', price: 275, img: P + 'beef-minced.webp', cat: '' }
+        { id: 'pw01', name: 'เนื้อแดง', spec: 'ตัดสด', unit: 'กก.', price: 275, img: P + 'beef-red.webp', cat: 'Set เนื้อ' },
+        { id: 'pw02', name: 'เนื้อลูกมะพร้าว', spec: 'ตัดสด', unit: 'กก.', price: 285, img: P + 'beef-round.webp', cat: 'Set เนื้อ' },
+        { id: 'pw03', name: 'แก้มวัว', spec: 'ตัดสด', unit: 'กก.', price: 300, img: P + 'beef-cheek.webp', cat: 'Set เนื้อ' }
       ]
     },
     {
       id: 'salmon', name: 'Supplier แซลมอน (Nu Tai Toto)', channel: 'Facebook/LINE · มีค่าส่ง/ค่าลัง', logo: L + 'salmon-supplier.webp', color: '#EB7A55',
-      shipping: 150, box: 100, freq: '', doc: ['แคปแชทคำสั่งซื้อ', 'สลิปโอนเงิน', 'รูปสินค้าที่รับ'], cats: [],
+      shipping: 150, box: 100, freq: '', doc: ['แคปแชทคำสั่งซื้อ', 'สลิปโอนเงิน', 'รูปสินค้าที่รับ'], cats: ['Set ปลา'],
       items: [
-        { id: 'sm01', name: 'แซลมอนปาด', spec: 'แช่แข็ง', unit: 'กก.', price: 250, img: P + 'salmon-fillet.webp', cat: '' },
-        { id: 'sm02', name: 'บราวน์', spec: 'แช่แข็ง', unit: 'กก.', price: 230, img: P + 'salmon-fillet.webp', cat: '' }
+        { id: 'sm01', name: 'แซลมอนปาด', spec: 'แช่แข็ง', unit: 'กก.', price: 250, img: P + 'salmon-fillet.webp', cat: 'Set ปลา' },
+        { id: 'sm02', name: 'บราวน์', spec: 'แช่แข็ง', unit: 'กก.', price: 230, img: P + 'salmon-fillet.webp', cat: 'Set ปลา' },
+        { id: 'sm03', name: 'เศษเนื้อปลาแซลมอน', spec: 'แช่แข็ง · ชิ้นตัดแต่ง', unit: 'กก.', price: 180, img: P + 'salmon-trim.webp', cat: 'Set ปลา' }
+      ]
+    }
+,
+    {
+      id: 'noshop', name: 'ร้านอื่นๆ (ไม่มีบิล)', channel: 'ตลาด / หน้าร้าน · ไม่มีบิล', logo: L + 'nobill-shop.webp', color: '#F59F4C',
+      shipping: 0, box: 0, freq: 'ซื้อบ่อย', docType: 'none_cashid',
+      doc: ['ชื่อผู้รับเงิน', 'รูปสินค้าที่ซื้อ (ถ้ามี)'], cats: [],
+      items: [
+        { id: 'ns01', name: 'ของสด (ระบุชื่อเอง)', spec: 'แตะราคาเพื่อใส่ยอดจริง', unit: 'รายการ', price: 0, img: '', cat: '' },
+        { id: 'ns02', name: 'ของใช้ในร้าน (ระบุชื่อเอง)', spec: 'แตะราคาเพื่อใส่ยอดจริง', unit: 'รายการ', price: 0, img: '', cat: '' },
+        { id: 'ns03', name: 'อุปกรณ์ / ของเบ็ดเตล็ด', spec: 'แตะราคาเพื่อใส่ยอดจริง', unit: 'รายการ', price: 0, img: '', cat: '' }
+      ]
+    },
+    {
+      id: 'nofee', name: 'อื่นๆ (ค่าเดินทาง/ค่าส่ง ไม่มีบิล)', channel: 'วิน / แท็กซี่ / ค่าส่ง · ไม่มีบิล', logo: L + 'nobill-travel.webp', color: '#F76707',
+      shipping: 0, box: 0, freq: 'ซื้อบ่อย', docType: 'none_cash_pvcert',
+      doc: ['ชื่อผู้รับเงิน', 'รูป/แคปหลักฐาน (ถ้ามี)'], cats: [],
+      items: [
+        { id: 'nf01', name: 'ค่าเดินทาง (วิน/แท็กซี่)', spec: 'แตะราคาเพื่อใส่ยอดจริง', unit: 'เที่ยว', price: 0, img: '', cat: '' },
+        { id: 'nf02', name: 'ค่าส่งของ (ไรเดอร์/รถรับจ้าง)', spec: 'แตะราคาเพื่อใส่ยอดจริง', unit: 'เที่ยว', price: 0, img: '', cat: '' },
+        { id: 'nf03', name: 'ค่าน้ำมันรถ', spec: 'แตะราคาเพื่อใส่ยอดจริง', unit: 'ครั้ง', price: 0, img: '', cat: '' },
+        { id: 'nf04', name: 'ค่าทางด่วน / ที่จอดรถ', spec: 'แตะราคาเพื่อใส่ยอดจริง', unit: 'ครั้ง', price: 0, img: '', cat: '' }
       ]
     }
   ];
@@ -137,10 +166,18 @@ window.KK_DATA = (function () {
 
   // ---------- เอกสารรออนุมัติ (ตัวอย่าง) ----------
   const drafts = [
-    { id: 'PV-2569-0042', type: 'ใบสำคัญจ่าย', entity: 'กะเพราโคตรคลีน', vendorId: 'loy', amount: 1890, date: '30 ก.ค. 69', payee: 'หลอยไก่สด (โอนธนาคาร)', ready: true },
-    { id: 'PV-2569-0043', type: 'ใบสำคัญจ่าย', entity: 'กะเพราโคตรคลีน', vendorId: 'fah', amount: 4130, date: '2 ส.ค. 69', payee: 'ฟ้าซีฟู้ด (โอนธนาคาร)', ready: true },
-    { id: 'RC-2569-0007', type: 'ใบรับรองแทนใบเสร็จ', entity: '5% ข้าวมันไก่', vendorId: 'papud', amount: 550, date: '1 ส.ค. 69', payee: 'วินมอเตอร์ไซค์ (ค่าส่งของ)', ready: false, missingField: 'เลขบัตรประชาชนผู้รับเงิน' }
+    { id: 'PV-2569-0042', type: 'ใบสำคัญจ่าย', entity: 'หสม. คดคลีน (คุณ+แฟน)', entityTaxId: '', vendorId: 'loy', amount: 1890, date: '30 ก.ค. 69', payee: 'หลอยไก่สด (โอนธนาคาร)', ready: true },
+    { id: 'PV-2569-0043', type: 'ใบสำคัญจ่าย', entity: 'หสม. คดคลีน (คุณ+แฟน)', entityTaxId: '', vendorId: 'fah', amount: 4130, date: '2 ส.ค. 69', payee: 'ฟ้าซีฟู้ด (โอนธนาคาร)', ready: true },
+    { id: 'RC-2569-0007', type: 'ใบรับรองแทนใบเสร็จ', entity: 'หสม. คดคลีน (คุณ+แฟน)', entityTaxId: '', vendorId: 'papud', amount: 550, date: '1 ส.ค. 69', payee: 'วินมอเตอร์ไซค์ (ค่าส่งของ)', ready: true }
   ];
+
+  // ---------- ผู้จ่ายเงิน/กิจการ (โหมดสาธิต — ตัวจริงมาจาก fin_entities) ----------
+  const entities = [
+    { id: 'e-hsm', name: 'หสม. คดคลีน (คุณ+แฟน)', type: 'ordinary_partnership', tax_id: '', address: '', vat_registered: false },
+    { id: 'e-hjk', name: 'หจก. คดคลีน กรุ๊ป', type: 'juristic_partnership', tax_id: '', address: '', vat_registered: true },
+    { id: 'e-person', name: 'บุคคลธรรมดา (ชื่อเจ้าของ)', type: 'individual', tax_id: '', address: '', vat_registered: true }
+  ];
+  const defaultEntityId = 'e-hsm';
 
   // ---------- งานรับของ (ตัวอย่าง) ----------
   const receives = [
@@ -174,9 +211,9 @@ window.KK_DATA = (function () {
   ];
   // ปริมาณซื้อเนื้อสัตว์เดือนนี้ (กก.) — เพิ่ม/ลดชนิดได้ในหน้า Data (อนาคต)
   const meat = [
-    { name: 'อกไก่', img: P + 'chicken-breast.webp', qty: 118, color: '#FFB84D' },
+    { name: 'อกไก่', img: P + 'chicken-breast-fillet.webp', qty: 118, color: '#FFB84D' },
     { name: 'หมูสันนอก', img: P + 'pork-sliced.webp', qty: 86, color: '#FF8FA3' },
-    { name: 'เนื้อแดงวัว', img: P + 'beef-minced.webp', qty: 54, color: '#74B816' },
+    { name: 'เนื้อแดงวัว', img: P + 'beef-red.webp', qty: 54, color: '#74B816' },
     { name: 'แซลมอน', img: P + 'salmon-fillet.webp', qty: 41, color: '#FF9F68' },
     { name: 'กุ้ง', img: P + 'shrimp-large-16-20.webp', qty: 38, color: '#F4845F' },
     { name: 'เป็ดบด', img: P + 'beef-minced.webp', qty: 22, color: '#B08968' }
@@ -190,5 +227,5 @@ window.KK_DATA = (function () {
   ];
   const books = { personal: 48620, biz: 41240, vatIn: 1260 };
 
-  return { vendors, purchases, drafts, receives, exp12, vat12, meat, top5, books };
+  return { vendors, purchases, drafts, receives, entities, defaultEntityId, exp12, vat12, meat, top5, books };
 })();
