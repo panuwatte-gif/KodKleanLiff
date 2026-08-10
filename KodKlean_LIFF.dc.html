@@ -1441,6 +1441,52 @@
           <div style="font-size:12px;font-weight:600;color:#B08968;margin-top:6px">ค่าตั้งต้น: gemini-3.5-flash-lite</div>
         </div>
       </div>
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="display:flex;align-items:center;gap:10px">
+          <img src="assets/icons/icon_document_folder.webp" alt="" style="width:44px;height:44px;flex-shrink:0">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:17px;font-weight:900">เก็บต้นฉบับขึ้น Google Drive</div>
+            <div style="font-size:13px;font-weight:600;color:#B08968">{{ driveCfgText }}</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;background:#FFF8F0;border-radius:16px;padding:12px 14px;margin-top:10px">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15px;font-weight:900">ส่งต้นฉบับขึ้น Drive</div>
+            <div style="font-size:13px;font-weight:700;color:{{ driveStateColor }}">{{ driveStateText }}</div>
+          </div>
+          <button onClick="{{ toggleDrive }}" style="width:60px;height:34px;border:none;border-radius:999px;cursor:pointer;background:{{ driveSwBg }};position:relative;flex-shrink:0">
+            <div style="position:absolute;top:4px;left:{{ driveSwKnob }};width:26px;height:26px;border-radius:999px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:left .2s"></div>
+          </button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px">
+          <div style="background:#FFF4E6;border-radius:14px;padding:10px;text-align:center">
+            <div style="font-size:24px;font-weight:900;color:#D9480F">{{ driveQueued }}</div>
+            <div style="font-size:12px;font-weight:700;color:#B08968">ค้างรอส่ง</div>
+          </div>
+          <div style="background:#EBFBEE;border-radius:14px;padding:10px;text-align:center">
+            <div style="font-size:24px;font-weight:900;color:#2B8A3E">{{ driveSynced }}</div>
+            <div style="font-size:12px;font-weight:700;color:#B08968">ขึ้น Drive แล้ว</div>
+          </div>
+          <div style="background:#FFF0F0;border-radius:14px;padding:10px;text-align:center">
+            <div style="font-size:24px;font-weight:900;color:#C92A2A">{{ driveErrCount }}</div>
+            <div style="font-size:12px;font-weight:700;color:#B08968">ส่งไม่ผ่าน</div>
+          </div>
+        </div>
+        <button onClick="{{ flushDrive }}" style="width:100%;margin-top:12px;background:linear-gradient(135deg,#4C6EF5,#22B8CF);color:#fff;border:none;border-radius:16px;padding:15px;font-size:16px;font-weight:900;cursor:pointer;min-height:48px">{{ driveBtnLabel }}</button>
+        <div style="font-size:12px;font-weight:600;color:#B08968;margin-top:8px">ระบบไม่ส่งเองอัตโนมัติ ไม่มีตัวตั้งเวลาเบื้องหลัง — ส่งเฉพาะตอนกดปุ่มนี้ ปิดสวิตช์แล้วกดก็ไม่ส่ง</div>
+        <sc-if value="{{ driveMsg }}" hint-placeholder-val="">
+          <div style="margin-top:10px;background:#F3F0FF;border-radius:14px;padding:12px;font-size:14px;font-weight:800;color:#5F3DC4">{{ driveMsg }}</div>
+        </sc-if>
+        <sc-if value="{{ hasDriveErr }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:10px;background:#FFF0F0;border:2px solid #FFD3D3;border-radius:14px;padding:12px">
+            <div style="font-size:14px;font-weight:900;color:#C92A2A;margin-bottom:4px">ไฟล์ที่ส่งไม่ผ่าน</div>
+            <sc-for list="{{ driveErrors }}" as="e" hint-placeholder-count="1">
+              <div style="font-size:13px;font-weight:700;color:#8A3A3A;margin-top:6px">{{ e.name }} · {{ e.error }}</div>
+            </sc-for>
+            <button onClick="{{ resetDriveErrors }}" style="width:100%;margin-top:10px;background:#fff;color:#C92A2A;border:3px solid #FFD3D3;border-radius:14px;padding:12px;font-size:15px;font-weight:800;cursor:pointer;min-height:48px">เอาไฟล์ที่ส่งไม่ผ่านกลับเข้าคิว</button>
+          </div>
+        </sc-if>
+      </div>
       <div style="background:#F8F0FC;border:2px solid #E9D8F4;border-radius:22px;padding:16px">
         <div style="font-size:16px;font-weight:900;color:#7048E8;margin-bottom:8px">🔒 แยกส่วนแก้ได้ / ส่วนล็อก</div>
         <div style="font-size:14px;font-weight:700;color:#2B8A3E;margin-bottom:2px">แก้เองได้ในหน้านี้</div>
@@ -3030,6 +3076,47 @@ class Component extends DCLogic {
     return rows;
   }
 
+  /* ---------- Google Drive: เก็บต้นฉบับผ่าน Apps Script (ส่งเฉพาะตอนกดปุ่ม) ----------
+     กันซ้ำรอย App_scan: ไม่มี cron/ตัวตั้งเวลา · เช็คสวิตช์ fin_rules.drive_sync ทุกครั้งก่อนส่ง
+     · ไฟล์ที่ส่งไม่ผ่าน 3 ครั้ง หยุดถาวรจนเจ้าของกดเอากลับเข้าคิว */
+  async refreshDriveState() {
+    if (!this.state.liveMode) return;
+    const r = await this.api('drive_state');
+    if (r && r.ok && r.data) this.setState({ drive: r.data });
+  }
+  toggleDrive = async () => {
+    if (!this.state.liveMode) return this.pop('โหมดสาธิต — ใส่รหัสผ่านเข้าระบบจริงก่อน');
+    const on = !(this.state.drive && this.state.drive.enabled);
+    this.setState({ driveMsg: on ? 'กำลังเปิด…' : 'กำลังปิด…' });
+    const r = await this.api('drive_toggle', { enabled: on });
+    if (r && r.ok && r.data) this.setState({ drive: r.data, driveMsg: on ? 'เปิดแล้ว — กดปุ่มส่งเมื่อพร้อม' : 'ปิดแล้ว — ระบบจะไม่ส่งไฟล์ขึ้น Drive' });
+    else this.setState({ driveMsg: 'สลับสวิตช์ไม่สำเร็จ: ' + ((r && r.error) || 'ต่อระบบไม่ติด') });
+  };
+  flushDrive = async () => {
+    if (!this.state.liveMode) return this.pop('โหมดสาธิต — ใส่รหัสผ่านเข้าระบบจริงก่อน');
+    if (this.state.driveBusy) return;
+    this.setState({ driveBusy: true, driveMsg: 'กำลังส่งไฟล์ขึ้น Drive…' });
+    const r = await this.api('drive_flush', { limit: 10 });
+    const run = r && r.ok && r.data ? r.data.run : null;
+    let msg;
+    if (!r || !r.ok) msg = 'ส่งไม่สำเร็จ: ' + ((r && r.error) || 'ต่อระบบไม่ติด');
+    else if (run && run.code === 'DISABLED') msg = 'สวิตช์ปิดอยู่ — เปิดสวิตช์ด้านบนก่อนแล้วกดส่งอีกครั้ง';
+    else if (run && run.code === 'NO_CREDENTIAL') msg = 'ยังไม่ได้ใส่ APPS_SCRIPT_URL / APPS_SCRIPT_TOKEN ใน Supabase Secrets';
+    else if (run && (run.synced || run.failed)) msg = 'ส่งขึ้น Drive สำเร็จ ' + (run.synced || 0) + ' ไฟล์' + (run.failed ? ' · ส่งไม่ผ่าน ' + run.failed + ' ไฟล์ (ดูเหตุผลด้านล่าง)' : '');
+    else msg = 'ไม่มีไฟล์ค้างรอส่ง';
+    this.setState({ driveBusy: false, driveMsg: msg, drive: (r && r.ok && r.data && r.data.state) || this.state.drive });
+  };
+  resetDriveErrors = async () => {
+    if (!this.state.liveMode) return;
+    this.setState({ driveMsg: 'กำลังเอาไฟล์กลับเข้าคิว…' });
+    const r = await this.api('drive_retry_reset');
+    const run = r && r.ok && r.data ? r.data.run : null;
+    this.setState({
+      drive: (r && r.ok && r.data && r.data.state) || this.state.drive,
+      driveMsg: run && run.ok ? 'เอากลับเข้าคิวแล้ว ' + (run.requeued || 0) + ' ไฟล์ — กดปุ่มส่งอีกครั้งได้เลย' : 'เอากลับเข้าคิวไม่สำเร็จ'
+    });
+  };
+
   /* ---------- บริการภายนอก ---------- */
   toggleSvc = (k) => { const svc = Object.assign({}, this.state.svc || {}); svc[k] = !svc[k]; this.setState({ svc }, () => this.save()); };
 
@@ -3454,7 +3541,7 @@ class Component extends DCLogic {
     const svcDefs = [
       { key: 'pass', name: 'รหัสผ่านแอป', need: 'รหัสเดียวใช้ 2 คน · แตะสวิตช์เพื่อเปลี่ยนรหัส', hk: 'password_configured' },
       { key: 'supabase', name: 'Supabase', need: 'ฐานข้อมูล + ไฟล์ย่อ WebP · แกนระบบ', hk: '__sb' },
-      { key: 'drive', name: 'Google Drive', need: 'เก็บไฟล์ต้นฉบับ ≥5 ปี (รอใส่ key)', hk: 'drive_configured' },
+      { key: 'drive', name: 'Google Drive', need: 'เก็บต้นฉบับ ≥5 ปี ผ่าน Apps Script · ตั้งค่าที่การ์ดข้างล่าง', hk: 'drive_configured' },
       { key: 'gemini', name: 'Gemini · AI อ่านบิล', need: 'ต้องตั้ง GEMINI_API_KEY ใน Supabase Secrets', hk: 'ai_configured' }
     ];
     const svcList = svcDefs.map(s => {
@@ -3467,6 +3554,13 @@ class Component extends DCLogic {
         toggle: s.key === 'pass' ? this.openPassChange : () => { this.refreshHealth(); this.pop(on ? 'เชื่อมต่ออยู่ ✓' : 'ตั้งค่า key ใน Supabase Secrets แล้วแตะ "ตรวจการเชื่อมต่อ"'); }
       };
     });
+
+    // ── Google Drive: สถานะคิว + สวิตช์ (ดึงจาก action drive_state) ──
+    const DR = st.drive || null;
+    const drC = (DR && DR.counts) || { queued: 0, synced: 0, error: 0, blocked: 0 };
+    const driveOn = !!(DR && DR.enabled);
+    const driveCfg = !!(DR && DR.configured);
+    const driveErrs = (DR && DR.recent_errors) || [];
 
     const m = st.modal; const isHist = !!m && m.kind === 'history';
     // ── กราฟราคาเนื้อสัตว์/วัตถุดิบ (จาก fin_liff_stats.prices) ──
@@ -3576,7 +3670,18 @@ class Component extends DCLogic {
       isInstalled: !!st.installed,
       doLogout: this.logoutApp, doInstall: this.installApp,
       connBadgeBg: st.liveMode ? '#37B24D' : '#B08968',
-      checkConn: () => { this.refreshHealth(); this.pop('กำลังตรวจการเชื่อมต่อ backend…'); },
+      checkConn: () => { this.refreshHealth(); this.refreshDriveState(); this.pop('กำลังตรวจการเชื่อมต่อ backend…'); },
+      driveCfgText: driveCfg ? 'ต่อ Apps Script ของบัญชี Drive เจ้าของแล้ว · ต้นฉบับเก็บ ≥5 ปี' : 'ยังไม่ได้ใส่ APPS_SCRIPT_URL / APPS_SCRIPT_TOKEN ใน Supabase Secrets',
+      driveStateText: driveOn ? 'เปิดอยู่ — ส่งได้เมื่อกดปุ่มข้างล่าง' : 'ปิดอยู่ — ไม่ส่งไฟล์ออกไปไหนเลย',
+      driveStateColor: driveOn ? '#2B8A3E' : '#B08968',
+      driveSwBg: driveOn ? '#37B24D' : '#D9C6B2', driveSwKnob: driveOn ? '32px' : '4px',
+      toggleDrive: this.toggleDrive,
+      driveQueued: drC.queued || 0, driveSynced: drC.synced || 0, driveErrCount: drC.error || 0,
+      driveBtnLabel: st.driveBusy ? 'กำลังส่ง…' : 'ส่งไฟล์ค้างขึ้น Drive ตอนนี้',
+      flushDrive: this.flushDrive, resetDriveErrors: this.resetDriveErrors,
+      driveMsg: st.driveMsg || '',
+      hasDriveErr: driveErrs.length > 0,
+      driveErrors: driveErrs.map(e => ({ name: e.name || '(ไม่มีชื่อ)', error: e.error || '' })),
       modalIsHistory: isHist, histTitle: isHist ? m.title : '', histRows: isHist ? m.hist : []
     };
   }
@@ -3887,7 +3992,8 @@ class Component extends DCLogic {
       goHome: go('home'),
       goList: () => { this.setState({ screen: 'list', buyStep: 0, dataVendorId: null }); this.fetchLiveList(true); },
       goApprove: () => { this.setState({ screen: 'approve', buyStep: 0, dataVendorId: null }); this.refreshApprove(); },
-      goDash: go('dash'), goData: go('data'), goSettings: go('settings'),
+      goDash: go('dash'), goData: go('data'),
+      goSettings: () => { go('settings')(); this.refreshDriveState(); },
       goReceive: () => { this.setState({ screen: 'list', listTab: 'รับของ' }); this.fetchLiveList(true); },
       goDraftTab: () => { this.setState({ screen: 'list', listTab: 'ร่าง' }); this.fetchLiveList(true); },
       startBuy: this.startBuy,
