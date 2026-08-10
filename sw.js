@@ -6,7 +6,7 @@
    - เรียก backend (supabase/line) = ไม่ยุ่ง ปล่อยผ่านตรงๆ
    เวลาปล่อยเวอร์ชันใหม่: แก้เลข CACHE_V ข้างล่าง 1 ตัว แล้ว deploy — แคชเก่าถูกล้างอัตโนมัติ
    ============================================================ */
-const CACHE_V = 'kk-money-v1';
+const CACHE_V = 'kk-money-v2';
 const SHELL = [
   './',
   './index.html',
@@ -18,6 +18,9 @@ const SHELL = [
   './manifest.webmanifest',
   './assets/app/icon-192.png',
   './assets/app/icon-512.png',
+  './assets/login/bg.webp',
+  './assets/login/logo.webp',
+  './assets/login/mascot.webp',
 ];
 
 self.addEventListener('install', (e) => {

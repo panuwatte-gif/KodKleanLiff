@@ -23,7 +23,6 @@
 <script src="data.js"></script>
 <script src="config.js"></script>
 <script src="kk-helpers.js"></script>
-<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <style>
   body { margin:0; background:#FFF4E6; font-family:'Noto Sans Thai',sans-serif; }
   a { color:#F76707; } a:hover { color:#E8590C; }
@@ -51,6 +50,50 @@
     <div style="position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:99;background:#2B8A3E;color:#fff;padding:12px 22px;border-radius:999px;font-weight:700;font-size:16px;box-shadow:0 6px 20px rgba(43,138,62,.4);animation:kkpop .3s ease">{{ toast }}</div>
   </sc-if>
 
+  <!-- ═══════════ หน้า LOGIN (รหัสผ่านแอป — แทน LINE Login) ═══════════ -->
+  <sc-if value="{{ isLocked }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="เข้าสู่ระบบ" style="position:fixed;inset:0;z-index:120;background:#e9efe7 url('assets/login/bg.webp') center/cover no-repeat;overflow-y:auto;display:flex;justify-content:center">
+      <div style="width:100%;max-width:440px;display:flex;flex-direction:column;align-items:center;padding:26px 22px 40px 22px;box-sizing:border-box">
+        <img src="assets/login/logo.webp" alt="KodKlean Group" style="width:248px;max-width:70%;filter:drop-shadow(0 6px 14px rgba(60,90,70,.12))">
+        <img src="assets/login/mascot.webp" alt="" style="width:168px;position:relative;z-index:3;margin-bottom:-48px;filter:drop-shadow(0 8px 16px rgba(70,90,75,.14))">
+        <div style="width:100%;background:rgba(251,249,244,.95);border:1.5px solid rgba(202,162,74,.45);border-radius:30px;box-shadow:0 18px 46px -18px rgba(45,80,60,.4),inset 0 0 0 1.5px rgba(202,162,74,.3);padding:58px 24px 26px 24px;display:flex;flex-direction:column;align-items:center;box-sizing:border-box">
+          <div style="width:72px;height:72px;border-radius:999px;display:flex;align-items:center;justify-content:center;color:#b8902f;border:3px solid #e6cd8a;background:radial-gradient(circle at 38% 30%,#e7f1e7,#c2dac6 68%,#a9c8b0 100%);box-shadow:0 8px 20px -6px rgba(40,70,50,.38),0 0 0 6px rgba(255,255,255,.5);margin-top:-14px">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2.4"></rect><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"></path><circle cx="12" cy="15" r="1.5" fill="currentColor" stroke="none"></circle><path d="M12 16v2"></path></svg>
+          </div>
+          <div style="font-size:27px;font-weight:800;color:#1f5d44;letter-spacing:.5px;margin:10px 0 4px 0">ใส่รหัสผ่าน</div>
+          <div style="display:flex;align-items:center;gap:10px;width:100%;justify-content:center;margin-bottom:16px">
+            <span style="height:1px;width:56px;background:linear-gradient(90deg,transparent,#e6cd8a,transparent)"></span>
+            <span style="width:8px;height:8px;border-radius:99px;background:#caa24a;opacity:.75"></span>
+            <span style="height:1px;width:56px;background:linear-gradient(90deg,transparent,#e6cd8a,transparent)"></span>
+          </div>
+          <div style="width:100%;display:flex;align-items:center;gap:10px;height:56px;padding:0 14px;border-radius:16px;background:rgba(255,255,255,.75);border:1.5px solid rgba(154,180,160,.6);box-sizing:border-box">
+            <span style="color:#2f7355;flex-shrink:0;display:flex"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2.4"></rect><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"></path></svg></span>
+            <input type="{{ loginPwType }}" value="{{ loginPwVal }}" onInput="{{ onLoginPw }}" onKeyDown="{{ onLoginKey }}" placeholder="รหัสผ่าน" autocomplete="current-password" style="flex:1;min-width:0;background:none;border:none;outline:none;font-size:18px;font-weight:700;color:#3a4a40">
+            <button onClick="{{ toggleLoginEye }}" aria-label="แสดง/ซ่อนรหัสผ่าน" style="flex-shrink:0;background:none;border:none;cursor:pointer;padding:6px;display:flex;color:{{ loginEyeColor }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+          </div>
+          <div style="min-height:20px;font-size:14px;font-weight:700;margin-top:8px;text-align:center;color:{{ loginMsgColor }}">{{ loginMsg }}</div>
+          <button onClick="{{ doPassLogin }}" style="position:relative;width:100%;height:58px;margin-top:4px;border-radius:999px;font-weight:800;font-size:20px;letter-spacing:1px;color:#e6cd8a;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#2f6e51 0%,#1f5740 55%,#173f2e 100%);box-shadow:0 0 0 2px #e6cd8a,0 12px 24px -10px rgba(23,63,46,.7);border:none;cursor:pointer">เข้าสู่ระบบ<span style="position:absolute;right:22px;display:flex"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg></span></button>
+          <div style="font-size:12.5px;font-weight:600;color:#7e8d83;margin-top:12px;text-align:center">รหัสเดียวใช้ได้ทั้ง 2 คน · เปลี่ยนรหัสได้ที่ ตั้งค่า</div>
+        </div>
+        <div style="display:flex;justify-content:center;align-items:center;gap:14px;margin-top:22px;flex-wrap:wrap">
+          <img src="assets/login/badge1.webp" alt="" style="width:92px;border-radius:18px">
+          <img src="assets/login/badge2.webp" alt="" style="width:92px;border-radius:18px">
+          <img src="assets/login/extra5.webp" alt="" style="width:92px;border-radius:18px">
+          <img src="assets/login/extra6.webp" alt="" style="width:92px;border-radius:18px">
+        </div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:18px">
+          <span style="height:1px;width:48px;background:linear-gradient(90deg,transparent,#e6cd8a,transparent)"></span>
+          <span style="width:6px;height:6px;border-radius:99px;background:#caa24a;opacity:.7"></span>
+          <span style="height:1px;width:48px;background:linear-gradient(90deg,transparent,#e6cd8a,transparent)"></span>
+        </div>
+        <div style="font-weight:700;font-size:11px;letter-spacing:2px;color:#7e8d83;margin-top:8px;text-align:center">ONE GROUP&nbsp;&nbsp;•&nbsp;&nbsp;MANY BRANDS&nbsp;&nbsp;•&nbsp;&nbsp;ONE STANDARD</div>
+        <sc-if value="{{ showDemoLink }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ enterDemo }}" style="margin-top:16px;background:rgba(255,255,255,.6);border:1.5px dashed #caa24a;border-radius:999px;padding:9px 18px;font-size:13px;font-weight:700;color:#7e8d83;cursor:pointer">เปิดดูแบบสาธิต (เฉพาะหน้าพรีวิว)</button>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
   <!-- ═══════════ หน้าหลัก ═══════════ -->
   <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
   <div data-screen-label="หน้าหลัก">
@@ -60,7 +103,9 @@
         <button onClick="{{ goSettings }}" style="background:#fff;border:none;border-radius:16px;padding:8px 14px;font-size:15px;font-weight:700;color:#7048E8;box-shadow:0 3px 10px rgba(112,72,232,.15);cursor:pointer">ตั้งค่า</button>
         <div style="position:relative;background:#fff;border-radius:16px;padding:6px;box-shadow:0 3px 10px rgba(255,150,80,.2)">
           <img src="assets/icons/icon_notification_bell.webp" alt="แจ้งเตือน" style="width:34px;height:34px;display:block">
-          <div style="position:absolute;top:-4px;right:-4px;background:#F76707;color:#fff;font-size:12px;font-weight:800;border-radius:999px;min-width:20px;height:20px;display:flex;align-items:center;justify-content:center">3</div>
+          <sc-if value="{{ hasBell }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;top:-4px;right:-4px;background:#F76707;color:#fff;font-size:12px;font-weight:800;border-radius:999px;min-width:20px;height:20px;display:flex;align-items:center;justify-content:center">{{ bellCount }}</div>
+          </sc-if>
         </div>
       </div>
     </div>
@@ -242,16 +287,28 @@
         </div>
         <sc-if value="{{ aiEnabled }}" hint-placeholder-val="{{ false }}">
           <label style="display:flex;align-items:center;gap:12px;margin-top:10px;background:linear-gradient(135deg,#EDE7FF,#E3F2FF);border:2px solid #B197FC;border-radius:16px;padding:12px 14px;cursor:pointer">
-            <input type="file" accept="image/*" onChange="{{ aiScan }}" style="display:none">
+            <input type="file" accept="image/*" multiple="multiple" onChange="{{ aiScan }}" style="display:none">
             <img src="assets/mascots/small_02-mascot-auto-decision.webp" alt="" style="width:44px;height:44px">
-            <div style="flex:1"><div style="font-size:16px;font-weight:800;color:#5F3DC4">ให้ AI อ่านจากรูป (บิลยาวๆ)</div><div style="font-size:13px;font-weight:600;color:#7048E8">AI เติมให้ · ตรวจ/แก้ก่อนยืนยัน</div></div>
+            <div style="flex:1"><div style="font-size:16px;font-weight:800;color:#5F3DC4">ให้ AI (Gemini) อ่านบิลจากรูป</div><div style="font-size:13px;font-weight:600;color:#7048E8">บิลยาวถ่ายหลายรูปได้ · AI เติมให้ ตรวจ/แก้ก่อนยืนยัน</div></div>
           </label>
         </sc-if>
         <sc-if value="{{ aiDisabled }}" hint-placeholder-val="{{ true }}">
           <button onClick="{{ aiScanBlocked }}" style="display:flex;align-items:center;gap:12px;margin-top:10px;width:100%;box-sizing:border-box;background:#F5EFE9;border:2px dashed #D9C6B2;border-radius:16px;padding:12px 14px;cursor:pointer;opacity:.75">
             <img src="assets/mascots/small_02-mascot-auto-decision.webp" alt="" style="width:44px;height:44px;filter:grayscale(.6)">
-            <div style="flex:1;text-align:left"><div style="font-size:16px;font-weight:800;color:#8A6D5C">ให้ AI อ่านจากรูป</div><div style="font-size:13px;font-weight:600;color:#B08968">ยังไม่ได้เชื่อม Gemini — แตะดูวิธีเปิด</div></div>
+            <div style="flex:1;text-align:left"><div style="font-size:16px;font-weight:800;color:#8A6D5C">ให้ AI อ่านบิลจากรูป</div><div style="font-size:13px;font-weight:600;color:#B08968">ยังไม่ได้ตั้งค่า GEMINI_API_KEY — แตะดูวิธีเปิด</div></div>
           </button>
+        </sc-if>
+        <sc-if value="{{ hasFreqSet }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:10px;background:linear-gradient(135deg,#EBFBEE,#E3FAFC);border:2px solid #8CE99A;border-radius:16px;padding:12px 14px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:16px;font-weight:800;color:#2B8A3E">⭐ ชุดที่ซื้อประจำร้านนี้ ({{ freqSetCount }} รายการ)</div>
+                <div style="font-size:13px;font-weight:600;color:#5C940D">{{ freqSetDesc }}</div>
+              </div>
+              <button onClick="{{ openFreqCfg }}" style="flex-shrink:0;background:#fff;color:#2B8A3E;border:2px solid #B2F2BB;border-radius:12px;padding:8px 12px;font-size:13px;font-weight:800;cursor:pointer">จัดการ</button>
+            </div>
+            <button onClick="{{ applyFreqSet }}" style="width:100%;margin-top:10px;background:linear-gradient(135deg,#37B24D,#2B8A3E);color:#fff;border:none;border-radius:12px;padding:11px;font-size:15px;font-weight:800;cursor:pointer">+ ใส่ทั้งชุดลงตะกร้าทีเดียว</button>
+          </div>
         </sc-if>
         <sc-if value="{{ aiRunning }}" hint-placeholder-val="{{ false }}">
           <div style="margin-top:10px;background:#FFF9DB;border-radius:14px;padding:12px 14px;font-size:15px;font-weight:800;color:#8A6D00">กำลังให้ AI อ่านรูป… ⏳</div>
@@ -385,7 +442,7 @@
               </div>
             </sc-if>
             <label style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;background:#FFF8F0;border:2px dashed #FFB27D;border-radius:12px;padding:9px;cursor:pointer">
-              <input type="file" accept="image/*" multiple onChange="{{ s.onFile }}" style="display:none">
+              <input type="file" accept="image/*" multiple="multiple" onChange="{{ s.onFile }}" style="display:none">
               <span style="font-size:14px;font-weight:800;color:#F76707">{{ s.addLabel }}</span>
             </label>
           </div>
@@ -433,6 +490,21 @@
             <sc-for list="{{ payerOpts }}" as="o" hint-placeholder-count="3"><option value="{{ o.v }}">{{ o.t }}</option></sc-for>
           </select>
           <div style="font-size:13px;font-weight:700;color:#7048E8;margin-top:6px">{{ payerMeta }}</div>
+          <div style="font-size:12.5px;font-weight:600;color:#B08968;margin-top:4px">ยังไม่จดนิติบุคคล = ใช้ "บุคคลธรรมดา" (ค่าตั้งต้น) ได้เลย ไม่ต้องเปลี่ยนอะไร</div>
+        </div>
+        <div style="background:#fff;border-radius:20px;padding:14px 16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+          <div style="font-size:16px;font-weight:900;margin-bottom:2px">จ่ายด้วยอะไร?</div>
+          <div style="font-size:13px;font-weight:600;color:#B08968;margin-bottom:8px">มีผลกับบัญชีฝั่งเครดิต — สด = เงินสด · โอน = ธนาคาร (ระบบผูกให้)</div>
+          <div style="display:flex;gap:8px">
+            <sc-for list="{{ payChips }}" as="c" hint-placeholder-count="2">
+              <button onClick="{{ c.pick }}" style="flex:1;border:2px solid {{ c.border }};border-radius:14px;padding:11px 8px;font-size:15px;font-weight:800;cursor:pointer;background:{{ c.bg }};color:{{ c.fg }}">{{ c.name }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="background:#fff;border-radius:20px;padding:14px 16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+          <div style="font-size:16px;font-weight:900;margin-bottom:2px">ผู้สำรองจ่าย (เว้นว่างได้)</div>
+          <div style="font-size:13px;font-weight:600;color:#B08968;margin-bottom:8px">ถ้าคนโอน/จ่ายเงินไม่ใช่ผู้จ่ายในเอกสาร เช่น แฟนสำรองจ่ายไปก่อน — สลิปไม่ต้องตรงชื่อผู้จ่าย ระบบจดชื่อไว้ให้ตามเบิกคืนถูกคน</div>
+          <input value="{{ reimburserVal }}" onChange="{{ onReimburser }}" placeholder="เช่น แม่พัน (ไม่ใส่ก็ได้)" style="width:100%;box-sizing:border-box;border:2px solid #FFD8A8;border-radius:14px;padding:12px 14px;font-size:16px;font-weight:600;outline:none">
         </div>
         <div style="background:#fff;border-radius:20px;padding:14px 16px;box-shadow:0 3px 12px rgba(255,140,90,.1);display:flex;align-items:center;gap:12px">
           <div style="flex:1">
@@ -462,6 +534,9 @@
       <div style="font-size:26px;font-weight:900;margin-top:14px;color:#2B8A3E">{{ successTitle }}</div>
       <div style="font-size:16px;font-weight:600;color:#8A6D5C;margin-top:6px">{{ successDesc }}</div>
       <div style="display:flex;flex-direction:column;gap:10px;margin-top:22px">
+        <sc-if value="{{ hasAiQueue }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ nextAiBill }}" style="background:linear-gradient(135deg,#7048E8,#9775FA);color:#fff;border:none;border-radius:18px;padding:15px;font-size:17px;font-weight:800;cursor:pointer">บันทึกบิลถัดไปที่ AI อ่านไว้ ({{ aiQueueCount }} บิล) ›</button>
+        </sc-if>
         <button onClick="{{ goDiary }}" style="background:linear-gradient(135deg,#FF922B,#F76BB8);color:#fff;border:none;border-radius:18px;padding:15px;font-size:17px;font-weight:800;cursor:pointer">เปิดสมุดบันทึก</button>
         <button onClick="{{ goHome }}" style="background:#fff;color:#F76707;border:3px solid #FFD8A8;border-radius:18px;padding:14px;font-size:17px;font-weight:800;cursor:pointer">กลับหน้าหลัก</button>
       </div>
@@ -878,7 +953,7 @@
               </sc-for>
             </div>
             <label style="display:flex;align-items:center;gap:10px;margin-top:10px;background:#FFF8F0;border:2px dashed #FFB27D;border-radius:14px;padding:10px 12px;cursor:pointer">
-              <input type="file" accept="image/*" multiple onChange="{{ j.onPhoto }}" style="display:none">
+              <input type="file" accept="image/*" multiple="multiple" onChange="{{ j.onPhoto }}" style="display:none">
               <img src="assets/icons/icon_camera.webp" alt="" style="width:38px;height:38px">
               <div style="font-size:15px;font-weight:800;color:#F76707">{{ j.photoLabel }}</div>
             </label>
@@ -896,6 +971,9 @@
             <div style="font-size:17px;font-weight:800;color:#8A6D5C;margin-top:10px">ยังไม่มีรายการในหมวดนี้</div>
           </div>
         </sc-if>
+        <sc-if value="{{ listLoading }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;padding:12px;font-size:15px;font-weight:800;color:#B08968">กำลังโหลดรายการจากระบบ… ⏳</div>
+        </sc-if>
         <sc-for list="{{ purchasesView }}" as="p" hint-placeholder-count="5">
           <div style="background:#fff;border-radius:20px;padding:14px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
             <div style="display:flex;align-items:center;gap:12px">
@@ -910,14 +988,24 @@
                 <div style="font-size:12px;font-weight:800;color:{{ p.statusColor }};background:{{ p.statusBg }};border-radius:999px;padding:3px 10px;display:inline-block">{{ p.status }}</div>
               </div>
             </div>
-            <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+            <div style="display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap">
               <sc-if value="{{ p.isAsset }}" hint-placeholder-val="{{ false }}">
                 <div style="font-size:12px;font-weight:800;color:#5F3DC4;background:#F3F0FF;border-radius:999px;padding:3px 10px">ของถาวร</div>
+              </sc-if>
+              <sc-if value="{{ p.canOpen }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ p.open }}" style="background:#E7F5FF;color:#1971C2;border:none;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:800;cursor:pointer">เปิดดู / เอกสาร</button>
+              </sc-if>
+              <sc-if value="{{ p.canAddEv }}" hint-placeholder-val="{{ false }}">
+                <label style="background:#FFF9DB;color:#B35C00;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center">
+                  <input type="file" accept="image/*" multiple="multiple" onChange="{{ p.addEv }}" style="display:none">+ อัปหลักฐาน
+                </label>
+              </sc-if>
+              <sc-if value="{{ p.hasHistory }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ p.openHistory }}" style="background:#F8F0FC;color:#9C36B5;border:none;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:800;cursor:pointer">ประวัติ</button>
               </sc-if>
               <sc-if value="{{ p.canCancel }}" hint-placeholder-val="{{ false }}">
                 <button onClick="{{ p.cancel }}" style="margin-left:auto;background:#FFF4E6;color:#D9480F;border:none;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:800;cursor:pointer">ยกเลิก</button>
               </sc-if>
-              <button onClick="{{ p.openHistory }}" style="background:#F8F0FC;color:#9C36B5;border:none;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:800;cursor:pointer">ดูประวัติแก้ไข</button>
             </div>
             <sc-if value="{{ p.hasMissing }}" hint-placeholder-val="{{ false }}">
               <div style="margin-top:10px;background:#FFF9DB;border-radius:14px;padding:10px 12px">
@@ -1037,6 +1125,36 @@
             </div>
           </sc-for>
         </div>
+      </div>
+
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="font-size:17px;font-weight:900;margin-bottom:2px">กราฟราคาเนื้อสัตว์/วัตถุดิบ (บาท/หน่วย)</div>
+        <div style="font-size:13px;font-weight:600;color:#B08968;margin-bottom:10px">จาก record ซื้อจริง · แตะชื่อเพื่อโชว์/ซ่อนเส้น (เลือกได้เอง ระบบจำไว้ให้)</div>
+        <sc-if value="{{ priceEmpty }}" hint-placeholder-val="{{ true }}">
+          <div style="text-align:center;padding:14px;background:#FFF8F0;border:1.5px dashed #F0C9A3;border-radius:14px;font-size:14px;font-weight:700;color:#B08968">ยังไม่มีข้อมูลราคา — เริ่มบันทึกซื้อ แล้วกราฟจะขึ้นเอง</div>
+        </sc-if>
+        <sc-if value="{{ priceHasData }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:#B08968"><span>{{ priceMaxText }}</span></div>
+          <svg viewBox="0 0 340 170" style="width:100%;display:block">
+            <line x1="0" y1="1" x2="340" y2="1" style="stroke:#FFE8CC;stroke-width:1"></line>
+            <line x1="0" y1="56" x2="340" y2="56" style="stroke:#FFF1DE;stroke-width:1"></line>
+            <line x1="0" y1="112" x2="340" y2="112" style="stroke:#FFF1DE;stroke-width:1"></line>
+            <line x1="0" y1="168" x2="340" y2="168" style="stroke:#FFE8CC;stroke-width:1"></line>
+            <sc-for list="{{ priceLines }}" as="s" hint-placeholder-count="3">
+              <polyline points="{{ s.pts }}" style="fill:none;stroke:{{ s.color }};stroke-width:3;stroke-linecap:round;stroke-linejoin:round"></polyline>
+            </sc-for>
+          </svg>
+          <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:#B08968;margin-top:2px">
+            <span>{{ priceMinText }}</span><span>{{ priceMonthsText }}</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+            <sc-for list="{{ priceChips }}" as="c" hint-placeholder-count="6">
+              <button onClick="{{ c.toggle }}" style="border:2px solid {{ c.border }};border-radius:999px;padding:7px 12px;font-size:13px;font-weight:800;cursor:pointer;background:{{ c.bg }};color:{{ c.fg }};display:flex;align-items:center;gap:6px">
+                <span style="width:10px;height:10px;border-radius:99px;background:{{ c.dot }};display:inline-block"></span>{{ c.name }} {{ c.priceText }}
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
       </div>
 
       <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
@@ -1194,8 +1312,8 @@
       <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1);display:flex;align-items:center;gap:14px">
         <img src="assets/characters/work_ahia.webp" alt="" style="height:100px">
         <div style="flex:1">
-          <div style="font-size:18px;font-weight:900">อาเฮีย (Owner)</div>
-          <div style="font-size:14px;font-weight:600;color:#B08968">เข้าผ่าน LINE · สิทธิ์อนุมัติ+เซ็นเอกสาร</div>
+          <div style="font-size:18px;font-weight:900">อาเฮีย &amp; แม่พัน (เจ้าของ)</div>
+          <div style="font-size:14px;font-weight:600;color:#B08968">ใช้ร่วมกัน 2 คน รหัสเดียว · สิทธิ์อนุมัติ+เซ็นเอกสารทั้งคู่</div>
         </div>
       </div>
 
@@ -1209,12 +1327,9 @@
         </div>
         <div style="font-size:13px;font-weight:800;color:#fff;background:{{ loginBadgeBg }};border-radius:999px;padding:6px 14px;display:inline-block;margin:12px 0">{{ loginBadge }}</div>
         <div style="display:flex;flex-direction:column;gap:10px">
-          <sc-if value="{{ showLogin }}" hint-placeholder-val="{{ false }}">
-            <button onClick="{{ doLogin }}" style="background:#06C755;color:#fff;border:none;border-radius:16px;padding:15px;font-size:16px;font-weight:900;cursor:pointer">เข้าสู่ระบบด้วย LINE</button>
-            <div style="font-size:13px;font-weight:600;color:#B08968">เข้าสู่ระบบครั้งเดียว แล้วเปิดจากไอคอนบนหน้าจอได้เลย ไม่ต้องเข้าผ่าน LINE ทุกครั้ง</div>
-          </sc-if>
           <sc-if value="{{ showLogout }}" hint-placeholder-val="{{ false }}">
-            <button onClick="{{ doLogout }}" style="background:#fff;color:#8A6D5C;border:3px solid #EAD9C8;border-radius:16px;padding:13px;font-size:15px;font-weight:800;cursor:pointer">ออกจากระบบ LINE</button>
+            <button onClick="{{ openPassChange }}" style="background:linear-gradient(135deg,#FF922B,#F76BB8);color:#fff;border:none;border-radius:16px;padding:14px;font-size:15px;font-weight:800;cursor:pointer">เปลี่ยนรหัสผ่านแอป</button>
+            <button onClick="{{ doLogout }}" style="background:#fff;color:#8A6D5C;border:3px solid #EAD9C8;border-radius:16px;padding:13px;font-size:15px;font-weight:800;cursor:pointer">ออกจากระบบ (ล็อกหน้าจอ)</button>
           </sc-if>
           <sc-if value="{{ showInstall }}" hint-placeholder-val="{{ false }}">
             <button onClick="{{ doInstall }}" style="background:linear-gradient(135deg,#FF922B,#F76BB8);color:#fff;border:none;border-radius:16px;padding:15px;font-size:16px;font-weight:900;cursor:pointer">ติดตั้งลงหน้าจอ (KodKlean_Money)</button>
@@ -1393,15 +1508,16 @@
               <div>จ่ายให้: {{ docPayee }}</div>
               <div style="display:flex;justify-content:space-between;background:#FFF8F0;border-radius:10px;padding:8px 12px"><span>รายการซื้อสินค้า/บริการ</span><span style="font-weight:900">{{ docAmountText }}</span></div>
               <div>จำนวนเงิน (ตัวอักษร): <span style="font-weight:900">{{ docAmountWords }}</span></div>
-              <div style="font-size:13px;color:#B08968">แนบ: สลิปโอน · แคปแชทคำสั่งซื้อ · รูปสินค้า (ตัวอย่าง)</div>
+              <sc-if value="{{ docHasExtra }}" hint-placeholder-val="{{ false }}"><div style="font-size:13px;color:#B08968">{{ docExtraText }}</div></sc-if>
             </div>
             <div style="display:flex;gap:12px;border-top:1px dashed #EAD9C8;padding-top:12px">
               <div style="flex:1;text-align:center">
                 <div style="height:52px;display:flex;align-items:center;justify-content:center">
-                  <sc-if value="{{ hasSig }}" hint-placeholder-val="{{ false }}"><img src="{{ sigThumb }}" alt="" style="max-height:48px;max-width:100%"></sc-if>
-                  <sc-if value="{{ noSig }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#B08968">(ลายเซ็นจะแปะเมื่อกดอนุมัติ)</div></sc-if>
+                  <sc-if value="{{ docHasSig }}" hint-placeholder-val="{{ false }}"><img src="{{ docSigThumb }}" alt="" style="max-height:48px;max-width:100%"></sc-if>
+                  <sc-if value="{{ docNoSig }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#B08968">(ลายเซ็นจะแปะเมื่อกดอนุมัติ)</div></sc-if>
                 </div>
                 <div style="font-size:13px;font-weight:700;border-top:1px solid #3D2C29;padding-top:4px">ผู้อนุมัติ / ผู้จ่ายเงิน</div>
+                <sc-if value="{{ docHasSignedBy }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;font-weight:700;color:#2B8A3E;margin-top:2px">{{ docSignedBy }}</div></sc-if>
               </div>
               <div style="flex:1;text-align:center">
                 <div style="height:52px"></div>
@@ -1460,6 +1576,49 @@
           </div>
         </sc-if>
 
+        <sc-if value="{{ modalIsAiMode }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center">
+            <img src="assets/mascots/small_02-mascot-auto-decision.webp" alt="" style="height:90px">
+            <div style="font-size:20px;font-weight:900;margin-top:6px">รูป {{ aiModeCount }} รูปนี้คืออะไร?</div>
+            <div style="font-size:14px;font-weight:600;color:#8A6D5C;margin-top:4px">บอก AI หน่อยว่าให้อ่านแบบไหน</div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
+              <button onClick="{{ aiPickOne }}" style="background:#fff;border:3px solid #B197FC;border-radius:18px;padding:14px;cursor:pointer;text-align:left">
+                <div style="font-size:16px;font-weight:800;color:#5F3DC4">บิลใบเดียวกัน (บิลยาว/หลายหน้า)</div>
+                <div style="font-size:13px;font-weight:600;color:#B08968">AI รวมทุกรูปเป็นบิลเดียว ไม่นับรายการซ้ำ</div>
+              </button>
+              <button onClick="{{ aiPickMany }}" style="background:#fff;border:3px solid #FFB27D;border-radius:18px;padding:14px;cursor:pointer;text-align:left">
+                <div style="font-size:16px;font-weight:800;color:#E8590C">คนละบิล (ร้านเดียวกัน)</div>
+                <div style="font-size:13px;font-weight:600;color:#B08968">AI แยกทีละบิล — บันทึกบิลแรกก่อน แล้วระบบชวนบันทึกบิลถัดไปให้เอง</div>
+              </button>
+              <button onClick="{{ closeModal }}" style="background:#fff;color:#8A6D5C;border:3px solid #EAD9C8;border-radius:16px;padding:12px;font-size:15px;font-weight:800;cursor:pointer">ยกเลิก</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ modalIsFreqCfg }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:20px;font-weight:900">จัดการ "ของใช้บ่อย" · {{ freqCfgVendor }}</div>
+          <div style="font-size:13px;font-weight:600;color:#8A6D5C;margin:2px 0 12px 0">ระบบนับจากบิลจริง — ปักหมุดของที่ต้องอยู่ในชุดเสมอ / ซ่อนของที่ไม่เอา</div>
+          <div style="background:#fff;border-radius:16px;padding:12px 14px;border:2px solid #FFE8CC;margin-bottom:10px;display:flex;align-items:center;gap:10px">
+            <div style="flex:1">
+              <div style="font-size:15px;font-weight:800">เกณฑ์ "บ่อย" (%)</div>
+              <div style="font-size:12.5px;font-weight:600;color:#B08968">ซื้อ ≥ กี่% ของบิลร้านนั้นถึงเข้าชุดอัตโนมัติ</div>
+            </div>
+            <input type="number" value="{{ freqThresholdVal }}" onChange="{{ onFreqThreshold }}" style="width:76px;border:2px solid #FFD8A8;border-radius:12px;padding:10px;font-size:18px;font-weight:800;text-align:center;outline:none">
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <sc-for list="{{ freqCfgRows }}" as="r" hint-placeholder-count="5">
+              <div style="display:flex;align-items:center;gap:10px;background:#fff;border-radius:14px;padding:10px 12px;border:2px solid {{ r.border }}">
+                <div style="flex:1;min-width:0">
+                  <div style="font-size:15px;font-weight:800">{{ r.name }}</div>
+                  <div style="font-size:12.5px;font-weight:600;color:#B08968">{{ r.statText }}</div>
+                </div>
+                <button onClick="{{ r.cycle }}" style="flex-shrink:0;background:{{ r.stateBg }};color:{{ r.stateFg }};border:none;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:800;cursor:pointer">{{ r.stateLabel }}</button>
+              </div>
+            </sc-for>
+          </div>
+          <button onClick="{{ closeModal }}" style="width:100%;margin-top:14px;background:#3D2C29;color:#fff;border:none;border-radius:16px;padding:14px;font-size:16px;font-weight:800;cursor:pointer">เสร็จแล้ว</button>
+        </sc-if>
+
         <sc-if value="{{ modalIsCase }}" hint-placeholder-val="{{ false }}">
           <div style="font-size:20px;font-weight:900">{{ caseTitle }}</div>
           <div style="font-size:13px;font-weight:600;color:#8A6D5C;margin-bottom:10px">{{ caseSub }}</div>
@@ -1491,22 +1650,41 @@
             <div style="margin-top:8px;font-size:13px;font-weight:900;color:#2B8A3E;text-align:center">เดบิต = เครดิต สมดุล ✓</div>
           </div>
           <sc-if value="{{ caseHasDocs }}" hint-placeholder-val="{{ false }}">
-            <div style="font-size:14px;font-weight:900;color:#8A6D5C;margin-bottom:6px">เอกสารในชุดนี้</div>
+            <div style="font-size:14px;font-weight:900;color:#8A6D5C;margin-bottom:6px">เอกสารในชุดนี้ — แตะดูบนจอได้ทันที</div>
             <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
               <sc-for list="{{ caseDocs }}" as="d" hint-placeholder-count="2">
-                <div style="display:flex;align-items:center;gap:10px;background:#fff;border-radius:14px;padding:10px 12px;border:1px solid #EAD9C8">
-                  <img src="assets/icons/icon_tax_invoice.webp" alt="" style="width:34px;height:34px;flex-shrink:0">
-                  <div style="flex:1;min-width:0">
-                    <div style="font-size:14px;font-weight:800">{{ d.name }}</div>
-                    <div style="font-size:12px;font-weight:600;color:#B08968">{{ d.sub }}</div>
+                <div style="background:#fff;border-radius:14px;padding:10px 12px;border:1px solid #EAD9C8">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <img src="assets/icons/icon_tax_invoice.webp" alt="" style="width:34px;height:34px;flex-shrink:0">
+                    <div style="flex:1;min-width:0">
+                      <div style="font-size:14px;font-weight:800">{{ d.name }}</div>
+                      <div style="font-size:12px;font-weight:600;color:{{ d.subColor }}">{{ d.sub }}</div>
+                    </div>
                   </div>
-                  <button onClick="{{ d.pdf }}" style="background:#E7F5FF;color:#1971C2;border:none;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:800;cursor:pointer;flex-shrink:0">PDF ⬇</button>
+                  <div style="display:flex;gap:6px;margin-top:8px">
+                    <sc-if value="{{ d.canView }}" hint-placeholder-val="{{ true }}">
+                      <button onClick="{{ d.view }}" style="flex:1;background:#E7F5FF;color:#1971C2;border:none;border-radius:10px;padding:8px 10px;font-size:13px;font-weight:800;cursor:pointer">ดูเอกสารเลย</button>
+                    </sc-if>
+                    <sc-if value="{{ d.canSign }}" hint-placeholder-val="{{ false }}">
+                      <button onClick="{{ d.signNow }}" style="flex:1;background:linear-gradient(135deg,#7048E8,#9775FA);color:#fff;border:none;border-radius:10px;padding:8px 10px;font-size:13px;font-weight:800;cursor:pointer">เซ็นใบนี้เลย ✍</button>
+                    </sc-if>
+                    <sc-if value="{{ d.hasPdf }}" hint-placeholder-val="{{ false }}">
+                      <button onClick="{{ d.pdf }}" style="background:#F3F0FF;color:#5F3DC4;border:none;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:800;cursor:pointer;flex-shrink:0">PDF ⬇</button>
+                    </sc-if>
+                  </div>
                 </div>
               </sc-for>
             </div>
           </sc-if>
+          <sc-if value="{{ caseCanAddEv }}" hint-placeholder-val="{{ false }}">
+            <label style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;background:#FFF8F0;border:2px dashed #FFB27D;border-radius:16px;padding:12px;cursor:pointer">
+              <input type="file" accept="image/*" multiple="multiple" onChange="{{ caseAddEv }}" style="display:none">
+              <img src="assets/icons/icon_camera.webp" alt="" style="width:30px;height:30px">
+              <span style="font-size:15px;font-weight:800;color:#F76707">+ อัปหลักฐานเพิ่ม (หลายรูป/ย้อนหลังได้ · สลิปไม่ต้องตรงชื่อผู้จ่าย)</span>
+            </label>
+          </sc-if>
           <sc-if value="{{ caseCanCancel }}" hint-placeholder-val="{{ false }}">
-            <button onClick="{{ caseCancel }}" style="width:100%;margin-bottom:10px;background:#fff;color:#D9480F;border:3px solid #FFD8A8;border-radius:16px;padding:13px;font-size:15px;font-weight:800;cursor:pointer">ยกเลิกรายการนี้ — ระบบลงรายการกลับ (reversal) ให้ ไม่ลบข้อมูลเดิม</button>
+            <button onClick="{{ caseCancel }}" style="width:100%;margin-bottom:10px;background:#fff;color:#D9480F;border:3px solid #FFD8A8;border-radius:16px;padding:13px;font-size:15px;font-weight:800;cursor:pointer">ยกเลิกรายการนี้ · ยังไม่เซ็น = ลบออกจริง / เซ็นแล้ว = ลงรายการกลับ (reversal)</button>
           </sc-if>
           <button onClick="{{ closeModal }}" style="width:100%;background:#3D2C29;color:#fff;border:none;border-radius:16px;padding:14px;font-size:16px;font-weight:800;cursor:pointer">ปิด</button>
         </sc-if>
@@ -1584,8 +1762,13 @@ class Component extends DCLogic {
     rules: null, monthLive: {}, thumbs: {}, agg: null,
     // ผู้จ่ายเงิน/กิจการ (เก็บใน fin_entities จริง · ค่าเริ่มต้น/ซ่อน เก็บใน fin_rules)
     entities: [], hiddenEntities: [], defaultEntityId: null, geminiModel: 'gemini-3.5-flash-lite',
-    // แอปบนหน้าจอ (PWA) + สถานะเข้าสู่ระบบ LINE — เว็บเป็นฐาน เข้าผ่าน LINE ก็ยังได้เหมือนเดิม
-    canInstall: false, installed: false, isIOS: false, inLine: false, canLogin: true
+    // แอปบนหน้าจอ (PWA)
+    canInstall: false, installed: false, isIOS: false,
+    // เข้าสู่ระบบด้วยรหัสผ่านแอป (แทน LINE Login) — ล็อกหน้าจอจนกว่าจะใส่รหัสถูก
+    locked: true, loginPw: '', loginPwShow: false, loginMsg: '', loginBusy: false, appPassSha: null,
+    // ลิสต์รวมทุกรายการ (โหมดจริง ดึงจาก ledger_query) + AI อ่านบิล + ของใช้บ่อย + กราฟราคา
+    liveList: null, listLoading: false, aiQueue: [], stats: null,
+    freqThreshold: 60, freqPins: {}, freqHides: {}, priceHidden: {}
   };
 
   componentDidMount() {
@@ -1616,60 +1799,104 @@ class Component extends DCLogic {
     if (r && r.outcome === 'accepted') this.pop('ติดตั้ง KodKlean_Money ลงหน้าจอแล้ว ✓');
   };
 
-  /* ---------- เชื่อม backend จริง (kk-finance-line) · ไม่ตั้งค่า = โหมดสาธิต ไม่พัง ---------- */
+  /* ---------- เข้าสู่ระบบด้วยรหัสผ่านแอป (แทน LINE Login — LIFF ไม่ใช่ทางหลักแล้ว) ----------
+     รหัสเก็บเป็น sha256 ใน fin_rules 'app_password' (ตั้งต้น 4065 · เปลี่ยนได้ที่หน้า ตั้งค่า)
+     เครื่องจำ session ด้วย localStorage 'kk_app_pass' (เก็บเฉพาะ hash ไม่เก็บรหัสดิบ) */
   async initBackend() {
-    const c = window.KK_CONFIG || {};
-    // health เช็คได้เสมอ (ไม่ต้อง login) — บอกว่า backend/secret พร้อมแค่ไหน
-    this.refreshHealth();
-    if (!c.LIFF_ID || !window.liff) { this.setState({ liveMode: false, canLogin: false }); return; }
-    try {
-      await window.liff.init({ liffId: c.LIFF_ID });
-      const inLine = !!(window.liff.isInClient && window.liff.isInClient());
-      this.setState({ inLine, canLogin: true });
-      // เว็บเป็นฐาน: เปิดในแอป LINE = ล็อกอินให้เลย · เปิดบนเว็บ/ไอคอนหน้าจอ = ล็อกอินเองครั้งแรก แล้วระบบจำไว้
-      if (!window.liff.isLoggedIn()) {
-        const remembered = (() => { try { return localStorage.getItem('kk_web_login') === '1'; } catch (e) { return false; } })();
-        if (inLine || remembered) { this.loginLine(); return; }
-        this.setState({ liveMode: false }); return;
+    this.refreshHealth(); // health เช็คได้เสมอ ไม่ต้อง login
+    this._inPreview = (() => { try { return window.top !== window.self; } catch (e) { return true; } })();
+    let sha = null;
+    try { sha = localStorage.getItem('kk_app_pass') || null; } catch (e) {}
+    if (sha) {
+      const r = await this.api('auth_check', { pass_sha: sha });
+      if (r && r.ok && r.data && r.data.valid) {
+        this._pass = sha;
+        this.setState({ locked: false, liveMode: true, appPassSha: sha });
+        this.bootstrapLive();
+        return;
       }
-      try { localStorage.setItem('kk_web_login', '1'); } catch (e) {}
-      this._idToken = window.liff.getIDToken();
-      const prof = await window.liff.getProfile().catch(() => null);
-      this.setState({ liveMode: true, lineName: prof?.displayName || null });
-      this.bootstrapLive();
-    } catch (e) {
-      this.setState({ liveMode: false, liveError: String(e?.message || e) });
+      // รหัสถูกเปลี่ยน/หมดสิทธิ์ → กลับไปหน้า login
+      try { localStorage.removeItem('kk_app_pass'); } catch (e) {}
+      if (r && !r.ok && !(r.data)) this.setState({ loginMsg: 'เชื่อมระบบไม่ได้ชั่วคราว — ลองใหม่อีกครั้ง' });
     }
+    this.setState({ locked: true, liveMode: false });
   }
+  async sha256Text(s) {
+    const h = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(String(s)));
+    return Array.from(new Uint8Array(h)).map(x => x.toString(16).padStart(2, '0')).join('');
+  }
+  doPassLogin = async () => {
+    if (this.state.loginBusy) return;
+    const pw = (this.state.loginPw || '').trim();
+    if (!pw) { this.setState({ loginMsg: 'กรอกรหัสผ่านก่อนนะ', loginMsgTone: 'err' }); return; }
+    this.setState({ loginBusy: true, loginMsg: 'กำลังตรวจรหัส…', loginMsgTone: 'ok' });
+    try {
+      const sha = await this.sha256Text(pw);
+      const r = await this.api('auth_check', { pass_sha: sha });
+      if (r && r.ok && r.data && r.data.valid) {
+        try { localStorage.setItem('kk_app_pass', sha); } catch (e) {}
+        this._pass = sha;
+        this.setState({ locked: false, liveMode: true, appPassSha: sha, loginPw: '', loginMsg: '', loginBusy: false });
+        this.bootstrapLive();
+        this.pop('เข้าสู่ระบบแล้ว ✓');
+      } else if (r && r.ok) {
+        this.setState({ loginMsg: 'รหัสผ่านไม่ถูกต้อง ลองใหม่อีกครั้ง', loginMsgTone: 'err', loginBusy: false });
+      } else {
+        this.setState({ loginMsg: 'ต่อระบบไม่ได้: ' + ((r && r.error) || 'เช็คอินเทอร์เน็ตแล้วลองใหม่'), loginMsgTone: 'err', loginBusy: false });
+      }
+    } catch (e) {
+      this.setState({ loginMsg: 'ต่อระบบไม่ได้: ' + String((e && e.message) || e), loginMsgTone: 'err', loginBusy: false });
+    }
+  };
+  logoutApp = () => {
+    try { localStorage.removeItem('kk_app_pass'); } catch (e) {}
+    this._pass = null;
+    this.setState({ locked: true, liveMode: false, appPassSha: null, loginPw: '', loginMsg: '', screen: 'home' });
+  };
+  // โหมดสาธิตเปิดได้เฉพาะในหน้าพรีวิว (iframe) — แอปจริงบังคับใส่รหัสเสมอ ไม่มี demo
+  enterDemo = () => this.setState({ locked: false, liveMode: false });
 
-  // เข้าสู่ระบบด้วย LINE — ใช้ได้ทั้งในแอป LINE และบนเว็บ/ไอคอนที่ติดตั้งบนหน้าจอ
-  loginLine = () => {
-    if (!window.liff) { this.pop('ยังโหลดตัวเชื่อม LINE ไม่เสร็จ ลองใหม่อีกครั้ง'); return; }
-    try { localStorage.setItem('kk_web_login', '1'); } catch (e) {}
-    try { window.liff.login({ redirectUri: location.href }); }
-    catch (e) { this.pop('เข้าสู่ระบบไม่สำเร็จ: ' + String((e && e.message) || e)); }
-  };
-  logoutLine = () => {
-    try { localStorage.setItem('kk_web_login', '0'); } catch (e) {}
-    try { if (window.liff && window.liff.isLoggedIn()) window.liff.logout(); } catch (e) {}
-    this._idToken = null;
-    this.setState({ liveMode: false, lineName: null });
-    this.pop('ออกจากระบบแล้ว — กลับเป็นโหมดสาธิต');
-  };
+  // เปลี่ยนรหัสผ่านแอป (ต้องรู้รหัสเดิม) — บันทึกที่ fin_rules ผ่านเกตเวย์
+  openPassChange = () => this.openModal({
+    kind: 'passchange', title: 'เปลี่ยนรหัสผ่านแอป',
+    vals: { oldpw: '', n1: '', n2: '' },
+    fields: [
+      { key: 'oldpw', label: 'รหัสเดิม', type: 'password' },
+      { key: 'n1', label: 'รหัสใหม่ (อย่างน้อย 4 ตัว)', type: 'password' },
+      { key: 'n2', label: 'พิมพ์รหัสใหม่ซ้ำอีกครั้ง', type: 'password' }
+    ]
+  });
+  async savePassChange(m) {
+    const v = m.vals;
+    if (!v.oldpw || !v.n1) { this.pop('กรอกรหัสเดิมและรหัสใหม่ก่อนนะ'); return; }
+    if (String(v.n1).trim().length < 4) { this.pop('รหัสใหม่สั้นไป — อย่างน้อย 4 ตัว'); return; }
+    if (v.n1 !== v.n2) { this.pop('รหัสใหม่ 2 ช่องไม่ตรงกัน'); return; }
+    const oldSha = await this.sha256Text(String(v.oldpw).trim());
+    const newSha = await this.sha256Text(String(v.n1).trim());
+    const r = await this.api('app_password_set', { old_sha: oldSha, new_sha: newSha });
+    if (r && r.ok) {
+      try { localStorage.setItem('kk_app_pass', newSha); } catch (e) {}
+      this._pass = newSha;
+      this.setState({ appPassSha: newSha });
+      this.pop('เปลี่ยนรหัสผ่านแล้ว ✓ (มีผลทั้ง 2 เครื่อง — อีกเครื่องใส่รหัสใหม่ครั้งเดียว)');
+    } else this.pop('เปลี่ยนรหัสไม่สำเร็จ: ' + ((r && r.error) || 'ต่อระบบไม่ได้'));
+  }
 
   async api(action, payload = {}) {
     const c = window.KK_CONFIG || {};
     if (!c.FN_GATEWAY) return { ok: false, error: 'no gateway' };
     try {
+      const body = { action, payload };
+      if (payload && payload.pass_sha) body.pass_sha = payload.pass_sha; // ใช้ตอน auth_check ก่อนมี session
       const res = await fetch(c.FN_GATEWAY, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'apikey': c.ANON_KEY || '',
           'Authorization': 'Bearer ' + (c.ANON_KEY || ''),
-          ...(this._idToken ? { 'x-line-id-token': this._idToken } : {}),
+          ...(this._pass ? { 'x-app-pass-sha': this._pass } : {}),
         },
-        body: JSON.stringify({ action, payload }),
+        body: JSON.stringify(body),
       });
       return await res.json();
     } catch (e) { return { ok: false, error: String(e?.message || e) }; }
@@ -1726,7 +1953,16 @@ class Component extends DCLogic {
       // ลายเซ็นผู้อนุมัติ (หลายคน) เก็บใน fin_rules — โหลดมาทับค่าในเครื่อง
       const savedSigners = (d.rules || []).find(r => r.key === 'liff_signers');
       if (savedSigners && Array.isArray(savedSigners.value) && savedSigners.value.length) this.setState({ signers: savedSigners.value });
+      // ตั้งค่า "ของใช้บ่อย" + รายการกราฟราคา (เก็บใน fin_rules เหมือนกัน)
+      const fc = (d.rules || []).find(r => r.key === 'liff_freq_config');
+      if (fc && fc.value) this.setState({ freqThreshold: +fc.value.threshold || 60, freqPins: fc.value.pins || {}, freqHides: fc.value.hides || {} });
+      const pw = (d.rules || []).find(r => r.key === 'liff_price_watch');
+      if (pw && pw.value && pw.value.hidden) this.setState({ priceHidden: pw.value.hidden });
       this.applyEntitiesFromBootstrap(d);
+      // สถิติซื้อจริง (ของใช้บ่อย + กราฟราคา) — ดึงจาก fin_po_items ผ่าน RPC fin_liff_stats
+      this.api('liff_stats').then(s => { if (s && s.ok && s.data) this.setState({ stats: s.data }); });
+      // ลิสต์รวมทุกรายการ (หน้า "รายการ")
+      this.fetchLiveList();
       // แคตตาล็อกสินค้าจริงจากฐานข้อมูล (fin_vendor_items ผ่าน RPC liff_catalog) — แทน mock ทั้งหมด
       const cat = await this.api('liff_catalog');
       if (cat && cat.ok && Array.isArray(cat.data) && cat.data.length) {
@@ -1746,21 +1982,8 @@ class Component extends DCLogic {
       this.api('liff_dashboard').then(g => { if (g && g.ok && g.data) this.setState({ agg: g.data }); });
       this.ensureMonth(this.state.diary.ym, true);
       // ดึงเอกสารรออนุมัติจริงมาแทนตัวอย่าง (ได้ backendId ไว้ใช้ตอนเซ็น) — ว่าง = ยังไม่มีเอกสารรอ
-      const a = await this.api('approve_list');
-      const docs = (a && a.ok && a.data && Array.isArray(a.data.docs)) ? a.data.docs : [];
-      const entRows = (a && a.ok && a.data && Array.isArray(a.data.entities)) ? a.data.entities : [];
-      const entMap = {}; entRows.forEach(e => { entMap[e.id] = e.name; });
-      this.setState({ drafts: docs.map(x => {
-        const pl = x.payload || {};
-        // ชื่อผู้จ่าย = ดึงจาก entity ของเอกสารจริง (ไม่เดา/ไม่ใส่ชื่อแบรนด์เอง)
-        const ent = this.entityById(x.entity_id);
-        return { id: x.doc_no || x.id, backendId: x.id,
-          type: (x.type === 'expense_certificate' || x.type === 'receipt_substitute') ? 'ใบรับรองแทนใบเสร็จ' : 'ใบสำคัญจ่าย',
-          entity: entMap[x.entity_id] || pl.entity_name || (ent && ent.name) || this._entityName || 'กิจการ',
-          entityTaxId: (ent && ent.tax_id) || pl.entity_tax_id || '',
-          vendorId: null, amount: +pl.total || 0,
-          date: pl.date || '', payee: pl.payee || pl.vendor_name || '', ready: true, missingField: '' };
-      }) });
+      this.setState({ drafts: [] });
+      await this.refreshApprove();
     } catch (e) { /* never block — โหมดสาธิตทำงานต่อได้ */ }
   }
   // โหลดข้อมูลเดือน (ปฏิทิน/ไดอารี่/งบ) จาก fin จริง — โหมดสาธิตคำนวณจากรายการในเครื่องแทน
@@ -1902,10 +2125,13 @@ class Component extends DCLogic {
       entities: (saved && saved.entities && saved.entities.length) ? saved.entities : JSON.parse(JSON.stringify(base.entities || [])),
       defaultEntityId: (saved && saved.defaultEntityId) || base.defaultEntityId || ((base.entities || [])[0] || {}).id || null,
       geminiModel: (saved && saved.geminiModel) || 'gemini-3.5-flash-lite',
+      freqThreshold: (saved && +saved.freqThreshold) || 60,
+      freqPins: (saved && saved.freqPins) || {}, freqHides: (saved && saved.freqHides) || {},
+      priceHidden: (saved && saved.priceHidden) || {},
       drafts: JSON.parse(JSON.stringify(base.drafts)), receives: JSON.parse(JSON.stringify(base.receives)) });
   }
   save() {
-    try { localStorage.setItem('kk_liff_v1', JSON.stringify({ vendors: this.state.db.vendors, purchases: this.state.db.purchases, sig: this.state.sig, signers: this.state.signers || [], prefsChars: this.state.prefsChars !== false, svc: this.state.svc || {}, rules: this.state.rules || null, entities: this.state.entities || [], defaultEntityId: this.state.defaultEntityId || null, geminiModel: this.state.geminiModel || 'gemini-3.5-flash-lite' })); } catch (e) {}
+    try { localStorage.setItem('kk_liff_v1', JSON.stringify({ vendors: this.state.db.vendors, purchases: this.state.db.purchases, sig: this.state.sig, signers: this.state.signers || [], prefsChars: this.state.prefsChars !== false, svc: this.state.svc || {}, rules: this.state.rules || null, entities: this.state.entities || [], defaultEntityId: this.state.defaultEntityId || null, geminiModel: this.state.geminiModel || 'gemini-3.5-flash-lite', freqThreshold: this.state.freqThreshold || 60, freqPins: this.state.freqPins || {}, freqHides: this.state.freqHides || {}, priceHidden: this.state.priceHidden || {} })); } catch (e) {}
   }
   fmt(n) { return '฿' + Math.round(n).toLocaleString('th-TH'); }
   pop(msg) {
@@ -1913,7 +2139,7 @@ class Component extends DCLogic {
     clearTimeout(this._tt); this._tt = setTimeout(() => this.setState({ toast: '' }), 2200);
   }
   vendorById(id) { return (this.state.db ? this.state.db.vendors : []).find(v => v.id === id) || { name: '?', logo: 'assets/logos/other.png', items: [], doc: [], cats: [], shipping: 0, box: 0 }; }
-  // บีบ+แปลง WebP ฝั่ง client ก่อนเก็บ (ของจริงทำก่อนอัปโหลด Supabase)
+  // บีบ+แปลง WebP ฝั่ง client ก่อนเก็บ — ถ้าเครื่องแปลง WebP ไม่ได้ (เช่น iOS เก่า) ใช้ JPEG แทน + แจ้งผู้ใช้ (ไม่เงียบ)
   compressOne(f, cb) {
     const r = new FileReader();
     r.onload = () => {
@@ -1923,7 +2149,29 @@ class Component extends DCLogic {
         const s = Math.min(1, 640 / Math.max(img.width, img.height));
         c.width = img.width * s; c.height = img.height * s;
         c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-        cb(c.toDataURL('image/webp', 0.8));
+        let out = '';
+        try { out = c.toDataURL('image/webp', 0.8); } catch (e) { out = ''; }
+        if (!out || out.indexOf('data:image/webp') !== 0) {
+          if (!this._webpWarned) { this._webpWarned = true; this.pop('เครื่องนี้แปลงรูปเป็น WebP ไม่ได้ — ระบบใช้ JPEG แทนให้อัตโนมัติ (ใช้งานได้ปกติ)'); }
+          out = c.toDataURL('image/jpeg', 0.82);
+        }
+        cb(out);
+      };
+      img.src = r.result;
+    };
+    r.readAsDataURL(f);
+  }
+  // รูปสำหรับส่งให้ AI อ่านบิล (ใหญ่กว่ารูปย่อ เพื่อให้อ่านตัวหนังสือออก)
+  compressAi(f, cb) {
+    const r = new FileReader();
+    r.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const c = document.createElement('canvas');
+        const s = Math.min(1, 1400 / Math.max(img.width, img.height));
+        c.width = img.width * s; c.height = img.height * s;
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        cb(c.toDataURL('image/jpeg', 0.85));
       };
       img.src = r.result;
     };
@@ -2033,7 +2281,14 @@ class Component extends DCLogic {
   evMissing() { return this.evidenceList().filter(l => !this.evOptional(l) && this.evArr(l).length === 0); }
 
   /* ---------- flow ซื้อ ---------- */
-  resetCart() { return { vendorId: null, qty: {}, priceOv: {}, ship: '', box: '', route: null, sub: null, ev: {}, isAsset: false, payerId: this.state.defaultEntityId || null }; }
+  resetCart() { return { vendorId: null, qty: {}, priceOv: {}, ship: '', box: '', route: null, sub: null, ev: {}, isAsset: false, payerId: this.state.defaultEntityId || null, pay: null, reimburser: '' }; }
+  // 🔒 วิธีจ่าย → บัญชีเครดิต (ผูกที่ backend): สด = 1000 เงินสด · โอน = 1020 ธนาคาร
+  // ค่าตั้งต้น: กฎกลุ่ม "จ่ายสด" = cash · นอกนั้น = transfer · ผู้ใช้สลับเองได้ในหน้าสรุป
+  cartPay() {
+    const c = this.state.cart || {};
+    if (c.pay === 'cash' || c.pay === 'transfer') return c.pay;
+    return (c.route === 'none' && /cash/.test(c.sub || '')) ? 'cash' : 'transfer';
+  }
   startBuy = () => this.setState({ screen: 'buy', buyStep: 1, cart: this.resetCart(), search: '', catFilter: 'ทั้งหมด', aiFilled: false });
   // แตะการ์ดร้านจากหน้าแรก → เข้า flow ซื้อของร้านนั้นทันที (ข้ามขั้นเลือกร้าน)
   startBuyVendor(id) {
@@ -2078,6 +2333,7 @@ class Component extends DCLogic {
       entity_id: this.currentPayerId(), vendor_id: this.beVendorId(this.state.cart.vendorId),
       vendor_name: this.vendorById(this.state.cart.vendorId).name, route: this.beRoute(),
       total: this.grandTotal(), is_stock: true, description: this.routeLabel() + ' — ' + this.vendorById(this.state.cart.vendorId).name,
+      payment_method: this.cartPay(), reimburser: (this.state.cart.reimburser || '').trim() || undefined,
       items: this.cartLines().map(l => ({ item_name: l.it.name, qty: l.qty, unit: l.it.unit, unit_price: l.price })),
       shipping_cost: +this.state.cart.ship || 0, packaging_cost: +this.state.cart.box || 0,
       draft: true, idem: 'liff-draft-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8)
@@ -2099,8 +2355,8 @@ class Component extends DCLogic {
     this.pop(isDraft ? 'บันทึกร่างขึ้นระบบจริงแล้ว (ยังไม่ลงบัญชี) ✓' : 'ลงบัญชีขึ้นระบบจริงแล้ว ✓ (เดบิต=เครดิต)');
     const cid = r.data && r.data.case_id;
     if (cid && evSnap && Object.keys(evSnap).length) this.uploadEvidenceToCase(cid, evSnap);
-    this.ensureMonth(this.state.diary.ym, true);
-    this.api('liff_dashboard').then(g => { if (g && g.ok && g.data) this.setState({ agg: g.data }); });
+    this.refreshAllLive();
+    this.api('liff_stats').then(s => { if (s && s.ok && s.data) this.setState({ stats: s.data }); });
   }
   // เก็บรูป 2 ที่: ย่อ WebP → Supabase (โชว์ในแอปเร็ว) / ต้นฉบับ → Google Drive (backend คิวให้ ยังไม่มี key ก็ไม่ error)
   async uploadEvidenceToCase(caseId, evSnap) {
@@ -2111,7 +2367,8 @@ class Component extends DCLogic {
         try {
           const full = (this._full || {})[thumb] || null;
           const sha = await this.sha256Hex(full || thumb);
-          const r = await this.api('upload_file', { sha256: sha, thumb_b64: thumb, original_b64: full || undefined, mime: 'image/jpeg', kind: part, case_id: caseId, name: l });
+          const thumbMime = thumb.indexOf('data:image/webp') === 0 ? 'image/webp' : 'image/jpeg';
+          const r = await this.api('upload_file', { sha256: sha, thumb_b64: thumb, thumb_mime: thumbMime, original_b64: full || undefined, mime: 'image/jpeg', kind: part, case_id: caseId, name: l });
           if (r && r.ok && r.data && r.data.file) {
             n++;
             if (!attached[part]) { attached[part] = true; await this.api('attach_part', { case_id: caseId, part, file_id: r.data.file.id }); }
@@ -2128,16 +2385,72 @@ class Component extends DCLogic {
     this.setState({ db: this.state.db, modal: null }); this.save();
     this.pop('ยกเลิกแล้ว — ลงรายการกลับหักล้างเป็นศูนย์');
   }
-  // ยกเลิก/กลับรายการ — โหมดจริง: backend ลง reversal + void เอกสารร่าง + PO เป็น CANCELLED
+  // ยกเลิก — โหมดจริง แบบมีระดับ: ยังไม่เซ็น/ยังไม่อนุมัติ = ลบออกจากระบบจริง · เซ็นแล้ว = reversal หักล้างเป็นศูนย์
   async cancelCaseLive(caseId) {
-    if (!window.confirm('ยกเลิกรายการนี้? ระบบจะลงรายการกลับ (reversal) หักล้างเป็นศูนย์ตามหลักบัญชี — ไม่ลบข้อมูลเดิม')) return;
+    if (!window.confirm('ยกเลิกรายการนี้?\n• ยังไม่เซ็น/ยังไม่อนุมัติเอกสาร → ลบออกจากระบบจริง (เหมาะกับรายการเทสต์/บันทึกผิด)\n• เซ็น/อนุมัติแล้ว → ลงรายการกลับ (reversal) หักล้างเป็นศูนย์ ไม่ลบข้อมูลเดิม')) return;
     const r = await this.api('liff_cancel', { case_id: caseId });
-    if (r && r.ok) {
-      this.pop('ยกเลิกแล้ว ✓ ลง reversal หักล้างเป็นศูนย์ (เดบิต=เครดิต)');
+    if (r && r.ok && r.data) {
+      this.pop(r.data.mode === 'deleted' ? 'ลบรายการออกจากระบบแล้ว ✓ (ยังไม่เคยเซ็น จึงลบจริงได้)' : 'ยกเลิกแล้ว ✓ ลง reversal หักล้างเป็นศูนย์ + เอกสารถูก void');
       this.setState({ modal: null });
-      this.ensureMonth(this.state.diary.ym, true);
-      this.api('liff_dashboard').then(g => { if (g && g.ok && g.data) this.setState({ agg: g.data }); });
+      this.refreshAllLive();
     } else this.pop('ยกเลิกไม่สำเร็จ: ' + ((r && r.error) || 'ไม่ทราบสาเหตุ'));
+  }
+  // รีเฟรชข้อมูลจริงทุกก้อนหลังมีการเขียน (ลิสต์/เดือน/กราฟ/เอกสารรอเซ็น)
+  refreshAllLive() {
+    if (!this.state.liveMode) return;
+    this.fetchLiveList(true);
+    this.ensureMonth(this.state.diary.ym, true);
+    this.api('liff_dashboard').then(g => { if (g && g.ok && g.data) this.setState({ agg: g.data }); });
+    this.refreshApprove();
+  }
+  async refreshApprove() {
+    if (!this.state.liveMode) return;
+    const a = await this.api('approve_list');
+    if (!a || !a.ok || !a.data || !Array.isArray(a.data.docs)) return;
+    const entRows = Array.isArray(a.data.entities) ? a.data.entities : [];
+    const entMap = {}; entRows.forEach(e => { entMap[e.id] = e.name; });
+    this.setState({ drafts: a.data.docs.map(x => {
+      const pl = x.payload || {};
+      const ent = this.entityById(x.entity_id);
+      return { id: x.doc_no || x.id, backendId: x.id,
+        type: (x.type === 'expense_certificate' || x.type === 'receipt_substitute') ? 'ใบรับรองแทนใบเสร็จ' : 'ใบสำคัญจ่าย',
+        entity: entMap[x.entity_id] || pl.entity_name || (ent && ent.name) || this._entityName || 'กิจการ',
+        entityTaxId: (ent && ent.tax_id) || pl.entity_tax_id || '',
+        vendorId: null, amount: +pl.total || 0, payload: pl,
+        date: pl.date || '', payee: pl.payee || pl.vendor_name || '', ready: true, missingField: '' };
+    }) });
+  }
+  // ── ลิสต์รวมทุกรายการ (หน้า "รายการ" โหมดจริง) — ledger_query: ล่าสุดก่อน + ค้นหา/กรองในเครื่อง ──
+  async fetchLiveList(force) {
+    if (!this.state.liveMode) return;
+    if (this.state.listLoading && !force) return;
+    this.setState({ listLoading: true });
+    const r = await this.api('ledger_query', { limit: 200 });
+    if (r && r.ok && r.data && Array.isArray(r.data.cases)) {
+      this.setState({ liveList: r.data.cases, listLoading: false });
+    } else this.setState({ listLoading: false });
+  }
+  // อัปหลักฐานเพิ่มเข้า CASE ย้อนหลัง (กี่รูปก็ได้ · สลิปไม่ต้องตรงชื่อผู้จ่าย)
+  caseAddEvidence(caseId, requiredParts, collectedParts, e) {
+    const need = (requiredParts || []).filter(p => !(collectedParts || {})[p]);
+    let first = true;
+    this.readFiles(e, async (thumb) => {
+      // รูปแรกเติม part ที่ยังขาด (เช่น slip) ให้เคสครบ — รูปถัดไปเก็บเป็นหลักฐานแนบ
+      const part = (first && need.length) ? need[0] : 'goods_photo';
+      first = false;
+      try {
+        const full = (this._full || {})[thumb] || null;
+        const sha = await this.sha256Hex(full || thumb);
+        const thumbMime = thumb.indexOf('data:image/webp') === 0 ? 'image/webp' : 'image/jpeg';
+        const r = await this.api('upload_file', { sha256: sha, thumb_b64: thumb, thumb_mime: thumbMime, original_b64: full || undefined, mime: 'image/jpeg', kind: part, case_id: caseId, name: 'หลักฐานเพิ่มเติม' });
+        if (r && r.ok && r.data && r.data.file) {
+          await this.api('attach_part', { case_id: caseId, part, file_id: r.data.file.id });
+          this.pop('อัปหลักฐานเพิ่มแล้ว ✓');
+          this.refreshAllLive();
+          if (this.state.modal && this.state.modal.kind === 'case' && this.state.modal.caseId === caseId) this.reloadCaseModal(caseId);
+        } else this.pop('อัปโหลดไม่สำเร็จ: ' + ((r && r.error) || 'ต่อระบบไม่ได้'));
+      } catch (err) { this.pop('อัปโหลดไม่สำเร็จ: ' + String((err && err.message) || err)); }
+    }, true);
   }
   confirmBuy = () => {
     // กันบันทึกยอด 0 (รายการที่ต้องพิมพ์ราคาเอง) — เขียนขึ้นระบบจริงไม่ผ่านอยู่แล้ว จะกลายเป็นรายการค้างในเครื่อง
@@ -2172,6 +2485,7 @@ class Component extends DCLogic {
         vendor_id: vid, vendor_name: vn,
         route: beR, total, vat, is_stock: true, category_account: '5010',
         description: this.routeLabel() + ' — ' + vn,
+        payment_method: this.cartPay(), reimburser: (this.state.cart.reimburser || '').trim() || undefined,
         items: this.cartLines().map(l => ({ item_name: l.it.name, qty: l.qty, unit: l.it.unit, unit_price: l.price })),
         shipping_cost: +this.state.cart.ship || 0, packaging_cost: +this.state.cart.box || 0,
         draft: false, idem: 'liff-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8)
@@ -2228,6 +2542,7 @@ class Component extends DCLogic {
     else if (m.kind === 'price') this.savePriceForm(m);
     else if (m.kind === 'rule') this.saveRuleForm(m);
     else if (m.kind === 'entity') this.saveEntityForm(m);
+    else if (m.kind === 'passchange') { this.savePassChange(m); this.setState({ modal: null }); return; }
     this.setState({ modal: null });
   };
 
@@ -2471,22 +2786,37 @@ class Component extends DCLogic {
     const m = this.state.modal; if (m) { m.sigData = ''; this.forceUpdate(); }
   };
 
-  /* ---------- อนุมัติ + เซ็น (เลือกผู้เซ็นได้) ---------- */
+  /* ---------- อนุมัติ + เซ็น (เลือกผู้เซ็นได้ · เซ็นเมื่อไหร่ก็ได้ ไม่บังคับเซ็นตอนบันทึก) ---------- */
   confirmSign = () => {
     const st = this.state; const sel = st.sel;
+    const m = st.modal || {};
     const signer = this.signersList().find(x => x.id === st.signPick) || this.signersList()[0] || null;
+    // เซ็นใบเดียวจาก CASE view (m.docIds) หรือหลายใบจากหน้าอนุมัติ (ติ๊กเลือก)
+    const directIds = Array.isArray(m.docIds) ? m.docIds : null;
+    if (st.liveMode) {
+      const ids = directIds || st.drafts.filter(d => sel[d.id] && d.backendId).map(d => d.backendId);
+      if (ids.length) {
+        this.api('liff_sign', { doc_ids: ids, signer_name: signer ? signer.name : null, signature_data: signer ? signer.sig : null }).then(r => {
+          if (r && r.ok) {
+            this.pop('เซ็นอนุมัติแล้ว ' + ((r.data && r.data.signed) || ids.length) + ' ใบ ✓' + (signer ? ' · ผู้เซ็น: ' + signer.name : ''));
+            this.refreshAllLive();
+          } else this.pop('เซ็นไม่สำเร็จ: ' + ((r && r.error) || 'ต่อระบบไม่ได้'));
+        });
+      }
+      this.setState({ sel: {}, modal: null });
+      return;
+    }
     const left = st.drafts.filter(d => !sel[d.id]);
     const n = st.drafts.length - left.length;
     const db = st.db;
     db.purchases.forEach(p => { if (p.status === 'รออนุมัติ') p.status = 'เสร็จสมบูรณ์'; });
-    if (st.liveMode) {
-      const ids = st.drafts.filter(d => sel[d.id] && d.backendId).map(d => d.backendId);
-      // liff_sign: อัปเดตเอกสารเป็น "อนุมัติแล้ว" + ลง fin_signature_events + แปะลายเซ็น/ชื่อผู้เซ็นใน payload เอกสาร
-      if (ids.length) this.pushLive('liff_sign', { doc_ids: ids, signer_name: signer ? signer.name : null, signature_data: signer ? signer.sig : null }, 'เซ็นอนุมัติขึ้นระบบจริงแล้ว ✓' + (signer ? ' โดย ' + signer.name : ''));
-    }
     this.setState({ drafts: left, sel: {}, modal: null, db }); this.save();
     this.pop('เซ็นและอนุมัติแล้ว ' + n + ' ใบ' + (signer ? ' · ผู้เซ็น: ' + signer.name : ''));
   };
+  // เซ็นใบเดียวทันทีจากหน้ารายการ/CASE view
+  signDocNow(docId, docNo) {
+    this.setState({ modal: { kind: 'sign', docIds: [docId], docNo: docNo || '' }, signPick: this.state.signPick || (this.signersList()[0] || {}).id || null });
+  }
 
   /* ---------- สลิปเดียว หลายร้าน ---------- */
   startMulti = () => this.setState({ screen: 'multi', multi: { total: '', rows: [{ vendorId: null, amount: '', route: 'slip' }] } });
@@ -2541,21 +2871,150 @@ class Component extends DCLogic {
     this.save();
   };
 
-  /* ---------- AI อ่านบิล (ผู้ช่วยกรอก · never block) ---------- */
-  aiEnabled() { const s = this.state.svc || {}; return !!s.gemini; }
-  aiScanBlocked = () => this.pop('ยังไม่ได้ใส่ Gemini key — ไปเปิดที่ ตั้งค่า › บริการภายนอก (ระหว่างนี้กรอกมือได้ตามปกติ)');
+  /* ---------- AI อ่านบิลด้วย Gemini (ของจริง — ยิงผ่านเกตเวย์ action liff_ocr ไม่ติดเงื่อนไข login) ----------
+     รองรับหลายรูป: ถามก่อนว่า "หลายรูป = บิลเดียว (บิลยาว)" หรือ "คนละบิล (ร้านเดียวกัน)"
+     คนละบิล → เติมบิลแรกลงตะกร้า บิลที่เหลือเข้าคิว aiQueue บันทึกต่อได้จากหน้าสำเร็จ */
+  aiEnabled() { const h = this.state.health; return !!(h && h.ai_configured); }
+  aiScanBlocked = () => this.pop('ยังไม่ได้ตั้งค่า GEMINI_API_KEY ใน Supabase Secrets — ตั้งครั้งเดียว AI อ่านบิลใช้ได้เลย (ระหว่างนี้กรอกมือได้ตามปกติ)');
   aiScan = (e) => {
-    const f = e.target.files && e.target.files[0]; if (!f) return;
-    this.setState({ aiRunning: true, aiFilled: false });
-    const bv = this.vendorById(this.state.cart.vendorId);
-    clearTimeout(this._ai); this._ai = setTimeout(() => {
-      const cart = Object.assign({}, this.state.cart); cart.qty = Object.assign({}, cart.qty);
-      (bv.items || []).slice(0, 3).forEach((it, i) => { cart.qty[it.id] = [2, 1, 3][i] || 1; });
-      if (!cart.route) cart.route = (this.mainRules()[0] || {}).id || null;
-      this.setState({ aiRunning: false, aiFilled: true, cart });
-      this.pop('AI อ่านให้แล้ว — ตรวจ/แก้จำนวนก่อนยืนยันได้เลย');
-    }, 1300);
+    const fs = Array.prototype.slice.call(e.target.files || []); e.target.value = '';
+    if (!fs.length) return;
+    if (!this.aiEnabled()) { this.aiScanBlocked(); return; }
+    if (fs.length === 1) { this.runAiScan(fs, 'one'); return; }
+    this._aiFiles = fs;
+    this.openModal({ kind: 'aimode', n: fs.length });
   };
+  aiModePick(mode) {
+    const fs = this._aiFiles || []; this._aiFiles = null;
+    this.setState({ modal: null });
+    if (fs.length) this.runAiScan(fs, mode);
+  }
+  async runAiScan(fs, mode) {
+    this.setState({ aiRunning: true, aiFilled: false });
+    try {
+      const imgs = [];
+      for (const f of fs.slice(0, 8)) imgs.push(await new Promise(res => this.compressAi(f, res)));
+      const v = this.vendorById(this.state.cart.vendorId);
+      const r = await this.api('liff_ocr', {
+        images: imgs.map(b64 => ({ b64, mime: 'image/jpeg' })), mode,
+        vendor_name: v.name !== '?' ? v.name : undefined,
+        catalog: (v.items || []).map(it => it.name).slice(0, 80)
+      });
+      if (!r || !r.ok || !r.data) { this.setState({ aiRunning: false }); this.pop('AI อ่านไม่สำเร็จ: ' + ((r && r.error) || 'ต่อระบบไม่ได้')); return; }
+      const d = r.data;
+      if (!d.available) { this.setState({ aiRunning: false }); this.pop(d.note || 'ยังไม่ได้เชื่อม Gemini'); return; }
+      if (d.error) { this.setState({ aiRunning: false }); this.pop('AI ตอบผิดพลาด: ' + d.error); return; }
+      const bills = (d.result && Array.isArray(d.result.bills)) ? d.result.bills.filter(b => b && (b.items || []).length) : [];
+      if (!bills.length) { this.setState({ aiRunning: false }); this.pop('AI อ่านไม่เจอรายการในรูป — ลองถ่ายชัดขึ้น หรือกรอกมือได้เลย'); return; }
+      const applied = this.applyAiBill(bills[0]);
+      const queue = bills.slice(1);
+      this.setState({ aiRunning: false, aiFilled: true, aiQueue: queue });
+      this.pop('AI เติมให้ ' + applied.matched + ' รายการ' + (applied.added ? ' · เพิ่มสินค้าใหม่ ' + applied.added : '') +
+        (queue.length ? ' · อีก ' + queue.length + ' บิลรออยู่ (ยืนยันบิลนี้ก่อน)' : '') + ' — ตรวจ/แก้ก่อนยืนยัน');
+    } catch (err) {
+      this.setState({ aiRunning: false });
+      this.pop('AI อ่านไม่สำเร็จ: ' + String((err && err.message) || err));
+    }
+  }
+  // เติมบิลที่ AI อ่านได้ลงตะกร้า: จับคู่ชื่อกับสินค้าในร้าน · ไม่เจอ = เพิ่มสินค้าใหม่ให้เลย (แก้/ลบได้)
+  applyAiBill(bill) {
+    const v = this.vendorById(this.state.cart.vendorId);
+    const cart = Object.assign({}, this.state.cart);
+    cart.qty = Object.assign({}, cart.qty); cart.priceOv = Object.assign({}, cart.priceOv);
+    let matched = 0, added = 0;
+    const norm = (s) => String(s || '').replace(/\s+/g, '').toLowerCase();
+    (bill.items || []).forEach(bi => {
+      if (!bi || !bi.name) return;
+      let it = (v.items || []).find(x => bi.catalog_match && x.name === bi.catalog_match)
+        || (v.items || []).find(x => norm(x.name) && (norm(x.name) === norm(bi.name) || norm(x.name).indexOf(norm(bi.name)) >= 0 || norm(bi.name).indexOf(norm(x.name)) >= 0));
+      if (!it) {
+        it = { id: 'ai' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), name: String(bi.name).slice(0, 60), spec: 'เพิ่มจาก AI อ่านบิล', unit: bi.unit || 'หน่วย', price: +bi.unit_price || 0, img: '', cat: '' };
+        v.items = (v.items || []).concat([it]); added++;
+        if (this.state.liveMode) this.pushQuiet('liff_catalog_admin', { op: 'item_save', vendor_id: v.id, item: { id: it.id, name: it.name, spec: it.spec, unit: it.unit, price: it.price, cat: '' } });
+      } else matched++;
+      cart.qty[it.id] = Math.max(1, Math.round(+bi.qty || 1));
+      if (+bi.unit_price > 0) cart.priceOv[it.id] = +bi.unit_price;
+    });
+    if (bill.payment_method === 'cash') cart.pay = 'cash';
+    if (bill.payment_method === 'transfer') cart.pay = 'transfer';
+    this.setState({ cart, db: this.state.db }); this.save();
+    return { matched, added };
+  }
+  // บิลถัดไปในคิว (โหมด "คนละบิล ร้านเดียวกัน") — เริ่ม flow ซื้อร้านเดิม + เติมของจากบิลนั้น
+  nextAiBill = () => {
+    const q = (this.state.aiQueue || []).slice();
+    const bill = q.shift(); if (!bill) return;
+    const vid = this.state.cart.vendorId || (this.state.success && this.state.success.vendorId);
+    this.startBuyVendor(vid);
+    setTimeout(() => {
+      const applied = this.applyAiBill(bill);
+      this.setState({ aiQueue: q, aiFilled: true });
+      this.pop('เติมบิลถัดไปให้แล้ว (' + (applied.matched + applied.added) + ' รายการ) — ตรวจแล้วยืนยันได้เลย');
+    }, 60);
+  };
+
+  /* ---------- ของใช้บ่อย (แท็บ ⭐ ต่อร้าน — สถิติจากบิลจริงผ่าน fin_liff_stats) ----------
+     เกณฑ์ "บ่อย" ตั้งได้ (% ของบิลร้านนั้น) + ปักหมุดของที่ต้องอยู่เสมอ + ซ่อนของที่ไม่เอา */
+  freqForVendor(mockId) {
+    const st = this.state;
+    const uuid = this.beVendorId(mockId);
+    const stats = (st.stats && Array.isArray(st.stats.freq)) ? st.stats.freq : [];
+    const row = stats.find(x => x.vendor_id === uuid) || null;
+    const v = this.vendorById(mockId);
+    const pins = (st.freqPins || {})[mockId] || [];
+    const hides = (st.freqHides || {})[mockId] || [];
+    const th = Math.max(1, +st.freqThreshold || 60);
+    const byName = {};
+    ((row && row.items) || []).forEach(it => { if (it && it.name) byName[it.name] = it; });
+    const rows = [];
+    (v.items || []).forEach(it => {
+      const s = byName[it.name] || null;
+      const pct = (s && row && row.bills) ? Math.round(s.bills / row.bills * 100) : 0;
+      const auto = pct >= th && (s ? +s.bills : 0) >= 2;
+      const pinned = pins.indexOf(it.name) >= 0;
+      const hidden = hides.indexOf(it.name) >= 0;
+      if ((auto || pinned) && !hidden) rows.push({ it, stat: s, pct, pinned, auto, qty: s ? Math.max(1, Math.round(+s.qty_avg || 1)) : 1 });
+    });
+    rows.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || b.pct - a.pct);
+    return { rows, bills: row ? +row.bills : 0, byName, th };
+  }
+  applyFreqSet = () => {
+    const f = this.freqForVendor(this.state.cart.vendorId);
+    if (!f.rows.length) return;
+    const cart = Object.assign({}, this.state.cart); cart.qty = Object.assign({}, cart.qty);
+    let n = 0;
+    f.rows.forEach(r => { if (!cart.qty[r.it.id]) { cart.qty[r.it.id] = r.qty; n++; } });
+    this.setState({ cart });
+    this.pop(n ? ('ใส่ชุดซื้อประจำ ' + n + ' รายการลงตะกร้าแล้ว — ปรับจำนวน/ลบทีละอันได้') : 'ของชุดนี้อยู่ในตะกร้าครบแล้ว');
+  };
+  openFreqCfg = () => this.openModal({ kind: 'freqcfg', vendorId: this.state.cart.vendorId });
+  persistFreqCfg() {
+    const st = this.state;
+    this.save();
+    if (st.liveMode) this.pushQuiet('settings_save', { rule_key: 'liff_freq_config',
+      value: { threshold: +st.freqThreshold || 60, pins: st.freqPins || {}, hides: st.freqHides || {} },
+      description: 'ตั้งค่าของใช้บ่อย (เกณฑ์ % / ปักหมุด / ซ่อน)' });
+  }
+  // วน 3 สถานะ: อัตโนมัติ (ตามสถิติ) → ปักหมุด (ล็อกให้อยู่เสมอ) → ซ่อน (ไม่เอา) → กลับอัตโนมัติ
+  cycleFreqState(mockId, name) {
+    const pins = Object.assign({}, this.state.freqPins); const hides = Object.assign({}, this.state.freqHides);
+    const p = (pins[mockId] || []).slice(); const h = (hides[mockId] || []).slice();
+    const inP = p.indexOf(name) >= 0, inH = h.indexOf(name) >= 0;
+    if (!inP && !inH) p.push(name);
+    else if (inP) { p.splice(p.indexOf(name), 1); h.push(name); }
+    else h.splice(h.indexOf(name), 1);
+    pins[mockId] = p; hides[mockId] = h;
+    this.setState({ freqPins: pins, freqHides: hides }, () => this.persistFreqCfg());
+  }
+  // กราฟราคา: ซ่อน/โชว์รายการ (จำไว้ทั้งเครื่อง + ระบบ)
+  togglePriceLine(name) {
+    const hidden = Object.assign({}, this.state.priceHidden);
+    hidden[name] = !hidden[name];
+    this.setState({ priceHidden: hidden }, () => {
+      this.save();
+      if (this.state.liveMode) this.pushQuiet('settings_save', { rule_key: 'liff_price_watch', value: { hidden }, description: 'กราฟราคา: รายการที่ซ่อน' });
+    });
+  }
 
   /* ---------- ประวัติการแก้ไข (edit_history) ---------- */
   openHistory = (p) => this.openModal({ kind: 'history', title: 'ประวัติ · ' + p.id, hist: this.historyFor(p) });
@@ -2659,14 +3118,17 @@ class Component extends DCLogic {
       return;
     }
     const c = r.live; if (!c) return;
-    this.openModal({ kind: 'case', caseId: c.id,
+    this.openModal({ kind: 'case', caseId: c.id, liveCase: c,
       title: r.vendorName + ' · ' + (c.case_no || ''), sub: H.dayLabel(r.iso) + ' · ' + r.route,
       canCancel: c.status !== 'cancelled', onCancel: () => this.cancelCaseLive(c.id),
       badges: [r.status], photos: [], journal: H.journalPreview(c.intake_route, +c.total || 0, false), docs: [] });
-    // ดึงชุดเต็มจริง (รูป+journal+เอกสาร) มาเติมใน modal
-    this.api('ledger_detail', { case_id: c.id }).then(res => {
+    this.reloadCaseModal(c.id);
+  }
+  // ดึงชุดเต็มจริง (รูป WebP จาก Supabase + journal + เอกสาร) มาเติมใน CASE modal
+  reloadCaseModal(caseId) {
+    this.api('ledger_detail', { case_id: caseId }).then(res => {
       const m = this.state.modal;
-      if (!m || m.kind !== 'case' || m.caseId !== c.id || !res || !res.ok || !res.data) return;
+      if (!m || m.kind !== 'case' || m.caseId !== caseId || !res || !res.ok || !res.data) return;
       const d = res.data;
       const photos = (d.files || []).filter(f => f.thumb_url).map(f => ({ src: f.thumb_url, full: f.thumb_url, drive: f.drive_file_id || null }));
       const journal = [];
@@ -2674,10 +3136,36 @@ class Component extends DCLogic {
         name: ((this._accounts && this._accounts[l.account_code]) || l.account_code) + (l.book_scope === 'inhouse_only' ? ' (งบร้าน)' : l.book_scope === 'statutory_only' ? ' (งบนิติ)' : ''),
         dr: +l.debit || 0, cr: +l.credit || 0
       })));
-      const DOCL = { payment_voucher: 'ใบสำคัญจ่าย', expense_certificate: 'ใบรับรองแทนใบเสร็จ' };
-      const docs = (d.documents || []).map(x => ({ name: (DOCL[x.type] || x.type) + ' ' + (x.doc_no || ''), sub: x.status === 'approved' ? 'เซ็นแล้ว ✓' : 'ร่าง รอเซ็น', pdfId: x.pdf_gdrive_id || null }));
-      this.setState({ modal: Object.assign({}, m, { photos, journal: journal.length ? journal : m.journal, docs }) });
+      const DOCL = { payment_voucher: 'ใบสำคัญจ่าย', expense_certificate: 'ใบรับรองแทนใบเสร็จ', receipt_substitute: 'ใบรับรองแทนใบเสร็จ' };
+      // เอกสารดูบนจอได้ทันที (สร้างจากข้อมูลใน Supabase — ไม่ต้องรอ Google Drive) + เซ็นได้จากตรงนี้เลย
+      const docs = (d.documents || []).map(x => ({
+        name: (DOCL[x.type] || x.type) + ' ' + (x.doc_no || ''),
+        sub: x.status === 'approved' ? 'เซ็นแล้ว ✓' + ((x.payload && x.payload.signed_by_name) ? ' โดย ' + x.payload.signed_by_name : '') : x.status === 'void' ? 'ยกเลิกแล้ว' : 'ร่าง รอเซ็น — เซ็นเมื่อไหร่ก็ได้',
+        subColor: x.status === 'approved' ? '#2B8A3E' : x.status === 'void' ? '#8A6D5C' : '#E67700',
+        canView: true, view: () => this.openLiveDoc(x),
+        canSign: x.status === 'draft', signNow: () => this.signDocNow(x.id, x.doc_no),
+        hasPdf: !!x.pdf_gdrive_id, pdfId: x.pdf_gdrive_id || null
+      }));
+      const liveCase = d.case || m.liveCase || null;
+      this.setState({ modal: Object.assign({}, m, { photos, journal: journal.length ? journal : m.journal, docs, liveCase }) });
     });
+  }
+  // เปิดดูเอกสารจริงบนจอ (ประกอบจาก payload ใน fin_documents — โชว์ได้ทันที Drive มีไว้เก็บ PDF เฉยๆ)
+  openLiveDoc(x) {
+    const pl = x.payload || {};
+    const DOCL = { payment_voucher: 'ใบสำคัญจ่าย', expense_certificate: 'ใบรับรองแทนใบเสร็จ', receipt_substitute: 'ใบรับรองแทนใบเสร็จ' };
+    const ent = this.entityById(x.entity_id);
+    const extra = [
+      pl.payment_method === 'cash' ? 'จ่ายสด (เครดิตเงินสด)' : (pl.payment_method ? 'จ่ายโอน (เครดิตธนาคาร)' : ''),
+      pl.reimburser ? 'สำรองจ่ายโดย: ' + pl.reimburser : '',
+      x.status === 'void' ? '⚠ เอกสารนี้ถูกยกเลิกแล้ว' : ''
+    ].filter(Boolean).join(' · ');
+    this.openModal({ kind: 'doc', d: {
+      type: DOCL[x.type] || x.type, id: x.doc_no || '', entity: pl.entity_name || (ent && ent.name) || this._entityName || '',
+      entityTaxId: pl.entity_tax_id || (ent && ent.tax_id) || '',
+      date: pl.date || '', payee: pl.payee || pl.vendor_name || '',
+      amount: +pl.total || 0, sigData: pl.signature_data || '', signedBy: pl.signed_by_name || '', extra
+    } });
   }
   casePdf(d) {
     if (d.pdfId) { window.open('https://drive.google.com/file/d/' + d.pdfId + '/view', '_blank'); return; }
@@ -2818,7 +3306,12 @@ class Component extends DCLogic {
       name: j.name, amtText: (j.dr ? 'Dr ' + fmt(j.dr) : 'Cr ' + fmt(j.cr)), color: j.dr ? '#2B8A3E' : '#D9480F'
     })) : [];
     const casePhotos = isCase ? (m.photos || []).map(p => ({ src: p.src, open: () => this.caseOpenFull(p) })) : [];
-    const caseDocs = isCase ? (m.docs || []).map(d => ({ name: d.name, sub: d.sub, pdf: () => this.casePdf(d) })) : [];
+    const caseDocs = isCase ? (m.docs || []).map(d => ({
+      name: d.name, sub: d.sub, subColor: d.subColor || '#B08968',
+      canView: !!d.view, view: d.view || null,
+      canSign: !!d.canSign, signNow: d.signNow || null,
+      hasPdf: !!d.pdfId, pdf: () => this.casePdf(d)
+    })) : [];
     const caseBadges = isCase ? (m.badges || []).map(t => { const [fg, bg] = this.statusTone(t); return { t, fg, bg }; }) : [];
 
     return {
@@ -2868,7 +3361,10 @@ class Component extends DCLogic {
       caseTitle: isCase ? m.title : '', caseSub: isCase ? m.sub : '',
       caseBadges, casePhotos, caseHasPhotos: casePhotos.length > 0,
       caseJournal, caseDocs, caseHasDocs: caseDocs.length > 0,
-      caseCanCancel: isCase && !!m.canCancel, caseCancel: isCase ? m.onCancel : null
+      caseCanCancel: isCase && !!m.canCancel, caseCancel: isCase ? m.onCancel : null,
+      // อัปหลักฐานเพิ่มย้อนหลังได้ตลอด (เฉพาะเคสจริงในระบบ)
+      caseCanAddEv: isCase && !!m.caseId && !!st.liveMode,
+      caseAddEv: isCase && m.caseId ? (e) => this.caseAddEvidence(m.caseId, (m.liveCase && m.liveCase.required_parts) || [], (m.liveCase && m.liveCase.collected_parts) || {}, e) : null
     };
   }
   exportDiaryCsv(ym, rows) {
@@ -2953,31 +3449,101 @@ class Component extends DCLogic {
     const EX = st.expense || { cat: '', amount: '', note: '', isAsset: false };
     const expCats = ['ค่าไฟฟ้า', 'ค่าน้ำประปา', 'ค่าเช่า', 'ค่าขนส่ง/เดินทาง', 'ค่าการตลาด', 'ค่าธรรมเนียมธนาคาร', 'เบ็ดเตล็ด'].map(c => ({ name: c, bg: EX.cat === c ? '#7048E8' : '#fff', fg: EX.cat === c ? '#fff' : '#8A6D5C', pick: () => this.expSet({ cat: c }) }));
 
-    const svc = st.svc || {};
     const H = st.health || null;
-    const healthKey = { line: 'line_configured', supabase: '__sb', drive: 'drive_configured', gemini: 'ai_configured' };
+    // สถานะบริการจริงจาก health ของเกตเวย์ — สวิตช์: รหัสผ่าน = เปิดหน้าเปลี่ยนรหัส · ตัวอื่น = เช็คซ้ำ
     const svcDefs = [
-      { key: 'line', name: 'LINE LIFF', need: 'LIFF ID + Channel token · จำเป็นตอน deploy' },
-      { key: 'supabase', name: 'Supabase', need: 'ฐานข้อมูล + ไฟล์ย่อ WebP · แกนระบบ' },
-      { key: 'drive', name: 'Google Drive', need: 'เก็บไฟล์ต้นฉบับ ≥5 ปี' },
-      { key: 'gemini', name: 'Gemini · AI อ่านบิล', need: 'เสริม — ไม่ใส่ก็ใช้ระบบได้เต็ม' }
+      { key: 'pass', name: 'รหัสผ่านแอป', need: 'รหัสเดียวใช้ 2 คน · แตะสวิตช์เพื่อเปลี่ยนรหัส', hk: 'password_configured' },
+      { key: 'supabase', name: 'Supabase', need: 'ฐานข้อมูล + ไฟล์ย่อ WebP · แกนระบบ', hk: '__sb' },
+      { key: 'drive', name: 'Google Drive', need: 'เก็บไฟล์ต้นฉบับ ≥5 ปี (รอใส่ key)', hk: 'drive_configured' },
+      { key: 'gemini', name: 'Gemini · AI อ่านบิล', need: 'ต้องตั้ง GEMINI_API_KEY ใน Supabase Secrets', hk: 'ai_configured' }
     ];
     const svcList = svcDefs.map(s => {
-      const real = H ? (healthKey[s.key] === '__sb' ? true : !!H[healthKey[s.key]]) : null;
-      const on = real === null ? !!svc[s.key] : real;
+      const on = H ? (s.hk === '__sb' ? true : !!H[s.hk]) : false;
       return {
         name: s.name, need: s.need,
-        statusText: real === null
-          ? (svc[s.key] ? 'เชื่อมต่อแล้ว ✓ (สาธิต)' : 'ยังไม่เชื่อม (ระบบทำงานได้)')
-          : (on ? 'เชื่อมต่อจริงแล้ว ✓' : 'ยังไม่ตั้งค่า key (ระบบทำงานได้)'),
+        statusText: H ? (on ? 'เชื่อมต่อจริงแล้ว ✓' : 'ยังไม่ตั้งค่า (ระบบส่วนอื่นทำงานได้)') : 'กำลังเช็ค…',
         statusColor: on ? '#2B8A3E' : '#B08968',
         bg: on ? '#37B24D' : '#D9C6B2', knob: on ? '32px' : '4px',
-        toggle: () => this.toggleSvc(s.key)
+        toggle: s.key === 'pass' ? this.openPassChange : () => { this.refreshHealth(); this.pop(on ? 'เชื่อมต่ออยู่ ✓' : 'ตั้งค่า key ใน Supabase Secrets แล้วแตะ "ตรวจการเชื่อมต่อ"'); }
       };
     });
 
     const m = st.modal; const isHist = !!m && m.kind === 'history';
+    // ── กราฟราคาเนื้อสัตว์/วัตถุดิบ (จาก fin_liff_stats.prices) ──
+    const prices = (st.stats && Array.isArray(st.stats.prices)) ? st.stats.prices : [];
+    const topItems = (st.stats && Array.isArray(st.stats.top_items)) ? st.stats.top_items : [];
+    const months = []; prices.forEach(p => { if (months.indexOf(p.ym) < 0) months.push(p.ym); }); months.sort();
+    const byItem = {}; prices.forEach(p => { (byItem[p.name] = byItem[p.name] || {})[p.ym] = +p.avg_price || 0; });
+    const allNames = topItems.map(t => t.name).filter(n => byItem[n]);
+    const hiddenP = st.priceHidden || {};
+    const selNames = allNames.filter(n => !hiddenP[n]).slice(0, 9);
+    let pMin = Infinity, pMax = -Infinity;
+    selNames.forEach(n => months.forEach(ym => { const v = byItem[n][ym]; if (v != null) { pMin = Math.min(pMin, v); pMax = Math.max(pMax, v); } }));
+    if (!isFinite(pMin)) { pMin = 0; pMax = 1; }
+    if (pMax - pMin < 1) pMax = pMin + 1;
+    const PC = ['#F76707', '#7048E8', '#2B8A3E', '#1971C2', '#E64980', '#B08968', '#0CA678', '#9C36B5', '#E67700'];
+    const xOf = (i) => months.length < 2 ? 170 : Math.round(8 + i * (324 / (months.length - 1)));
+    const yOf = (v) => Math.round(160 - ((v - pMin) / (pMax - pMin)) * 148);
+    const priceLines = selNames.map((n, i) => ({
+      pts: months.map((ym, mi) => byItem[n][ym] != null ? xOf(mi) + ',' + yOf(byItem[n][ym]) : null).filter(Boolean).join(' '),
+      color: PC[i % PC.length]
+    })).filter(s => s.pts.indexOf(' ') > 0 || selNames.length === 1);
+    const lastPriceOf = (n) => { for (let i = months.length - 1; i >= 0; i--) { const v = byItem[n][months[i]]; if (v != null) return v; } return null; };
+    const priceChips = allNames.map((n, i) => {
+      const on = !hiddenP[n]; const lp = lastPriceOf(n);
+      return { name: n, priceText: lp != null ? '฿' + lp : '', toggle: () => this.togglePriceLine(n),
+        on, bg: on ? '#FFF8F0' : '#fff', fg: on ? '#3D2C29' : '#B8A08D', border: on ? '#FFB27D' : '#EFE4D6',
+        dot: on ? PC[allNames.filter(x => !hiddenP[x]).slice(0, 9).indexOf(n) % PC.length] || '#D9C6B2' : '#D9C6B2' };
+    });
+    const HM = window.KK_HELPERS;
+    // ── AI: modal เลือกโหมดหลายรูป + คิวบิลถัดไป ──
+    const isAiMode = !!m && m.kind === 'aimode';
+    // ── จัดการของใช้บ่อย ──
+    const isFreqCfg = !!m && m.kind === 'freqcfg';
+    let freqCfgRows = [], freqCfgVendorName = '';
+    if (isFreqCfg) {
+      const fv = this.vendorById(m.vendorId); freqCfgVendorName = fv.name;
+      const fInfo = this.freqForVendor(m.vendorId);
+      const pins = (st.freqPins || {})[m.vendorId] || []; const hides = (st.freqHides || {})[m.vendorId] || [];
+      freqCfgRows = (fv.items || []).map(it => {
+        const s = fInfo.byName[it.name]; const pct = (s && fInfo.bills) ? Math.round(s.bills / fInfo.bills * 100) : 0;
+        const stt = pins.indexOf(it.name) >= 0 ? 'pin' : hides.indexOf(it.name) >= 0 ? 'hide' : 'auto';
+        const inSet = stt === 'pin' || (stt === 'auto' && pct >= fInfo.th && (s ? +s.bills : 0) >= 2);
+        return { name: it.name,
+          statText: (s ? ('ซื้อ ' + s.bills + '/' + fInfo.bills + ' บิล (' + pct + '%)') : 'ยังไม่มีสถิติ') + (inSet ? ' · อยู่ในชุด ✓' : ''),
+          border: inSet ? '#8CE99A' : '#F1E4D4',
+          stateLabel: stt === 'pin' ? '📌 ปักหมุด' : stt === 'hide' ? 'ซ่อนไว้' : 'อัตโนมัติ',
+          stateBg: stt === 'pin' ? '#FFF3BF' : stt === 'hide' ? '#F1EAE1' : '#E7F5FF',
+          stateFg: stt === 'pin' ? '#B35C00' : stt === 'hide' ? '#8A6D5C' : '#1971C2',
+          cycle: () => this.cycleFreqState(m.vendorId, it.name) };
+      });
+    }
     return {
+      /* login + สถานะระบบ (รหัสผ่านแอปแทน LINE) */
+      isLocked: !!st.locked,
+      loginPwVal: st.loginPw || '', loginPwType: st.loginPwShow ? 'text' : 'password',
+      onLoginPw: (e) => this.setState({ loginPw: e.target.value, loginMsg: '' }),
+      onLoginKey: (e) => { if (e.key === 'Enter') this.doPassLogin(); },
+      toggleLoginEye: () => this.setState({ loginPwShow: !st.loginPwShow }),
+      loginEyeColor: st.loginPwShow ? '#2f7355' : '#7d8d83',
+      loginMsg: st.loginMsg || '', loginMsgColor: st.loginMsgTone === 'ok' ? '#1f5d44' : '#b4543f',
+      doPassLogin: this.doPassLogin, enterDemo: this.enterDemo,
+      showDemoLink: !!this._inPreview, openPassChange: this.openPassChange,
+      /* AI หลายรูป + คิวบิล */
+      modalIsAiMode: isAiMode, aiModeCount: isAiMode ? (m.n || 2) : 0,
+      aiPickOne: () => this.aiModePick('one'), aiPickMany: () => this.aiModePick('many'),
+      hasAiQueue: (st.aiQueue || []).length > 0, aiQueueCount: (st.aiQueue || []).length, nextAiBill: this.nextAiBill,
+      /* จัดการของใช้บ่อย */
+      modalIsFreqCfg: isFreqCfg, freqCfgVendor: freqCfgVendorName, freqCfgRows,
+      freqThresholdVal: String(st.freqThreshold || 60),
+      onFreqThreshold: (e) => this.setState({ freqThreshold: Math.max(1, Math.min(100, +e.target.value || 60)) }, () => this.persistFreqCfg()),
+      /* กราฟราคา */
+      priceEmpty: priceLines.length === 0, priceHasData: priceLines.length > 0,
+      priceLines, priceChips,
+      priceMaxText: '฿' + Math.round(pMax) + ' /หน่วย', priceMinText: '฿' + Math.round(pMin),
+      priceMonthsText: months.length ? (HM ? (HM.ymShort(months[0]) + ' → ' + HM.ymShort(months[months.length - 1])) : '') : '',
+      /* ลิสต์รวม */
+      listLoading: !!st.listLoading,
       startMulti: this.startMulti, startExpense: this.startExpense,
       isMulti: st.screen === 'multi', isExpense: st.screen === 'expense',
       backHome: () => this.setState({ screen: 'home' }),
@@ -3002,14 +3568,13 @@ class Component extends DCLogic {
       liveMode: !!st.liveMode, lineName: st.lineName || null,
       connBadge: st.liveMode ? ('เชื่อมระบบจริง' + (st.lineName ? ' · ' + st.lineName : '')) : 'โหมดสาธิต (ยังไม่ได้เข้าสู่ระบบ)',
       appModeText: st.inLine ? 'เปิดผ่านแอป LINE อยู่' : (st.installed ? 'เปิดจากไอคอนบนหน้าจอ' : 'เปิดบนเว็บเบราว์เซอร์'),
-      loginBadge: st.liveMode ? ('เข้าสู่ระบบแล้ว' + (st.lineName ? ' · ' + st.lineName : '')) : 'ยังไม่ได้เข้าสู่ระบบ (โหมดสาธิต)',
+      loginBadge: st.liveMode ? 'เข้าสู่ระบบแล้ว · ต่อระบบจริง' : 'โหมดสาธิต (ยังไม่ได้ใส่รหัส)',
       loginBadgeBg: st.liveMode ? '#37B24D' : '#B08968',
-      showLogin: !st.liveMode && st.canLogin !== false,
-      showLogout: !!st.liveMode,
+      showLogout: !st.locked,
       showInstall: !!st.canInstall,
       showIOSHint: !!st.isIOS && !st.canInstall && !st.installed,
       isInstalled: !!st.installed,
-      doLogin: this.loginLine, doLogout: this.logoutLine, doInstall: this.installApp,
+      doLogout: this.logoutApp, doInstall: this.installApp,
       connBadgeBg: st.liveMode ? '#37B24D' : '#B08968',
       checkConn: () => { this.refreshHealth(); this.pop('กำลังตรวจการเชื่อมต่อ backend…'); },
       modalIsHistory: isHist, histTitle: isHist ? m.title : '', histRows: isHist ? m.hist : []
@@ -3025,7 +3590,8 @@ class Component extends DCLogic {
     const orange = '#F76707', dim = '#C9AD97';
 
     /* ---- home ---- */
-    const monthOut = (st.liveMode && st.agg) ? (+st.agg.month_out || 0)
+    // โหมดจริง = ไม่มีตัวเลขปลอม: ยังไม่ได้ค่าจากระบบ ให้เป็น 0 ไปก่อน (ห้ามตกไปใช้ค่าสาธิต)
+    const monthOut = st.liveMode ? (st.agg ? (+st.agg.month_out || 0) : 0)
       : 48620 + db.purchases.filter(p => p.date === 'วันนี้' && p.status !== 'ร่าง').reduce((a, p) => a + p.total, 0);
     const statusStyle = (s) => s === 'เสร็จสมบูรณ์' ? ['#2B8A3E', '#EBFBEE'] : s === 'รออนุมัติ' ? ['#E67700', '#FFF9DB'] : s === 'ยกเลิกแล้ว' ? ['#8A6D5C', '#F1EAE1'] : s === 'รอรับของ' ? ['#1971C2', '#E7F5FF'] : ['#9C36B5', '#F8F0FC'];
     const pView = (p) => {
@@ -3033,7 +3599,8 @@ class Component extends DCLogic {
       return {
         id: p.id, logo: p.isExpense ? 'assets/icons/icon_document_folder.webp' : v.logo, vendorName: p.isExpense ? (p.expName || 'ค่าใช้จ่าย') : v.name, date: p.date, route: p.route, totalText: this.fmt(p.total),
         status: p.status, statusColor: c, statusBg: b, isAsset: !!p.isAsset,
-        openHistory: () => this.openHistory(p),
+        openHistory: () => this.openHistory(p), hasHistory: true,
+        canOpen: false, open: null, canAddEv: false, addEv: null,
         canCancel: p.status !== 'ยกเลิกแล้ว' && p.status !== 'ร่าง', cancel: () => this.cancelPurchase(p),
         hasMissing: p.missing.length > 0, missingText: p.missing.join(' · '),
         onFill: (e) => this.readFiles(e, (url) => {
@@ -3125,9 +3692,16 @@ class Component extends DCLogic {
     const lines = this.cartLines();
     const summaryLines = lines.map(l => ({ name: l.it.name, qtyText: l.qty + ' ' + l.it.unit, amtText: this.fmt(l.qty * l.price) }));
 
+    const freqInfo = this.freqForVendor(st.cart.vendorId);
+
     /* ---- list ---- */
     const tabs = ['ทั้งหมด', 'ร่าง', 'รับของ', 'เสร็จสมบูรณ์'];
-    const tabCount = (t) => t === 'รับของ' ? st.receives.length : db.purchases.filter(p => t === 'ทั้งหมด' || p.status === t).length;
+    // แท็บ "ร่าง" = ตะกร้ารอจับคู่ (ยังขาดหลักฐาน) · "เสร็จสมบูรณ์" = ออกเอกสาร/ปิดเคสแล้ว
+    const liveTabOf = (s) => s === 'รอหลักฐาน' ? 'ร่าง' : s === 'ยกเลิกแล้ว' ? 'ยกเลิกแล้ว' : 'เสร็จสมบูรณ์';
+    const liveCases = (st.liveMode && Array.isArray(st.liveList)) ? st.liveList : null;
+    const tabCount = (t) => t === 'รับของ' ? st.receives.length
+      : liveCases ? liveCases.filter(c => t === 'ทั้งหมด' || liveTabOf(this.caseStatusTh(c.status)) === t).length
+      : db.purchases.filter(p => t === 'ทั้งหมด' || p.status === t).length;
     const listTabs = tabs.map(t => ({
       name: (t === 'ร่าง' ? 'ตะกร้ารอจับคู่' : t) + ' (' + tabCount(t) + ')',
       bg: st.listTab === t ? '#FF8A3D' : '#fff', fg: st.listTab === t ? '#fff' : '#8A6D5C',
@@ -3135,10 +3709,35 @@ class Component extends DCLogic {
     }));
     const listIsReceive = st.listTab === 'รับของ';
     const lsearch = (st.listSearch || '').trim();
-    const purchasesView = db.purchases
-      .filter(p => (st.listTab === 'ทั้งหมด' || p.status === st.listTab)
-        && (!lsearch || [p.id, p.route || '', (p.isExpense ? (p.expName || '') : this.vendorById(p.vendorId).name)].join(' ').indexOf(lsearch) >= 0))
-      .map(pView);
+    // โหมดจริง: ลิสต์รวมมาจาก ledger_query (ทุกรายการที่บันทึกไว้) · โหมดสาธิตใช้ข้อมูลตัวอย่าง
+    const liveRows = (st.liveMode && Array.isArray(st.liveList)) ? st.liveList.map(c => {
+      const label = this.caseStatusTh(c.status);
+      const [fg, bg] = this.statusTone(label);
+      const vmock = Object.keys(this._vmap || {}).find(k => this._vmap[k] === c.vendor_id);
+      const v = vmock ? this.vendorById(vmock) : null;
+      const req = c.required_parts || []; const got = c.collected_parts || {};
+      const miss = (Array.isArray(req) ? req : []).filter(p => !got[p]).map(p => p === 'slip' ? 'สลิปโอน' : p === 'vendor_doc' ? 'ใบเสร็จ/ใบกำกับ' : p);
+      return {
+        id: c.case_no || '', logo: (v && v.logo) || 'assets/icons/icon_document_folder.webp',
+        vendorName: c.vendor_name || (v && v.name) || 'รายการ',
+        date: (window.KK_HELPERS ? KK_HELPERS.dayLabel(String(c.created_at || '').slice(0, 10)) : String(c.created_at || '').slice(0, 10)),
+        route: this.beRouteLabel(c.intake_route), totalText: this.fmt(+c.total || 0),
+        status: label, statusColor: fg, statusBg: bg, isAsset: false,
+        hasHistory: false, openHistory: null,
+        canOpen: true, open: () => this.openCase({ live: c, vendorName: c.vendor_name || (v && v.name) || 'รายการ', iso: String(c.created_at || '').slice(0, 10), route: this.beRouteLabel(c.intake_route), status: label, total: +c.total || 0 }),
+        canAddEv: c.status !== 'cancelled', addEv: (e) => this.caseAddEvidence(c.id, req, got, e),
+        canCancel: c.status !== 'cancelled', cancel: () => this.cancelCaseLive(c.id),
+        hasMissing: miss.length > 0, missingText: miss.join(' · '),
+        onFill: (e) => this.caseAddEvidence(c.id, req, got, e)
+      };
+    }) : null;
+    const purchasesView = liveRows
+      ? liveRows.filter(r => (st.listTab === 'ทั้งหมด' || liveTabOf(r.status) === st.listTab)
+          && (!lsearch || [r.id, r.route || '', r.vendorName].join(' ').indexOf(lsearch) >= 0))
+      : db.purchases
+        .filter(p => (st.listTab === 'ทั้งหมด' || p.status === st.listTab)
+          && (!lsearch || [p.id, p.route || '', (p.isExpense ? (p.expName || '') : this.vendorById(p.vendorId).name)].join(' ').indexOf(lsearch) >= 0))
+        .map(pView);
 
     const receivesView = st.receives.map(j => {
       const v = this.vendorById(j.vendorId);
@@ -3285,19 +3884,43 @@ class Component extends DCLogic {
       isHome: st.screen === 'home', isList: st.screen === 'list', isApprove: st.screen === 'approve',
       isDash: st.screen === 'dash', isData: st.screen === 'data', isSettings: st.screen === 'settings',
       isSuccess: st.screen === 'success', inBuy: st.screen === 'buy',
-      goHome: go('home'), goList: go('list'), goApprove: go('approve'), goDash: go('dash'), goData: go('data'), goSettings: go('settings'),
-      goReceive: () => this.setState({ screen: 'list', listTab: 'รับของ' }),
-      goDraftTab: () => this.setState({ screen: 'list', listTab: 'ร่าง' }),
+      goHome: go('home'),
+      goList: () => { this.setState({ screen: 'list', buyStep: 0, dataVendorId: null }); this.fetchLiveList(true); },
+      goApprove: () => { this.setState({ screen: 'approve', buyStep: 0, dataVendorId: null }); this.refreshApprove(); },
+      goDash: go('dash'), goData: go('data'), goSettings: go('settings'),
+      goReceive: () => { this.setState({ screen: 'list', listTab: 'รับของ' }); this.fetchLiveList(true); },
+      goDraftTab: () => { this.setState({ screen: 'list', listTab: 'ร่าง' }); this.fetchLiveList(true); },
       startBuy: this.startBuy,
 
       monthOutText: this.fmt(monthOut),
-      nApprove: st.drafts.length, nReceive: st.receives.length, nDraft: db.purchases.filter(p => p.status === 'ร่าง').length,
-      recent3: db.purchases.slice(0, 3).map(pView),
+      // ป้ายกระดิ่ง = งานค้างจริง (รออนุมัติ + ค้างรับของ + เคสรอหลักฐาน) · 0 = ซ่อนป้าย
+      bellCount: String(st.drafts.length + st.receives.length + ((st.liveMode && Array.isArray(st.liveList)) ? st.liveList.filter(c => c.status === 'waiting').length : (st.db ? st.db.purchases.filter(p => p.status === 'ร่าง').length : 0))),
+      hasBell: (st.drafts.length + st.receives.length + ((st.liveMode && Array.isArray(st.liveList)) ? st.liveList.filter(c => c.status === 'waiting').length : (st.db ? st.db.purchases.filter(p => p.status === 'ร่าง').length : 0))) > 0,
+      nApprove: st.drafts.length, nReceive: st.receives.length,
+      nDraft: (st.liveMode && Array.isArray(st.liveList)) ? st.liveList.filter(c => c.status === 'waiting').length : db.purchases.filter(p => p.status === 'ร่าง').length,
+      // โหมดจริง: รายการล่าสุดมาจากระบบจริงเสมอ (ไม่ใช่สำเนาในเครื่อง) — ลบในระบบแล้วหน้าแรกต้องหายตาม
+      recent3: (st.liveMode && Array.isArray(st.liveList))
+        ? st.liveList.slice(0, 3).map(c => {
+            const label = this.caseStatusTh(c.status); const [fg, bg] = this.statusTone(label);
+            const vmock = Object.keys(this._vmap || {}).find(k => this._vmap[k] === c.vendor_id);
+            const v = vmock ? this.vendorById(vmock) : null;
+            return { logo: (v && v.logo) || 'assets/icons/icon_document_folder.webp',
+              vendorName: c.vendor_name || (v && v.name) || 'รายการ',
+              date: (window.KK_HELPERS ? KK_HELPERS.dayLabel(String(c.created_at || '').slice(0, 10)) : ''),
+              route: this.beRouteLabel(c.intake_route), totalText: this.fmt(+c.total || 0),
+              status: label, statusColor: fg, statusBg: bg };
+          })
+        : db.purchases.slice(0, 3).map(pView),
       // การ์ดร้านซื้อบ่อยหน้าแรก — แตะแล้วเข้า flow ซื้อของร้านนั้นทันที
       homeVendors: db.vendors.slice()
         .sort((a, b) => (a.freq === 'ซื้อบ่อย' ? 0 : 1) - (b.freq === 'ซื้อบ่อย' ? 0 : 1))
         .slice(0, 9)
         .map(v => ({ name: v.name, logo: v.logo, isFreq: v.freq === 'ซื้อบ่อย', meta: 'สินค้า ' + (v.items || []).length + ' รายการ', buy: () => this.startBuyVendor(v.id) })),
+
+      // ชุด "ของที่ซื้อประจำร้านนี้" (สถิติจากบิลจริง) — ใส่ทั้งชุดทีเดียว
+      hasFreqSet: freqInfo.rows.length > 0, freqSetCount: freqInfo.rows.length,
+      freqSetDesc: freqInfo.rows.slice(0, 4).map(r => r.it.name).join(' · ') + (freqInfo.rows.length > 4 ? ' …' : ''),
+      applyFreqSet: this.applyFreqSet, openFreqCfg: this.openFreqCfg,
 
       buyTitle: buyTitles[step] || '', inBuyPair: pairAges[step],
       buyPairA: 'assets/poses2/boypink_07.png', buyPairB: 'assets/poses2/girlbaby_08.png',
@@ -3326,6 +3949,14 @@ class Component extends DCLogic {
       sumEvText: evAllDone ? 'ครบทุกชิ้น ✓' : 'ขาด ' + this.evMissing().length + ' ชิ้น (เติมภายหลังได้ · กดยืนยันลงบัญชีได้เลย)',
       payerOpts: entOpts, payerVal: payerId, payerName: payerEnt.name || '—', payerMeta: payerMetaText,
       onPayer: (e) => this.setState({ cart: Object.assign({}, st.cart, { payerId: e.target.value }) }),
+      // วิธีจ่าย (สด/โอน) → ผูกบัญชีเครดิตที่ backend · ผู้สำรองจ่าย (ไม่บังคับ)
+      payChips: [{ k: 'cash', n: '💵 จ่ายสด' }, { k: 'transfer', n: '🏦 โอน/บัตร' }].map(o => {
+        const on = this.cartPay() === o.k;
+        return { name: o.n, bg: on ? '#FF8A3D' : '#fff', fg: on ? '#fff' : '#8A6D5C', border: on ? '#FF8A3D' : '#FFD8A8',
+          pick: () => this.setState({ cart: Object.assign({}, st.cart, { pay: o.k }) }) };
+      }),
+      reimburserVal: (st.cart && st.cart.reimburser) || '',
+      onReimburser: (e) => this.setState({ cart: Object.assign({}, st.cart, { reimburser: e.target.value }) }),
       confirmBuy: this.confirmBuy,
       successTitle: st.success ? st.success.title : '', successDesc: st.success ? st.success.desc : '',
 
@@ -3381,7 +4012,7 @@ class Component extends DCLogic {
       resetData: () => { if (window.confirm('ล้างข้อมูลทดลองทั้งหมด กลับค่าตั้งต้น?')) { localStorage.removeItem('kk_liff_v1'); this.loadDB(); this.pop('กลับค่าตั้งต้นแล้ว'); } },
 
       hasModal: !!m, closeModal: this.closeModal, stopClick: this.stopClick, modalSave: this.modalSave,
-      modalIsForm: !!m && (m.kind === 'vendor' || m.kind === 'item' || m.kind === 'price' || m.kind === 'rule' || m.kind === 'entity'),
+      modalIsForm: !!m && (m.kind === 'vendor' || m.kind === 'item' || m.kind === 'price' || m.kind === 'rule' || m.kind === 'entity' || m.kind === 'passchange'),
       modalIsDoc: !!m && m.kind === 'doc', modalIsSign: !!m && m.kind === 'sign',
       modalTitle: m ? m.title : '', modalFields,
       modalHasImgField: !!m && (m.kind === 'vendor' || m.kind === 'item'),
@@ -3395,6 +4026,12 @@ class Component extends DCLogic {
       docEntityTax: m && m.d && m.d.entityTaxId ? ('เลขภาษีผู้จ่าย ' + m.d.entityTaxId) : '', docHasEntityTax: !!(m && m.d && m.d.entityTaxId),
       docDate: m && m.d ? m.d.date : '', docPayee: m && m.d ? m.d.payee : '',
       docAmountText: m && m.d ? this.fmt(m.d.amount) : '', docAmountWords: m && m.d ? thaiBaht(m.d.amount) : '',
+      docHasExtra: !!(m && m.d && m.d.extra), docExtraText: (m && m.d && m.d.extra) || '',
+      // ลายเซ็นในเอกสาร: ของจริงมาจาก payload (เซ็นแล้ว) · ยังไม่เซ็น = โชว์ข้อความว่าจะแปะตอนอนุมัติ
+      docHasSig: !!(m && m.d && (m.d.sigData || (!m.d.signedBy && ((this.signersList()[0] || {}).sig || st.sig)))),
+      docNoSig: !(m && m.d && (m.d.sigData || (!m.d.signedBy && ((this.signersList()[0] || {}).sig || st.sig)))),
+      docSigThumb: (m && m.d && (m.d.sigData || (!m.d.signedBy && ((this.signersList()[0] || {}).sig || st.sig)))) || '',
+      docHasSignedBy: !!(m && m.d && m.d.signedBy), docSignedBy: (m && m.d && m.d.signedBy) ? ('เซ็นโดย ' + m.d.signedBy) : '',
 
       navHomeC: navC('home'), navHomeF: navF('home'),
       navListC: (st.screen === 'diary' || st.screen === 'list') ? '#F76707' : '#B8A08D',
