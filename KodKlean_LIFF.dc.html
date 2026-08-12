@@ -206,16 +206,21 @@
       </div>
       <div style="display:flex;flex-direction:column;gap:10px">
         <sc-for list="{{ recent3 }}" as="p" hint-placeholder-count="3">
-          <div style="background:#fff;border-radius:18px;padding:12px 14px;box-shadow:0 3px 10px rgba(255,140,90,.1);display:flex;align-items:center;gap:12px">
-            <img src="{{ p.logo }}" alt="" style="width:46px;height:46px;object-fit:contain;border-radius:12px;background:#FFF8F0;padding:3px">
-            <div style="flex:1;min-width:0">
-              <div style="font-size:16px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.vendorName }}</div>
-              <div style="font-size:13px;font-weight:600;color:#B08968">{{ p.date }} · {{ p.route }}</div>
+          <div style="background:#fff;border-radius:18px;padding:12px 14px;box-shadow:0 3px 10px rgba(255,140,90,.1)">
+            <div style="display:flex;align-items:center;gap:12px">
+              <img src="{{ p.logo }}" alt="" style="width:46px;height:46px;object-fit:contain;border-radius:12px;background:#FFF8F0;padding:3px">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:16px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.vendorName }}</div>
+                <div style="font-size:13px;font-weight:600;color:#B08968">{{ p.date }} · {{ p.route }}</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:17px;font-weight:900">{{ p.totalText }}</div>
+                <div style="font-size:12px;font-weight:800;color:{{ p.statusColor }};background:{{ p.statusBg }};border-radius:999px;padding:2px 10px;display:inline-block">{{ p.status }}</div>
+              </div>
             </div>
-            <div style="text-align:right">
-              <div style="font-size:17px;font-weight:900">{{ p.totalText }}</div>
-              <div style="font-size:12px;font-weight:800;color:{{ p.statusColor }};background:{{ p.statusBg }};border-radius:999px;padding:2px 10px;display:inline-block">{{ p.status }}</div>
-            </div>
+            <sc-if value="{{ p.hasItems }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:8px;background:#FFF8F0;border-radius:14px;padding:8px 11px;font-size:13px;font-weight:700;color:#5C4438;line-height:1.45;text-wrap:pretty">{{ p.itemsText }}</div>
+            </sc-if>
           </div>
         </sc-for>
       </div>
@@ -643,7 +648,42 @@
         <div style="font-size:17px;font-weight:800;margin-bottom:8px">หมายเหตุ (เว้นว่างได้)</div>
         <input value="{{ expNoteVal }}" onChange="{{ onExpNote }}" placeholder="เช่น ค่าไฟเดือน ก.ค. สาขาลาดพร้าว" style="width:100%;box-sizing:border-box;border:2px solid #FFD8A8;border-radius:14px;padding:12px 14px;font-size:16px;font-weight:600;outline:none">
       </div>
-      <div style="background:#E7F5FF;border-radius:16px;padding:12px 16px;font-size:14px;font-weight:700;color:#1864AB">ระบบจะสร้างใบสำคัญจ่าย + ลงบัญชีให้อัตโนมัติ (แนบสลิปทีหลังได้ · never block)</div>
+      <div style="background:#fff;border-radius:20px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.12)">
+        <div style="font-size:17px;font-weight:800;margin-bottom:2px">เอกสารที่มีในมือ?</div>
+        <div style="font-size:13px;font-weight:600;color:#B08968;margin-bottom:10px">ค่าน้ำ/ไฟ/เช่า บิลมักเป็นชื่อเจ้าของตึก — ระบบออกเอกสารรองรับให้ถูกแบบ ไม่เป็นตัวเลขลอย</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ expDocCards }}" as="c" hint-placeholder-count="3">
+            <button onClick="{{ c.pick }}" style="background:#fff;border:3px solid {{ c.border }};border-radius:16px;padding:11px 14px;cursor:pointer;text-align:left">
+              <div style="font-size:15px;font-weight:800">{{ c.title }}</div>
+              <div style="font-size:13px;font-weight:600;color:#B08968">{{ c.desc }}</div>
+            </button>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <sc-for list="{{ expPayChips }}" as="c" hint-placeholder-count="2">
+            <button onClick="{{ c.pick }}" style="flex:1;border:2px solid {{ c.border }};border-radius:14px;padding:10px 8px;font-size:15px;font-weight:800;cursor:pointer;background:{{ c.bg }};color:{{ c.fg }}">{{ c.name }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="background:#fff;border-radius:20px;padding:14px 16px;box-shadow:0 3px 12px rgba(255,140,90,.12)">
+        <div style="font-size:16px;font-weight:800;margin-bottom:2px">แนบหลักฐาน (ไม่บังคับ · เติมทีหลังได้)</div>
+        <div style="font-size:13px;font-weight:600;color:#B08968;margin-bottom:8px">บิล / สลิปโอน / สัญญาเช่า — แนบได้หลายรูป · HEIC แปลงให้เอง</div>
+        <sc-if value="{{ expHasEv }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:8px;overflow-x:auto;margin-bottom:8px;padding-top:4px">
+            <sc-for list="{{ expEvThumbs }}" as="t" hint-placeholder-count="2">
+              <div style="position:relative;flex-shrink:0">
+                <img src="{{ t.src }}" alt="" style="width:62px;height:62px;object-fit:cover;border-radius:12px;display:block">
+                <button onClick="{{ t.del }}" style="position:absolute;top:-6px;right:-6px;width:22px;height:22px;border:2px solid #fff;border-radius:999px;background:#E8590C;color:#fff;font-size:11px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">✕</button>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <label style="display:flex;align-items:center;justify-content:center;gap:8px;background:#FFF8F0;border:2px dashed #FFB27D;border-radius:12px;padding:10px;cursor:pointer">
+          <input type="file" accept="image/*,.heic,.heif" multiple="multiple" onChange="{{ onExpEv }}" style="display:none">
+          <span style="font-size:14px;font-weight:800;color:#F76707">+ ถ่ายรูป / เลือกรูป (หลายรูปได้)</span>
+        </label>
+      </div>
+      <div style="background:#E7F5FF;border-radius:16px;padding:12px 16px;font-size:14px;font-weight:700;color:#1864AB">{{ expDocNote }}</div>
       <button onClick="{{ confirmExpense }}" style="background:linear-gradient(135deg,#37B24D,#2B8A3E);color:#fff;border:none;border-radius:18px;padding:16px;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 6px 18px rgba(43,138,62,.35)">บันทึกค่าใช้จ่าย ✓</button>
     </div>
   </div>
@@ -725,6 +765,9 @@
               <div style="font-size:12px;font-weight:800;color:{{ d.statusColor }};background:{{ d.statusBg }};border-radius:999px;padding:2px 10px;display:inline-block">{{ d.status }}</div>
             </div>
           </div>
+          <sc-if value="{{ d.hasItems }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:8px;background:#FFF8F0;border-radius:14px;padding:9px 12px;font-size:14px;font-weight:700;color:#5C4438;line-height:1.45;text-wrap:pretty">{{ d.itemsText }}</div>
+          </sc-if>
           <sc-if value="{{ d.hasThumbs }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;gap:6px;margin-top:8px;overflow-x:auto">
               <sc-for list="{{ d.thumbs }}" as="t" hint-placeholder-count="3">
@@ -913,7 +956,7 @@
 
     <sc-if value="{{ listIsPurchases }}" hint-placeholder-val="{{ true }}">
     <div style="display:flex;gap:8px;padding:12px 16px 0 16px;align-items:center">
-      <input value="{{ listSearchVal }}" onInput="{{ onListSearch }}" placeholder="ค้นหา ร้าน / เลขที่ / เอกสาร" style="flex:1;min-width:0;border:2px solid #FFE0C2;border-radius:14px;padding:11px 14px;font-size:15px;background:#fff;color:#3D2C29;box-sizing:border-box">
+      <input value="{{ listSearchVal }}" onInput="{{ onListSearch }}" placeholder="ค้นหา ชื่อสินค้า / ร้าน / เลขที่" style="flex:1;min-width:0;border:2px solid #FFE0C2;border-radius:14px;padding:11px 14px;font-size:15px;background:#fff;color:#3D2C29;box-sizing:border-box">
       <button onClick="{{ exportCsv }}" style="flex-shrink:0;border:none;border-radius:14px;padding:11px 15px;font-size:15px;font-weight:800;background:#37B24D;color:#fff;cursor:pointer">⬇ Excel/CSV</button>
     </div>
     </sc-if>
@@ -963,6 +1006,30 @@
       </div>
     </sc-if>
 
+    <sc-if value="{{ hasItemHits }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:12px 16px 0 16px;display:flex;flex-direction:column;gap:10px">
+        <sc-for list="{{ itemHits }}" as="h" hint-placeholder-count="1">
+          <div style="background:#F3F0FF;border:2px solid #D0BFFF;border-radius:20px;padding:14px">
+            <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
+              <div style="font-size:17px;font-weight:900;color:#5F3DC4">{{ h.name }}</div>
+              <div style="font-size:14px;font-weight:800;color:#7048E8">{{ h.priceText }}</div>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:#6741D9;margin-top:2px">{{ h.countText }} · {{ h.lastText }}</div>
+            <div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">
+              <sc-for list="{{ h.buys }}" as="b" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;gap:8px;background:#fff;border-radius:12px;padding:8px 11px">
+                  <div style="font-size:14px;font-weight:800;color:#5C4438;flex-shrink:0">{{ b.dateText }}</div>
+                  <div style="font-size:13px;font-weight:700;color:#B08968;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ b.vendorName }}</div>
+                  <div style="font-size:13px;font-weight:700;color:#8A6D5C;flex-shrink:0">{{ b.qtyText }}</div>
+                  <div style="font-size:14px;font-weight:900;color:#7048E8;flex-shrink:0">{{ b.priceText }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
     <sc-if value="{{ listIsPurchases }}" hint-placeholder-val="{{ true }}">
       <div style="padding:12px 16px;display:flex;flex-direction:column;gap:10px">
         <sc-if value="{{ listEmpty }}" hint-placeholder-val="{{ false }}">
@@ -988,6 +1055,9 @@
                 <div style="font-size:12px;font-weight:800;color:{{ p.statusColor }};background:{{ p.statusBg }};border-radius:999px;padding:3px 10px;display:inline-block">{{ p.status }}</div>
               </div>
             </div>
+            <sc-if value="{{ p.hasItems }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:8px;background:#FFF8F0;border-radius:14px;padding:9px 12px;font-size:14px;font-weight:700;color:#5C4438;line-height:1.45;text-wrap:pretty">{{ p.itemsText }}</div>
+            </sc-if>
             <div style="display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap">
               <sc-if value="{{ p.isAsset }}" hint-placeholder-val="{{ false }}">
                 <div style="font-size:12px;font-weight:800;color:#5F3DC4;background:#F3F0FF;border-radius:999px;padding:3px 10px">ของถาวร</div>
@@ -996,9 +1066,7 @@
                 <button onClick="{{ p.open }}" style="background:#E7F5FF;color:#1971C2;border:none;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:800;cursor:pointer">เปิดดู / เอกสาร</button>
               </sc-if>
               <sc-if value="{{ p.canAddEv }}" hint-placeholder-val="{{ false }}">
-                <label style="background:#FFF9DB;color:#B35C00;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center">
-                  <input type="file" accept="image/*" multiple="multiple" onChange="{{ p.addEv }}" style="display:none">+ อัปหลักฐาน
-                </label>
+                <button onClick="{{ p.addEv }}" style="background:#FFF9DB;color:#B35C00;border:none;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:800;cursor:pointer">+ อัปหลักฐาน</button>
               </sc-if>
               <sc-if value="{{ p.hasHistory }}" hint-placeholder-val="{{ false }}">
                 <button onClick="{{ p.openHistory }}" style="background:#F8F0FC;color:#9C36B5;border:none;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:800;cursor:pointer">ประวัติ</button>
@@ -1265,7 +1333,10 @@
         </div>
       </div>
       <div style="padding:0 16px;display:flex;flex-direction:column;gap:10px">
-        <button onClick="{{ addItem }}" style="background:linear-gradient(135deg,#37B24D,#2B8A3E);color:#fff;border:none;border-radius:16px;padding:13px;font-size:16px;font-weight:800;cursor:pointer">+ เพิ่มสินค้าในร้านนี้</button>
+        <div style="display:flex;gap:8px">
+          <button onClick="{{ addItem }}" style="flex:1.4;background:linear-gradient(135deg,#37B24D,#2B8A3E);color:#fff;border:none;border-radius:16px;padding:13px;font-size:16px;font-weight:800;cursor:pointer">+ เพิ่มสินค้า</button>
+          <button onClick="{{ openCatMgr }}" style="flex:1;background:#F3F0FF;color:#5F3DC4;border:2px solid #D0BFFF;border-radius:16px;padding:13px 8px;font-size:15px;font-weight:800;cursor:pointer">จัดการหมวด</button>
+        </div>
         <sc-if value="{{ dvHasCats }}" hint-placeholder-val="{{ false }}">
           <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:2px">
             <sc-for list="{{ dvCatChips }}" as="c" hint-placeholder-count="4">
@@ -1292,6 +1363,7 @@
             </div>
             <div style="display:flex;flex-direction:column;gap:6px">
               <button onClick="{{ it.edit }}" style="background:#FFF9DB;color:#B35C00;border:none;border-radius:10px;padding:7px 12px;font-size:13px;font-weight:800;cursor:pointer">แก้ไข</button>
+              <button onClick="{{ it.move }}" style="background:#E7F5FF;color:#1971C2;border:none;border-radius:10px;padding:7px 12px;font-size:13px;font-weight:800;cursor:pointer">⇅ ย้าย</button>
               <button onClick="{{ it.del }}" style="background:#FFF4E6;color:#D9480F;border:none;border-radius:10px;padding:7px 12px;font-size:13px;font-weight:800;cursor:pointer">ลบ</button>
             </div>
           </div>
@@ -1369,6 +1441,32 @@
             </div>
           </sc-for>
           <button onClick="{{ addEntity }}" style="background:#FFF8F0;border:2px dashed #FFB27D;border-radius:18px;padding:14px;cursor:pointer;font-size:16px;font-weight:800;color:#F76707">+ เพิ่มผู้จ่าย / กิจการ</button>
+        </div>
+      </div>
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:2px">
+          <img src="assets/icons/icon_tax_invoice.webp" alt="" style="width:40px;height:40px">
+          <div style="font-size:17px;font-weight:900">ตั้งค่าเอกสาร</div>
+        </div>
+        <div style="font-size:13px;font-weight:600;color:#B08968;margin-bottom:12px">เอกสารที่ต้องเซ็น (ใบสำคัญจ่าย / ใบรับรองแทนใบเสร็จ) ค่าตั้งต้น<b>ไม่มีหัวกระดาษ</b>ตามฟอร์มมาตรฐาน — เปิด/ปิดหัวกระดาษของแต่ละใบได้เอง · ชื่อ/เลขภาษี/ที่อยู่บนหัวดึงจาก "ผู้จ่ายเงิน/กิจการ" ด้านบน</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ docHeadToggles }}" as="t" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:10px;background:#FFF8F0;border-radius:14px;padding:10px 12px">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:15px;font-weight:800">{{ t.name }}</div>
+                <div style="font-size:12px;font-weight:700;color:{{ t.subColor }}">{{ t.sub }}</div>
+              </div>
+              <button onClick="{{ t.preview }}" style="flex-shrink:0;background:#E7F5FF;color:#1971C2;border:none;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:800;cursor:pointer">ดูตัวอย่าง</button>
+              <button onClick="{{ t.toggle }}" style="width:56px;height:32px;border:none;border-radius:999px;cursor:pointer;background:{{ t.bg }};position:relative;flex-shrink:0">
+                <div style="position:absolute;top:4px;left:{{ t.knob }};width:24px;height:24px;border-radius:999px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:left .2s"></div>
+              </button>
+            </div>
+          </sc-for>
+        </div>
+        <div style="border-top:2px dashed #FFE8CC;margin-top:12px;padding-top:12px">
+          <div style="font-size:14px;font-weight:800;color:#8A6D5C;margin-bottom:4px">ชื่อกิจการในใบรับรองแทนใบเสร็จ — "…ได้จ่ายไปในงานของ ___"</div>
+          <input value="{{ certNameVal }}" onChange="{{ onCertName }}" placeholder="{{ certNamePh }}" style="width:100%;box-sizing:border-box;border:2px solid #FFD8A8;border-radius:14px;padding:12px 14px;font-size:16px;font-weight:700;background:#fff;outline:none">
+          <div style="font-size:12px;font-weight:600;color:#B08968;margin-top:4px">เว้นว่าง = ใช้ชื่อผู้จ่าย/กิจการที่เลือกตอนบันทึก (ยังไม่ใช่บริษัท ไม่ต้องมีคำว่า "จำกัด")</div>
         </div>
       </div>
       <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
@@ -1541,35 +1639,60 @@
         </sc-if>
 
         <sc-if value="{{ modalIsDoc }}" hint-placeholder-val="{{ false }}">
-          <div style="background:#fff;border-radius:18px;padding:18px;border:1px solid #EAD9C8">
-            <div style="text-align:center;border-bottom:2px solid #3D2C29;padding-bottom:10px">
-              <div style="font-size:19px;font-weight:900">{{ docType }}</div>
-              <div style="font-size:14px;font-weight:700;color:#8A6D5C">{{ docEntity }} · เลขที่ {{ docNo }}</div>
-              <sc-if value="{{ docHasEntityTax }}" hint-placeholder-val="{{ false }}">
-                <div style="font-size:13px;font-weight:600;color:#8A6D5C">{{ docEntityTax }}</div>
-              </sc-if>
+          <!-- เอกสารเต็มรูปแบบตาม template FlowAccount — ไม่มีช่องว่างเปล่า (ข้อมูลไหนไม่มี = ตัดบรรทัดออก) -->
+          <div style="background:#fff;border-radius:14px;padding:20px 16px;border:1px solid #EAD9C8;color:#1a1a1a;line-height:1.5">
+            <sc-if value="{{ docHasHeader }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-bottom:12px">
+                <div style="font-size:16px;font-weight:800">{{ docHeadName }}</div>
+                <sc-for list="{{ docHeadLines }}" as="hl" hint-placeholder-count="2"><div style="font-size:12.5px;color:#444">{{ hl }}</div></sc-for>
+              </div>
+            </sc-if>
+            <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+              <div style="min-width:0">
+                <div style="font-size:19px;font-weight:900">{{ docTitle }}</div>
+                <div style="font-size:11.5px;color:#888;font-weight:600">{{ docTitleEn }}</div>
+              </div>
+              <div style="text-align:right;flex-shrink:0">
+                <sc-for list="{{ docMeta }}" as="mrow" hint-placeholder-count="2"><div style="font-size:13px"><span style="color:#777">{{ mrow.k }}</span> <b>{{ mrow.v }}</b></div></sc-for>
+              </div>
             </div>
-            <div style="display:flex;flex-direction:column;gap:6px;padding:12px 0;font-size:15px;font-weight:700;color:#5C4438">
-              <div>วันที่: {{ docDate }}</div>
-              <div>จ่ายให้: {{ docPayee }}</div>
-              <div style="display:flex;justify-content:space-between;background:#FFF8F0;border-radius:10px;padding:8px 12px"><span>รายการซื้อสินค้า/บริการ</span><span style="font-weight:900">{{ docAmountText }}</span></div>
-              <div>จำนวนเงิน (ตัวอักษร): <span style="font-weight:900">{{ docAmountWords }}</span></div>
-              <sc-if value="{{ docHasExtra }}" hint-placeholder-val="{{ false }}"><div style="font-size:13px;color:#B08968">{{ docExtraText }}</div></sc-if>
-            </div>
-            <div style="display:flex;gap:12px;border-top:1px dashed #EAD9C8;padding-top:12px">
-              <div style="flex:1;text-align:center">
-                <div style="height:52px;display:flex;align-items:center;justify-content:center">
-                  <sc-if value="{{ docHasSig }}" hint-placeholder-val="{{ false }}"><img src="{{ docSigThumb }}" alt="" style="max-height:48px;max-width:100%"></sc-if>
-                  <sc-if value="{{ docNoSig }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;font-weight:700;color:#B08968">(ลายเซ็นจะแปะเมื่อกดอนุมัติ)</div></sc-if>
+            <sc-if value="{{ docHasParty }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:10px;display:flex;flex-direction:column;gap:2px;font-size:13.5px">
+                <sc-for list="{{ docParty }}" as="prow" hint-placeholder-count="2"><div><span style="color:#777">{{ prow.k }}</span> <b>{{ prow.v }}</b></div></sc-for>
+              </div>
+            </sc-if>
+            <div style="margin-top:12px;border:1px solid #4a4a4a;border-radius:4px;overflow:hidden">
+              <div style="display:flex;background:#F0EDE6;border-bottom:1px solid #4a4a4a">
+                <sc-for list="{{ docCols }}" as="c" hint-placeholder-count="3"><div style="width:{{ c.w }};padding:6px 7px;font-weight:800;font-size:12px;text-align:{{ c.a }};box-sizing:border-box">{{ c.t }}</div></sc-for>
+              </div>
+              <sc-for list="{{ docRows }}" as="row" hint-placeholder-count="2">
+                <div style="display:flex;border-bottom:1px solid #E7E0D2">
+                  <sc-for list="{{ row.cells }}" as="c" hint-placeholder-count="3"><div style="width:{{ c.w }};padding:6px 7px;font-size:12.5px;text-align:{{ c.a }};box-sizing:border-box;word-break:break-word">{{ c.t }}</div></sc-for>
                 </div>
-                <div style="font-size:13px;font-weight:700;border-top:1px solid #3D2C29;padding-top:4px">ผู้อนุมัติ / ผู้จ่ายเงิน</div>
-                <sc-if value="{{ docHasSignedBy }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;font-weight:700;color:#2B8A3E;margin-top:2px">{{ docSignedBy }}</div></sc-if>
-              </div>
-              <div style="flex:1;text-align:center">
-                <div style="height:52px"></div>
-                <div style="font-size:13px;font-weight:700;border-top:1px solid #3D2C29;padding-top:4px">ผู้รับเงิน</div>
+              </sc-for>
+              <div style="padding:8px 10px;display:flex;flex-direction:column;gap:3px">
+                <sc-for list="{{ docTotals }}" as="trow" hint-placeholder-count="2">
+                  <div style="display:flex;justify-content:flex-end;gap:16px;font-size:13px;font-weight:{{ trow.fw }}">
+                    <span>{{ trow.k }}</span><span style="min-width:96px;text-align:right">{{ trow.v }}</span>
+                  </div>
+                </sc-for>
               </div>
             </div>
+            <sc-if value="{{ docHasWords }}" hint-placeholder-val="{{ false }}"><div style="margin-top:8px;font-size:13px">ตัวอักษร: (<b>{{ docWords }}</b>)</div></sc-if>
+            <sc-if value="{{ docHasPayLine }}" hint-placeholder-val="{{ false }}"><div style="margin-top:6px;font-size:13px">{{ docPayLine }}</div></sc-if>
+            <sc-if value="{{ docHasCert }}" hint-placeholder-val="{{ false }}"><div style="margin-top:12px;font-size:13px;line-height:1.8;text-indent:24px">{{ docCertText }}</div></sc-if>
+            <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">
+              <sc-for list="{{ docSigns }}" as="sn" hint-placeholder-count="2">
+                <div style="flex:1;min-width:104px;text-align:center">
+                  <div style="height:46px;display:flex;align-items:flex-end;justify-content:center">
+                    <sc-if value="{{ sn.hasSig }}" hint-placeholder-val="{{ false }}"><img src="{{ sn.sig }}" alt="ลายเซ็น" style="max-height:46px;max-width:100%"></sc-if>
+                  </div>
+                  <div style="border-top:1px dotted #555;margin-top:4px;padding-top:4px;font-size:12.5px;font-weight:700">{{ sn.label }}</div>
+                  <sc-if value="{{ sn.hasName }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:#2B8A3E;font-weight:700">{{ sn.name }}</div></sc-if>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ docHasExtra }}" hint-placeholder-val="{{ false }}"><div style="margin-top:12px;font-size:12.5px;font-weight:700;color:#B35C00;background:#FFF9DB;border-radius:8px;padding:8px 10px">{{ docExtraText }}</div></sc-if>
           </div>
           <button onClick="{{ closeModal }}" style="width:100%;margin-top:14px;background:#3D2C29;color:#fff;border:none;border-radius:16px;padding:14px;font-size:16px;font-weight:800;cursor:pointer">ปิด</button>
         </sc-if>
@@ -1641,6 +1764,38 @@
           </div>
         </sc-if>
 
+        <sc-if value="{{ modalIsEvKind }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:20px;font-weight:900">อัปหลักฐานเพิ่ม — รูปนี้คืออะไร?</div>
+          <div style="font-size:13px;font-weight:600;color:#8A6D5C;margin:2px 0 12px 0">เลือกประเภทก่อน ระบบจะเก็บเข้าโฟลเดอร์ที่ถูกต้อง · เลือกได้หลายรูปพร้อมกัน · รูป HEIC จากมือถือระบบแปลงเป็น JPG ให้เอง</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <sc-for list="{{ evKindOpts }}" as="o" hint-placeholder-count="5">
+              <label style="display:flex;align-items:center;gap:12px;background:#fff;border:2px solid #FFE0C2;border-radius:16px;padding:12px 14px;cursor:pointer">
+                <input type="file" accept="image/*,.heic,.heif" multiple="multiple" onChange="{{ o.onFile }}" style="display:none">
+                <img src="{{ o.icon }}" alt="" style="width:40px;height:40px;flex-shrink:0">
+                <div style="flex:1;min-width:0"><div style="font-size:16px;font-weight:800">{{ o.name }}</div><div style="font-size:12.5px;font-weight:600;color:#B08968">{{ o.desc }}</div></div>
+                <div style="font-size:20px;color:#FFB27D;font-weight:900">›</div>
+              </label>
+            </sc-for>
+          </div>
+          <button onClick="{{ closeModal }}" style="width:100%;margin-top:14px;background:#fff;color:#8A6D5C;border:3px solid #EAD9C8;border-radius:16px;padding:13px;font-size:15px;font-weight:800;cursor:pointer">ยกเลิก</button>
+        </sc-if>
+
+        <sc-if value="{{ modalIsCatMgr }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:20px;font-weight:900">จัดการหมวดสินค้า · {{ catMgrVendor }}</div>
+          <div style="font-size:13px;font-weight:600;color:#8A6D5C;margin:2px 0 12px 0">เปลี่ยนชื่อ = แก้ทุกสินค้าในหมวดพร้อมกัน · ลบ/รวม = ย้ายสินค้าทั้งหมวดไปหมวดอื่น (ตั้งชื่อปลายทางเป็นหมวดที่มีอยู่ = รวมหมวด)</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <sc-for list="{{ catMgrRows }}" as="r" hint-placeholder-count="3">
+              <div style="display:flex;align-items:center;gap:8px;background:#fff;border-radius:14px;padding:10px 12px;border:2px solid #F1E4D4">
+                <div style="flex:1;min-width:0;font-size:15px;font-weight:800">{{ r.name }} <span style="font-size:12px;color:#B08968;font-weight:600">({{ r.count }} รายการ)</span></div>
+                <button onClick="{{ r.rename }}" style="flex-shrink:0;background:#FFF9DB;color:#B35C00;border:none;border-radius:10px;padding:9px 12px;font-size:13px;font-weight:800;cursor:pointer">เปลี่ยนชื่อ</button>
+                <button onClick="{{ r.del }}" style="flex-shrink:0;background:#FFF4E6;color:#D9480F;border:none;border-radius:10px;padding:9px 12px;font-size:13px;font-weight:800;cursor:pointer">ลบ/รวม</button>
+              </div>
+            </sc-for>
+          </div>
+          <button onClick="{{ catMgrAdd }}" style="width:100%;margin-top:10px;background:#FFF8F0;border:2px dashed #FFB27D;border-radius:14px;padding:12px;cursor:pointer;font-size:15px;font-weight:800;color:#F76707">+ เพิ่มหมวดใหม่</button>
+          <button onClick="{{ closeModal }}" style="width:100%;margin-top:10px;background:#3D2C29;color:#fff;border:none;border-radius:16px;padding:14px;font-size:16px;font-weight:800;cursor:pointer">เสร็จแล้ว</button>
+        </sc-if>
+
         <sc-if value="{{ modalIsFreqCfg }}" hint-placeholder-val="{{ false }}">
           <div style="font-size:20px;font-weight:900">จัดการ "ของใช้บ่อย" · {{ freqCfgVendor }}</div>
           <div style="font-size:13px;font-weight:600;color:#8A6D5C;margin:2px 0 12px 0">ระบบนับจากบิลจริง — ปักหมุดของที่ต้องอยู่ในชุดเสมอ / ซ่อนของที่ไม่เอา</div>
@@ -1673,13 +1828,42 @@
               <div style="font-size:12px;font-weight:800;color:{{ b.fg }};background:{{ b.bg }};border-radius:999px;padding:4px 12px">{{ b.t }}</div>
             </sc-for>
           </div>
+          <sc-if value="{{ caseHasItems }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#fff;border-radius:16px;padding:12px 14px;border:1px solid #EAD9C8;margin-bottom:12px">
+              <div style="font-size:14px;font-weight:900;margin-bottom:6px">รายการสินค้า / ค่าใช้จ่าย</div>
+              <div style="display:flex;flex-direction:column;gap:4px">
+                <sc-for list="{{ caseItems }}" as="ci" hint-placeholder-count="3">
+                  <div style="display:flex;justify-content:space-between;gap:8px;font-size:14px;font-weight:700;color:#5C4438">
+                    <span style="min-width:0">{{ ci.name }} <span style="color:#B08968;font-weight:600;white-space:nowrap">{{ ci.qtyText }}</span></span>
+                    <span style="flex-shrink:0;font-weight:900">{{ ci.amtText }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:2px;border-top:2px dashed #FFE8CC;margin-top:8px;padding-top:8px">
+                <sc-for list="{{ caseSums }}" as="cs" hint-placeholder-count="2">
+                  <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:{{ cs.fw }};color:{{ cs.color }}"><span>{{ cs.k }}</span><span>{{ cs.v }}</span></div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ caseHasMeta }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-bottom:12px;font-size:13.5px;font-weight:700;color:#1971C2;background:#E7F5FF;border-radius:12px;padding:8px 12px">{{ caseMetaText }}</div>
+          </sc-if>
           <sc-if value="{{ caseHasPhotos }}" hint-placeholder-val="{{ false }}">
-            <div style="font-size:14px;font-weight:900;color:#8A6D5C;margin-bottom:6px">หลักฐานแนบ</div>
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+            <div style="font-size:14px;font-weight:900;color:#8A6D5C;margin-bottom:6px">หลักฐานแนบ — แตะดูรูปเต็ม · ✕ = ลบไฟล์ที่อัปผิด</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px">
               <sc-for list="{{ casePhotos }}" as="p" hint-placeholder-count="3">
-                <button onClick="{{ p.open }}" style="border:none;padding:0;background:#FFF8F0;border-radius:14px;overflow:hidden;cursor:pointer;aspect-ratio:1">
-                  <img src="{{ p.src }}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">
-                </button>
+                <div style="position:relative">
+                  <button onClick="{{ p.open }}" style="border:none;padding:0;background:#FFF8F0;border-radius:14px;overflow:hidden;cursor:pointer;aspect-ratio:1;width:100%;display:block">
+                    <img src="{{ p.src }}" alt="" style="width:100%;height:100%;object-fit:cover;display:block">
+                  </button>
+                  <sc-if value="{{ p.hasKind }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:absolute;left:4px;bottom:4px;background:rgba(61,44,41,.75);color:#fff;font-size:10px;font-weight:800;border-radius:8px;padding:2px 7px;pointer-events:none">{{ p.kindLabel }}</div>
+                  </sc-if>
+                  <sc-if value="{{ p.canDel }}" hint-placeholder-val="{{ false }}">
+                    <button onClick="{{ p.del }}" aria-label="ลบไฟล์นี้" style="position:absolute;top:-7px;right:-7px;width:24px;height:24px;border:2px solid #fff;border-radius:999px;background:#E8590C;color:#fff;font-size:12px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">✕</button>
+                  </sc-if>
+                </div>
               </sc-for>
             </div>
           </sc-if>
@@ -1723,11 +1907,10 @@
             </div>
           </sc-if>
           <sc-if value="{{ caseCanAddEv }}" hint-placeholder-val="{{ false }}">
-            <label style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;background:#FFF8F0;border:2px dashed #FFB27D;border-radius:16px;padding:12px;cursor:pointer">
-              <input type="file" accept="image/*" multiple="multiple" onChange="{{ caseAddEv }}" style="display:none">
+            <button onClick="{{ caseAddEv }}" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;box-sizing:border-box;margin-bottom:10px;background:#FFF8F0;border:2px dashed #FFB27D;border-radius:16px;padding:12px;cursor:pointer">
               <img src="assets/icons/icon_camera.webp" alt="" style="width:30px;height:30px">
-              <span style="font-size:15px;font-weight:800;color:#F76707">+ อัปหลักฐานเพิ่ม (หลายรูป/ย้อนหลังได้ · สลิปไม่ต้องตรงชื่อผู้จ่าย)</span>
-            </label>
+              <span style="font-size:15px;font-weight:800;color:#F76707">+ อัปหลักฐานเพิ่ม (เลือกประเภทก่อน · หลายรูป/HEIC ได้)</span>
+            </button>
           </sc-if>
           <sc-if value="{{ caseCanCancel }}" hint-placeholder-val="{{ false }}">
             <button onClick="{{ caseCancel }}" style="width:100%;margin-bottom:10px;background:#fff;color:#D9480F;border:3px solid #FFD8A8;border-radius:16px;padding:13px;font-size:15px;font-weight:800;cursor:pointer">ยกเลิกรายการนี้ · ยังไม่เซ็น = ลบออกจริง / เซ็นแล้ว = ลงรายการกลับ (reversal)</button>
@@ -1931,21 +2114,29 @@ class Component extends DCLogic {
   async api(action, payload = {}) {
     const c = window.KK_CONFIG || {};
     if (!c.FN_GATEWAY) return { ok: false, error: 'no gateway' };
-    try {
-      const body = { action, payload };
-      if (payload && payload.pass_sha) body.pass_sha = payload.pass_sha; // ใช้ตอน auth_check ก่อนมี session
-      const res = await fetch(c.FN_GATEWAY, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': c.ANON_KEY || '',
-          'Authorization': 'Bearer ' + (c.ANON_KEY || ''),
-          ...(this._pass ? { 'x-app-pass-sha': this._pass } : {}),
-        },
-        body: JSON.stringify(body),
-      });
-      return await res.json();
-    } catch (e) { return { ok: false, error: String(e?.message || e) }; }
+    const body = { action, payload };
+    if (payload && payload.pass_sha) body.pass_sha = payload.pass_sha; // ใช้ตอน auth_check ก่อนมี session
+    // เน็ตสะดุด / เซิร์ฟเวอร์ตื่นช้า (5xx) → ลองซ้ำเองเงียบๆ 2 ครั้ง กันรูป/รายการหายทั้งที่ผู้ใช้กดแล้ว
+    // ปลอดภัย: purchase_save มี idem key · upload_file กันซ้ำด้วย sha256 อยู่แล้ว
+    let lastErr = 'ต่อระบบไม่ได้';
+    for (let attempt = 0; attempt < 3; attempt++) {
+      if (attempt) await new Promise(r => setTimeout(r, attempt * 900));
+      try {
+        const res = await fetch(c.FN_GATEWAY, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': c.ANON_KEY || '',
+            'Authorization': 'Bearer ' + (c.ANON_KEY || ''),
+            ...(this._pass ? { 'x-app-pass-sha': this._pass } : {}),
+          },
+          body: JSON.stringify(body),
+        });
+        if (res.status >= 500) { lastErr = 'ระบบตอบไม่ไหวชั่วคราว (' + res.status + ')'; continue; }
+        return await res.json();
+      } catch (e) { lastErr = String(e?.message || e); }
+    }
+    return { ok: false, error: lastErr };
   }
 
   async refreshHealth() {
@@ -2004,6 +2195,9 @@ class Component extends DCLogic {
       if (fc && fc.value) this.setState({ freqThreshold: +fc.value.threshold || 60, freqPins: fc.value.pins || {}, freqHides: fc.value.hides || {} });
       const pw = (d.rules || []).find(r => r.key === 'liff_price_watch');
       if (pw && pw.value && pw.value.hidden) this.setState({ priceHidden: pw.value.hidden });
+      // ตั้งค่าเอกสาร (หัวกระดาษ per ใบ + ชื่อกิจการในใบรับรอง)
+      const dset = (d.rules || []).find(r => r.key === 'liff_doc_settings');
+      if (dset && dset.value) this.setState({ docSet: dset.value });
       this.applyEntitiesFromBootstrap(d);
       // สถิติซื้อจริง (ของใช้บ่อย + กราฟราคา) — ดึงจาก fin_po_items ผ่าน RPC fin_liff_stats
       this.api('liff_stats').then(s => { if (s && s.ok && s.data) this.setState({ stats: s.data }); });
@@ -2174,10 +2368,11 @@ class Component extends DCLogic {
       freqThreshold: (saved && +saved.freqThreshold) || 60,
       freqPins: (saved && saved.freqPins) || {}, freqHides: (saved && saved.freqHides) || {},
       priceHidden: (saved && saved.priceHidden) || {},
+      docSet: (saved && saved.docSet) || null,
       drafts: JSON.parse(JSON.stringify(base.drafts)), receives: JSON.parse(JSON.stringify(base.receives)) });
   }
   save() {
-    try { localStorage.setItem('kk_liff_v1', JSON.stringify({ vendors: this.state.db.vendors, purchases: this.state.db.purchases, sig: this.state.sig, signers: this.state.signers || [], prefsChars: this.state.prefsChars !== false, svc: this.state.svc || {}, rules: this.state.rules || null, entities: this.state.entities || [], defaultEntityId: this.state.defaultEntityId || null, geminiModel: this.state.geminiModel || 'gemini-3.5-flash-lite', freqThreshold: this.state.freqThreshold || 60, freqPins: this.state.freqPins || {}, freqHides: this.state.freqHides || {}, priceHidden: this.state.priceHidden || {} })); } catch (e) {}
+    try { localStorage.setItem('kk_liff_v1', JSON.stringify({ vendors: this.state.db.vendors, purchases: this.state.db.purchases, sig: this.state.sig, signers: this.state.signers || [], prefsChars: this.state.prefsChars !== false, svc: this.state.svc || {}, rules: this.state.rules || null, entities: this.state.entities || [], defaultEntityId: this.state.defaultEntityId || null, geminiModel: this.state.geminiModel || 'gemini-3.5-flash-lite', freqThreshold: this.state.freqThreshold || 60, freqPins: this.state.freqPins || {}, freqHides: this.state.freqHides || {}, priceHidden: this.state.priceHidden || {}, docSet: this.state.docSet || null })); } catch (e) {}
   }
   fmt(n) { return '฿' + Math.round(n).toLocaleString('th-TH'); }
   pop(msg) {
@@ -2185,60 +2380,61 @@ class Component extends DCLogic {
     clearTimeout(this._tt); this._tt = setTimeout(() => this.setState({ toast: '' }), 2200);
   }
   vendorById(id) { return (this.state.db ? this.state.db.vendors : []).find(v => v.id === id) || { name: '?', logo: 'assets/logos/other.png', items: [], doc: [], cats: [], shipping: 0, box: 0 }; }
-  // บีบ+แปลง WebP ฝั่ง client ก่อนเก็บ — ถ้าเครื่องแปลง WebP ไม่ได้ (เช่น iOS เก่า) ใช้ JPEG แทน + แจ้งผู้ใช้ (ไม่เงียบ)
-  compressOne(f, cb) {
-    const r = new FileReader();
-    r.onload = () => {
-      const img = new Image();
-      img.onload = () => {
-        const c = document.createElement('canvas');
-        const s = Math.min(1, 640 / Math.max(img.width, img.height));
-        c.width = img.width * s; c.height = img.height * s;
-        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-        let out = '';
-        try { out = c.toDataURL('image/webp', 0.8); } catch (e) { out = ''; }
-        if (!out || out.indexOf('data:image/webp') !== 0) {
-          if (!this._webpWarned) { this._webpWarned = true; this.pop('เครื่องนี้แปลงรูปเป็น WebP ไม่ได้ — ระบบใช้ JPEG แทนให้อัตโนมัติ (ใช้งานได้ปกติ)'); }
-          out = c.toDataURL('image/jpeg', 0.82);
-        }
-        cb(out);
-      };
-      img.src = r.result;
-    };
-    r.readAsDataURL(f);
+  /* ---------- รูปภาพ: HEIC→JPG อัตโนมัติ + ย่อ + แจ้ง error ชัดทุกไฟล์ (ไม่เงียบ) ---------- */
+  isHeicFile(f) { return /hei[cf]/i.test((f && f.type) || '') || /\.hei[cf]$/i.test((f && f.name) || ''); }
+  ensureHeicLib() {
+    if (window.heic2any) return Promise.resolve(true);
+    if (!this._heicLoading) this._heicLoading = new Promise((res) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js';
+      s.onload = () => res(true);
+      s.onerror = () => { this._heicLoading = null; res(false); };
+      document.head.appendChild(s);
+    });
+    return this._heicLoading;
   }
-  // รูปสำหรับส่งให้ AI อ่านบิล (ใหญ่กว่ารูปย่อ เพื่อให้อ่านตัวหนังสือออก)
-  compressAi(f, cb) {
-    const r = new FileReader();
-    r.onload = () => {
-      const img = new Image();
-      img.onload = () => {
-        const c = document.createElement('canvas');
-        const s = Math.min(1, 1400 / Math.max(img.width, img.height));
-        c.width = img.width * s; c.height = img.height * s;
-        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-        cb(c.toDataURL('image/jpeg', 0.85));
-      };
-      img.src = r.result;
-    };
-    r.readAsDataURL(f);
+  // HEIC/HEIF จาก iPhone/Android → แปลงเป็น JPG ก่อนอัปเสมอ (ตรวจจาก mime/นามสกุล ไม่ใช่ยี่ห้อเครื่อง)
+  async normalizeFile(f) {
+    if (!this.isHeicFile(f)) return f;
+    const ok = await this.ensureHeicLib();
+    if (!ok || !window.heic2any) throw new Error('โหลดตัวแปลงรูป HEIC ไม่ได้ — เช็คอินเทอร์เน็ตแล้วลองใหม่ หรือตั้งกล้องมือถือให้ถ่ายเป็น JPG');
+    const out = await window.heic2any({ blob: f, toType: 'image/jpeg', quality: 0.88 });
+    const b = Array.isArray(out) ? out[0] : out;
+    return new File([b], String(f.name || 'photo').replace(/\.hei[cf]$/i, '') + '.jpg', { type: 'image/jpeg' });
   }
-  // รูปต้นฉบับ (ชัดพออ่านบิลออก ~1-2MB) — เตรียมส่ง Google Drive · ไม่มี key ระบบพักไว้ใน Supabase pending ให้เอง ไม่ error
-  compressFull(f, cb) {
-    const r = new FileReader();
-    r.onload = () => {
-      const img = new Image();
-      img.onload = () => {
-        const c = document.createElement('canvas');
-        const s = Math.min(1, 1600 / Math.max(img.width, img.height));
-        c.width = img.width * s; c.height = img.height * s;
-        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-        cb(c.toDataURL('image/jpeg', 0.85));
+  imgFromFile(f) {
+    return new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onerror = () => rej(new Error('อ่านไฟล์ไม่ได้'));
+      r.onload = () => {
+        const img = new Image();
+        img.onerror = () => rej(new Error('เปิดรูปไม่ได้ — ไฟล์อาจเสียหรือฟอร์แมตไม่รองรับ'));
+        img.onload = () => res(img);
+        img.src = r.result;
       };
-      img.src = r.result;
-    };
-    r.readAsDataURL(f);
+      r.readAsDataURL(f);
+    });
   }
+  scaleDataUrl(img, maxSide, type, q) {
+    const c = document.createElement('canvas');
+    const s = Math.min(1, maxSide / Math.max(img.width, img.height));
+    c.width = Math.max(1, Math.round(img.width * s)); c.height = Math.max(1, Math.round(img.height * s));
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    if (type === 'image/webp') {
+      try { const out = c.toDataURL('image/webp', q); if (out.indexOf('data:image/webp') === 0) return out; } catch (e) {}
+      return c.toDataURL('image/jpeg', 0.82); // เครื่องเก่าแปลง WebP ไม่ได้ → ใช้ JPEG แทน
+    }
+    return c.toDataURL(type, q);
+  }
+  _compressTo(f, maxSide, type, q, cb) {
+    this.normalizeFile(f)
+      .then((nf) => this.imgFromFile(nf))
+      .then((img) => cb(this.scaleDataUrl(img, maxSide, type, q)))
+      .catch((e) => this.pop('อัปรูป' + (f && f.name ? ' "' + f.name + '"' : '') + ' ไม่สำเร็จ: ' + String((e && e.message) || e)));
+  }
+  compressOne(f, cb) { this._compressTo(f, 640, 'image/webp', 0.8, cb); }
+  compressAi(f, cb) { this._compressTo(f, 1400, 'image/jpeg', 0.85, cb); }
+  compressFull(f, cb) { this._compressTo(f, 1600, 'image/jpeg', 0.85, cb); }
   // แนบได้หลายรูปต่อครั้ง — เรียก cb ทีละรูปตามลำดับ · withFull = เก็บต้นฉบับคู่กันไว้ส่งขึ้นระบบ
   readFiles(e, cb, withFull) {
     const fs = Array.prototype.slice.call((e.target.files || [])); if (!fs.length) return;
@@ -2264,6 +2460,18 @@ class Component extends DCLogic {
     if (/ใบกำกับ|ใบเสร็จ|บิล/.test(l || '')) return 'vendor_doc';
     if (/แชท|คำสั่งซื้อ/.test(l || '')) return 'order_capture';
     return 'goods_photo';
+  }
+  // fin_files.kind ต้องเป็นค่าที่ระบบไฟล์รู้จัก (ผูกโฟลเดอร์ Drive) — part ของเคส (vendor_doc/order_capture) ไม่ใช่ kind
+  evFileKind(part) { return { slip: 'slip', vendor_doc: 'tax_invoice', order_capture: 'order_screenshot', goods_photo: 'goods_photo', other: 'other' }[part] || 'other'; }
+  // ลบไฟล์หลักฐานที่อัปผิด (ลบจริง: storage + แถวไฟล์ + คิว Drive — ไฟล์แนบไม่ใช่ธุรกรรมบัญชี ไม่ต้อง reversal)
+  async deleteEvFile(caseId, fileId, name) {
+    if (!window.confirm('ลบไฟล์หลักฐาน' + (name ? ' "' + name + '"' : 'นี้') + ' ออกจากระบบจริง? (กู้คืนไม่ได้)')) return;
+    const r = await this.api('file_delete', { file_id: fileId });
+    if (r && r.ok) {
+      this.pop('ลบไฟล์แล้ว ✓');
+      if (caseId) this.reloadCaseModal(caseId);
+      this.refreshAllLive();
+    } else this.pop('ลบไม่สำเร็จ: ' + ((r && r.error) || 'ต่อระบบไม่ได้'));
   }
   // ยิง backend เงียบๆ (ไม่เด้ง toast ตอนสำเร็จ — ใช้กับงานจุกจิก เช่น สลับตำแหน่ง)
   async pushQuiet(action, payload) {
@@ -2414,7 +2622,7 @@ class Component extends DCLogic {
           const full = (this._full || {})[thumb] || null;
           const sha = await this.sha256Hex(full || thumb);
           const thumbMime = thumb.indexOf('data:image/webp') === 0 ? 'image/webp' : 'image/jpeg';
-          const r = await this.api('upload_file', { sha256: sha, thumb_b64: thumb, thumb_mime: thumbMime, original_b64: full || undefined, mime: 'image/jpeg', kind: part, case_id: caseId, name: l });
+          const r = await this.api('upload_file', { sha256: sha, thumb_b64: thumb, thumb_mime: thumbMime, original_b64: full || undefined, mime: 'image/jpeg', kind: this.evFileKind(part), case_id: caseId, name: l });
           if (r && r.ok && r.data && r.data.file) {
             n++;
             if (!attached[part]) { attached[part] = true; await this.api('attach_part', { case_id: caseId, part, file_id: r.data.file.id }); }
@@ -2458,8 +2666,8 @@ class Component extends DCLogic {
     this.setState({ drafts: a.data.docs.map(x => {
       const pl = x.payload || {};
       const ent = this.entityById(x.entity_id);
-      return { id: x.doc_no || x.id, backendId: x.id,
-        type: (x.type === 'expense_certificate' || x.type === 'receipt_substitute') ? 'ใบรับรองแทนใบเสร็จ' : 'ใบสำคัญจ่าย',
+      return { id: x.doc_no || x.id, backendId: x.id, raw: x,
+        type: this.docTypeLabel[x.type] || 'เอกสาร',
         entity: entMap[x.entity_id] || pl.entity_name || (ent && ent.name) || this._entityName || 'กิจการ',
         entityTaxId: (ent && ent.tax_id) || pl.entity_tax_id || '',
         vendorId: null, amount: +pl.total || 0, payload: pl,
@@ -2476,27 +2684,46 @@ class Component extends DCLogic {
       this.setState({ liveList: r.data.cases, listLoading: false });
     } else this.setState({ listLoading: false });
   }
-  // อัปหลักฐานเพิ่มเข้า CASE ย้อนหลัง (กี่รูปก็ได้ · สลิปไม่ต้องตรงชื่อผู้จ่าย)
+  // อัปหลักฐานเพิ่มเข้า CASE: เปิดตัวเลือกประเภทก่อน (kind ถูก → เข้าโฟลเดอร์ Drive ถูก)
+  openEvKind(caseId, requiredParts, collectedParts) {
+    this.openModal({ kind: 'evkind', caseId, req: requiredParts || [], got: collectedParts || {} });
+  }
+  uploadEvKind(caseId, part, e) {
+    const files = Array.prototype.slice.call(e.target.files || []); e.target.value = '';
+    this.setState({ modal: null });
+    this.uploadEvFiles(caseId, part, files);
+  }
+  // อัปทีละไฟล์ นับผลทุกรูป — พลาดรูปไหนแจ้งชื่อไฟล์+เหตุผลชัดๆ ไม่หายเงียบ
+  async uploadEvFiles(caseId, part, files) {
+    if (!files.length) return;
+    this.pop('กำลังอัป ' + files.length + ' รูป…');
+    let ok = 0; const errs = [];
+    for (const raw of files) {
+      try {
+        const f = await this.normalizeFile(raw);
+        const img = await this.imgFromFile(f);
+        const thumb = this.scaleDataUrl(img, 640, 'image/webp', 0.8);
+        const full = this.scaleDataUrl(img, 1600, 'image/jpeg', 0.85);
+        const sha = await this.sha256Hex(full);
+        const thumbMime = thumb.indexOf('data:image/webp') === 0 ? 'image/webp' : 'image/jpeg';
+        const r = await this.api('upload_file', { sha256: sha, thumb_b64: thumb, thumb_mime: thumbMime, original_b64: full, mime: 'image/jpeg', kind: this.evFileKind(part), case_id: caseId, name: raw.name || 'หลักฐานเพิ่มเติม' });
+        if (!(r && r.ok && r.data && r.data.file)) throw new Error((r && r.error) || 'ต่อระบบไม่ได้');
+        await this.api('attach_part', { case_id: caseId, part: part, file_id: r.data.file.id });
+        ok++;
+      } catch (err) { errs.push((raw.name || 'รูป') + ': ' + String((err && err.message) || err)); }
+    }
+    if (errs.length) this.pop('อัปสำเร็จ ' + ok + '/' + files.length + ' รูป · ไม่ผ่าน — ' + errs.join(' · '));
+    else this.pop('อัปหลักฐาน ' + ok + ' รูปเข้าระบบแล้ว ✓');
+    this.refreshAllLive();
+    const m = this.state.modal;
+    if (m && m.kind === 'case' && m.caseId === caseId) this.reloadCaseModal(caseId);
+  }
+  // ทางลัด "เติมหลักฐานที่ขาด" — รู้ part ที่ขาดอยู่แล้ว ไม่ต้องถามประเภท
   caseAddEvidence(caseId, requiredParts, collectedParts, e) {
     const need = (requiredParts || []).filter(p => !(collectedParts || {})[p]);
-    let first = true;
-    this.readFiles(e, async (thumb) => {
-      // รูปแรกเติม part ที่ยังขาด (เช่น slip) ให้เคสครบ — รูปถัดไปเก็บเป็นหลักฐานแนบ
-      const part = (first && need.length) ? need[0] : 'goods_photo';
-      first = false;
-      try {
-        const full = (this._full || {})[thumb] || null;
-        const sha = await this.sha256Hex(full || thumb);
-        const thumbMime = thumb.indexOf('data:image/webp') === 0 ? 'image/webp' : 'image/jpeg';
-        const r = await this.api('upload_file', { sha256: sha, thumb_b64: thumb, thumb_mime: thumbMime, original_b64: full || undefined, mime: 'image/jpeg', kind: part, case_id: caseId, name: 'หลักฐานเพิ่มเติม' });
-        if (r && r.ok && r.data && r.data.file) {
-          await this.api('attach_part', { case_id: caseId, part, file_id: r.data.file.id });
-          this.pop('อัปหลักฐานเพิ่มแล้ว ✓');
-          this.refreshAllLive();
-          if (this.state.modal && this.state.modal.kind === 'case' && this.state.modal.caseId === caseId) this.reloadCaseModal(caseId);
-        } else this.pop('อัปโหลดไม่สำเร็จ: ' + ((r && r.error) || 'ต่อระบบไม่ได้'));
-      } catch (err) { this.pop('อัปโหลดไม่สำเร็จ: ' + String((err && err.message) || err)); }
-    }, true);
+    const part = need.length ? need[0] : 'goods_photo';
+    const files = Array.prototype.slice.call(e.target.files || []); e.target.value = '';
+    this.uploadEvFiles(caseId, part, files);
   }
   confirmBuy = () => {
     // กันบันทึกยอด 0 (รายการที่ต้องพิมพ์ราคาเอง) — เขียนขึ้นระบบจริงไม่ผ่านอยู่แล้ว จะกลายเป็นรายการค้างในเครื่อง
@@ -2521,7 +2748,7 @@ class Component extends DCLogic {
         vendor_id: vid, vendor_name: vn,
         route: beR, total, vat, is_stock: false, is_asset: true,
         category_account: '5010', description: this.routeLabel() + ' — ' + vn,
-        items: this.cartLines().map(l => ({ item_name: l.it.name, qty: l.qty, unit: l.it.unit, unit_price: l.price })),
+        items: this.cartLines().map(l => ({ item_name: l.it.name, qty: l.qty, unit: l.it.unit, unit_price: l.price, cat: l.it.cat || undefined })),
         asset: { name: vn + ' (ของถาวร)' }
       }, 'ลงบัญชีของถาวรขึ้นระบบจริงแล้ว ✓');
       // ซื้อสินค้า: liff_purchase_save — backend สร้าง CASE + ใบสั่งซื้อ (fin_purchase_orders+รายการ) + ลงบัญชี (เดบิต=เครดิต) + เอกสารร่าง ครบใน transaction เดียว
@@ -2532,7 +2759,7 @@ class Component extends DCLogic {
         route: beR, total, vat, is_stock: true, category_account: '5010',
         description: this.routeLabel() + ' — ' + vn,
         payment_method: this.cartPay(), reimburser: (this.state.cart.reimburser || '').trim() || undefined,
-        items: this.cartLines().map(l => ({ item_name: l.it.name, qty: l.qty, unit: l.it.unit, unit_price: l.price })),
+        items: this.cartLines().map(l => ({ item_name: l.it.name, qty: l.qty, unit: l.it.unit, unit_price: l.price, cat: l.it.cat || undefined })),
         shipping_cost: +this.state.cart.ship || 0, packaging_cost: +this.state.cart.box || 0,
         draft: false, idem: 'liff-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8)
       }, this.evSnapshot(), false);
@@ -2719,7 +2946,7 @@ class Component extends DCLogic {
         { key: 'spec', label: 'สเปค (เช่น 16/20 · NW80%)', type: 'text' },
         { key: 'unit', label: 'หน่วยขาย (กก. / แพ็ก / ถุง)', type: 'text' },
         { key: 'price', label: 'ราคาล่าสุด (บาท)', type: 'number' },
-        { key: 'cat', label: 'หมวดในร้าน (เว้นว่างได้)', type: 'text' }
+        { key: 'cat', label: 'หมวดในร้าน — เลือกจากหมวดที่มี (กันหมวดซ้ำ เช่น "ผัก" กับ "ผัก+อื่นๆ")', type: 'select', opts: [{ v: '', t: 'ไม่มีหมวด' }].concat(this.vendorCats(v).map(c => ({ v: c, t: c }))).concat([{ v: '__new__', t: '+ เพิ่มหมวดใหม่…' }]) }
       ]
     });
   }
@@ -2727,6 +2954,7 @@ class Component extends DCLogic {
     const db = this.state.db; const v = db.vendors.find(x => x.id === m.vendorId); const vals = m.vals;
     if (!vals.name) { this.pop('ใส่ชื่อสินค้าก่อนนะ'); return; }
     let itemId = m.targetId;
+    if (vals.cat === '__new__') vals.cat = '';
     if (m.targetId) {
       const it = v.items.find(x => x.id === m.targetId);
       Object.assign(it, { name: vals.name, spec: vals.spec, unit: vals.unit || 'กก.', price: +vals.price || 0, cat: vals.cat, img: m.img === 'assets/logos/other.png' ? it.img : m.img });
@@ -2734,9 +2962,9 @@ class Component extends DCLogic {
     } else {
       itemId = 'i' + Date.now();
       v.items = v.items.concat([{ id: itemId, name: vals.name, spec: vals.spec, unit: vals.unit || 'กก.', price: +vals.price || 0, cat: vals.cat, img: m.img === 'assets/logos/other.png' ? '' : m.img }]);
-      if (vals.cat && (v.cats || []).indexOf(vals.cat) < 0) v.cats = (v.cats || []).concat([vals.cat]);
       this.pop('เพิ่มสินค้าแล้ว');
     }
+    if (vals.cat && (v.cats || []).indexOf(vals.cat) < 0) { v.cats = (v.cats || []).concat([vals.cat]); this.syncVendorCats(v); }
     this.setState({ db }); this.save();
     // เขียนเข้า fin_vendor_items จริง (ชื่อ/สเปค/หน่วย/ราคา/หมวด/รูป WebP)
     if (this.state.liveMode) {
@@ -2759,6 +2987,67 @@ class Component extends DCLogic {
     v.items.splice(i, 1); v.items.splice(j, 0, it);
     this.setState({ db }); this.save();
     this.pushQuiet('liff_catalog_admin', { op: 'item_sort', vendor_id: v.id, order: v.items.map(x => x.id) });
+  }
+  // ย้ายสินค้าไปตำแหน่งที่ต้องการทีเดียว (ร้านสินค้าเยอะ กด ▲▼ ทีละขั้นไม่ไหว)
+  moveItemTo(v, it) {
+    const list = v.items || []; const cur = list.indexOf(it) + 1;
+    const raw = window.prompt('ย้าย "' + it.name + '" ไปลำดับที่เท่าไหร่? (1-' + list.length + ' · ตอนนี้อยู่ลำดับ ' + cur + ')', String(cur));
+    if (raw === null) return;
+    const pos = Math.max(1, Math.min(list.length, Math.round(+raw || cur)));
+    if (pos === cur) return;
+    list.splice(cur - 1, 1); list.splice(pos - 1, 0, it);
+    this.setState({ db: this.state.db }); this.save();
+    this.pushQuiet('liff_catalog_admin', { op: 'item_sort', vendor_id: v.id, order: list.map(x => x.id) });
+    this.pop('ย้าย "' + it.name + '" ไปลำดับที่ ' + pos + ' แล้ว ✓');
+  }
+  /* ---------- จัดการหมวดสินค้า (C2/C3): dropdown เลือก · เปลี่ยนชื่อ/ลบ/รวมหมวด ---------- */
+  vendorCats(v) {
+    const s = {}; const out = [];
+    (((v && v.cats) || [])).forEach(c => { if (c && !s[c]) { s[c] = 1; out.push(c); } });
+    (((v && v.items) || [])).forEach(it => { if (it.cat && !s[it.cat]) { s[it.cat] = 1; out.push(it.cat); } });
+    return out;
+  }
+  catCount(v, c) { return ((v && v.items) || []).filter(it => (it.cat || '') === c).length; }
+  syncVendorCats(v) {
+    if (this.state.liveMode) this.pushQuiet('liff_catalog_admin', { op: 'vendor_save', vendor_id: v.id, vendor_uuid: this.beVendorId(v.id) || undefined, name: v.name, profile: { cats: v.cats || [] } });
+  }
+  openCatMgr = () => this.openModal({ kind: 'catmgr', vendorId: this.state.dataVendorId });
+  catRename(v, from) {
+    const to = (window.prompt('เปลี่ยนชื่อหมวด "' + from + '" เป็น…\n(ตั้งชื่อตรงกับหมวดที่มีอยู่ = รวมหมวดเข้าด้วยกัน)', from) || '').trim();
+    if (!to || to === from) return;
+    (v.items || []).forEach(it => { if ((it.cat || '') === from) it.cat = to; });
+    v.cats = (v.cats || []).map(c => (c === from ? to : c)).filter((c, i, a) => c && a.indexOf(c) === i);
+    if (v.cats.indexOf(to) < 0) v.cats.push(to);
+    this.setState({ db: this.state.db }); this.save();
+    if (this.state.liveMode) this.pushLive('liff_catalog_admin', { op: 'category_rename', vendor_id: v.id, from, to }, 'เปลี่ยนชื่อหมวดขึ้นระบบจริงแล้ว ✓ (แก้ทุกสินค้าในหมวดพร้อมกัน)');
+    else this.pop('เปลี่ยนชื่อหมวดแล้ว');
+    this.syncVendorCats(v);
+  }
+  catDelete(v, from) {
+    const n = this.catCount(v, from);
+    let to = '';
+    if (n > 0) {
+      const others = this.vendorCats(v).filter(c => c !== from);
+      const ans = window.prompt('หมวด "' + from + '" มีสินค้า ' + n + ' รายการ — ย้ายไปหมวดไหน?\nพิมพ์ชื่อหมวดปลายทาง' + (others.length ? ' (ที่มีอยู่: ' + others.slice(0, 5).join(' / ') + ')' : '') + ' · เว้นว่าง = ไม่มีหมวด', others[0] || '');
+      if (ans === null) return;
+      to = ans.trim();
+    } else if (!window.confirm('ลบหมวด "' + from + '"?')) return;
+    (v.items || []).forEach(it => { if ((it.cat || '') === from) it.cat = to; });
+    v.cats = (v.cats || []).filter(c => c && c !== from);
+    if (to && v.cats.indexOf(to) < 0) v.cats.push(to);
+    this.setState({ db: this.state.db }); this.save();
+    if (this.state.liveMode) this.pushLive('liff_catalog_admin', { op: 'category_delete', vendor_id: v.id, from, move_to: to }, to ? 'รวมสินค้าเข้าหมวด "' + to + '" ขึ้นระบบจริงแล้ว ✓' : 'ลบหมวดขึ้นระบบจริงแล้ว ✓');
+    else this.pop(to ? 'ย้ายสินค้าไปหมวด "' + to + '" แล้ว' : 'ลบหมวดแล้ว');
+    this.syncVendorCats(v);
+  }
+  catAdd(v) {
+    const nn = (window.prompt('ตั้งชื่อหมวดใหม่ (เช่น ผัก, ของแห้ง)') || '').trim();
+    if (!nn) return;
+    if (this.vendorCats(v).indexOf(nn) >= 0) { this.pop('มีหมวด "' + nn + '" อยู่แล้ว — เลือกใช้ได้เลย'); return; }
+    v.cats = (v.cats || []).concat([nn]);
+    this.setState({ db: this.state.db }); this.save();
+    this.syncVendorCats(v);
+    this.pop('เพิ่มหมวด "' + nn + '" แล้ว — ตอนเพิ่ม/แก้สินค้าจะมีให้เลือก');
   }
   savePriceForm(m) {
     const np = +m.vals.price || 0;
@@ -2891,29 +3180,48 @@ class Component extends DCLogic {
   };
 
   /* ---------- ค่าใช้จ่ายไม่ใช่สินค้า ---------- */
-  startExpense = () => this.setState({ screen: 'expense', expense: { cat: '', amount: '', note: '', isAsset: false, payerId: this.state.defaultEntityId || null } });
+  startExpense = () => this.setState({ screen: 'expense', expense: { cat: '', amount: '', note: '', isAsset: false, payerId: this.state.defaultEntityId || null, route: '2a', pay: 'transfer', ev: [] } });
   expSet = (patch) => this.setState({ expense: Object.assign({}, this.state.expense, patch) });
   confirmExpense = () => {
     const ex = this.state.expense;
     if (!ex.cat) { this.pop('เลือกประเภทค่าใช้จ่ายก่อนนะ'); return; }
     if (!(+ex.amount > 0)) { this.pop('ใส่จำนวนเงินก่อนนะ'); return; }
+    const route = ex.route || '2a';
+    const routeTh = route === '1b' ? 'บิล/ใบเสร็จ' : route === '2b_travel' ? 'ใบรับรองแทนใบเสร็จ' : 'ใบสำคัญจ่าย';
     const db = this.state.db;
-    db.purchases = [{ id: 'EX-' + (101 + db.purchases.filter(x => x.id.indexOf('EX-') === 0).length), vendorId: null, expName: ex.cat, date: 'วันนี้', total: +ex.amount || 0, status: 'รออนุมัติ', route: 'ใบสำคัญจ่าย (ค่าใช้จ่าย)', missing: [], isExpense: true, isAsset: !!ex.isAsset }].concat(db.purchases);
+    db.purchases = [{ id: 'EX-' + (101 + db.purchases.filter(x => x.id.indexOf('EX-') === 0).length), vendorId: null, expName: ex.cat, date: 'วันนี้', total: +ex.amount || 0, status: 'รออนุมัติ', route: routeTh + ' (ค่าใช้จ่าย)', missing: [], isExpense: true, isAsset: !!ex.isAsset }].concat(db.purchases);
     if (this.state.liveMode) {
-      // ผังบัญชีจริง (fin_accounts): 5210 การตลาด · 5220 เบ็ดเตล็ด · 5900 ค่าใช้จ่ายอื่น (ไม่มีเลข 5410 ในผังจริง)
+      // ผังบัญชีจริง (fin_accounts): 5210 การตลาด · 5220 เบ็ดเตล็ด · 5900 ค่าใช้จ่ายอื่น
       const accByCat = { 'ค่าไฟฟ้า': '5220', 'ค่าน้ำประปา': '5220', 'ค่าเช่า': '5220', 'ค่าขนส่ง/เดินทาง': '5220', 'ค่าการตลาด': '5210', 'ค่าธรรมเนียมธนาคาร': '5900', 'เบ็ดเตล็ด': '5220' };
-      const isAsset = !!ex.isAsset;
       const pe = this.entityById(ex.payerId) || this.payerEntity() || {};
-      this.pushLive('summary_confirm', {
-        entity_id: ex.payerId || this.state.defaultEntityId || this._entityId,
-        entity_name: pe.name || null, entity_tax_id: pe.tax_id || null,
-        route: '1b', total: +ex.amount || 0, // 1b = มีบิล/ไม่มี VAT · เข้าทั้ง 2 งบ · ไม่สร้างเอกสารเพิ่ม
-        category_account: accByCat[ex.cat] || '5220', is_stock: false, is_asset: isAsset,
-        vendor_name: ex.cat, description: ex.cat + (ex.note ? ' · ' + ex.note : ''),
-        ...(isAsset ? { asset: { name: ex.cat } } : {})
-      }, 'ลงบัญชีค่าใช้จ่ายขึ้นระบบจริงแล้ว ✓');
+      if (ex.isAsset) {
+        // ของถาวร: เส้นทางเดิม (ลง fin_assets + สูตรงบนิติ/งบร้าน)
+        this.pushLive('summary_confirm', {
+          entity_id: ex.payerId || this.state.defaultEntityId || this._entityId,
+          entity_name: pe.name || null, entity_tax_id: pe.tax_id || null,
+          route: '1b', total: +ex.amount || 0,
+          category_account: accByCat[ex.cat] || '5220', is_stock: false, is_asset: true,
+          vendor_name: ex.cat, description: ex.cat + (ex.note ? ' · ' + ex.note : ''),
+          asset: { name: ex.cat }
+        }, 'ลงบัญชีของถาวรขึ้นระบบจริงแล้ว ✓');
+      } else {
+        // ค่าใช้จ่ายทุกตัวเข้า flow เอกสารเต็ม (B): Expense Note + สมุดรายวันจ่าย + เอกสารตาม route + แนบหลักฐาน + เซ็นได้
+        const evSnap = {};
+        if ((ex.ev || []).length) evSnap[route === '2a' ? 'สลิปโอนเงิน' : route === '1b' ? 'บิล/ใบเสร็จ' : 'รูปหลักฐาน'] = ex.ev.slice();
+        this.savePurchaseLive({
+          entity_id: ex.payerId || this.state.defaultEntityId || this._entityId,
+          entity_name: pe.name || null, entity_tax_id: pe.tax_id || null,
+          vendor_id: null, vendor_name: ex.cat,
+          route, total: +ex.amount || 0, vat: 0, is_stock: false,
+          category_account: accByCat[ex.cat] || '5220',
+          description: ex.cat + (ex.note ? ' · ' + ex.note : ''),
+          payment_method: ex.pay === 'cash' ? 'cash' : 'transfer',
+          items: [{ item_name: ex.cat + (ex.note ? ' — ' + ex.note : ''), qty: 1, unit: 'รายการ', unit_price: +ex.amount || 0 }],
+          draft: false, idem: 'liff-exp-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8)
+        }, evSnap, false);
+      }
     }
-    this.setState({ db, screen: 'success', success: { title: 'บันทึกค่าใช้จ่ายแล้ว!', desc: ex.isAsset ? 'ทำเครื่องหมาย "ของถาวร" ไว้ · ลงค่าใช้จ่ายทันทีทั้ง 2 งบ (ยังไม่คิดค่าเสื่อม เก็บ flag ไว้เปิดทีหลัง)' : 'ระบบลงบัญชี + สร้างใบสำคัญจ่ายให้ รอเซ็นอนุมัติ' } });
+    this.setState({ db, screen: 'success', success: { title: 'บันทึกค่าใช้จ่ายแล้ว!', desc: ex.isAsset ? 'ทำเครื่องหมาย "ของถาวร" ไว้ · ลงค่าใช้จ่ายทันทีทั้ง 2 งบ (ยังไม่คิดค่าเสื่อม เก็บ flag ไว้เปิดทีหลัง)' : 'ระบบลงบัญชี + ออกบันทึกค่าใช้จ่าย + สมุดรายวันจ่าย' + (route === '2a' ? ' + ใบสำคัญจ่าย (รอเซ็น)' : route === '2b_travel' ? ' + ใบรับรองแทนใบเสร็จ (รอเซ็น)' : '') + ' ให้แล้ว' } });
     this.save();
   };
 
@@ -3151,6 +3459,52 @@ class Component extends DCLogic {
       : s === 'ยกเลิกแล้ว' ? ['#8A6D5C', '#F1EAE1']
       : s === 'รอรับของ' || s === 'หลักฐานครบ' ? ['#1971C2', '#E7F5FF'] : ['#9C36B5', '#F8F0FC'];
   }
+  // ── ทะเบียนสินค้าต่อเคส (มาจาก liff_stats → case_items, โหลดตอนเข้าแอปแล้ว จึงขึ้นทันทีไม่ต้องรอ)
+  caseItemsOf(caseId) {
+    const s = this.state.stats; const m = (s && s.case_items) || {};
+    const e = caseId ? m[caseId] : null;
+    return (e && Array.isArray(e.items)) ? e.items : [];
+  }
+  qtyText(q) { const x = +q; return Number.isFinite(x) ? String(Math.round(x * 100) / 100) : ''; }
+  // "เนื้อกุ้ง 22กก. · แซลมอน 20กก. และอีก 3 รายการ"
+  itemsLine(items) {
+    if (!items || !items.length) return '';
+    const head = items.slice(0, 3).map(i => i.name + (this.qtyText(i.qty) ? ' ' + this.qtyText(i.qty) + (i.unit || '') : ''));
+    const rest = items.length - head.length;
+    return head.join(' · ') + (rest > 0 ? ' และอีก ' + rest + ' รายการ' : '');
+  }
+  itemsSearchText(items) { return (items || []).map(i => i.name).join(' '); }
+  // ค้นชื่อสินค้าข้ามทุกเดือน → ซื้อวันไหน ที่ร้านไหน ราคาเท่าไร (พร้อมประวัติราคา)
+  itemSearchHits(q) {
+    const s = this.state.stats; const m = (s && s.case_items) || {};
+    const needle = String(q || '').trim();
+    if (needle.length < 2) return [];
+    const by = {};
+    Object.keys(m).forEach(cid => {
+      const e = m[cid] || {}; const items = Array.isArray(e.items) ? e.items : [];
+      items.forEach(it => {
+        if (!it.name || it.name.indexOf(needle) < 0) return;
+        const g = by[it.name] || (by[it.name] = { name: it.name, buys: [] });
+        const mid = this._vmapRev ? this._vmapRev[e.v] : null;
+        const v = mid ? this.vendorById(mid) : null;
+        g.buys.push({ caseId: cid, d: e.d || '', price: +it.price || 0, qty: +it.qty || 0, unit: it.unit || '',
+          vendorName: (v && v.name !== '?') ? v.name : '' });
+      });
+    });
+    return Object.keys(by).map(k => by[k]).map(g => {
+      g.buys.sort((a, b) => (a.d < b.d ? 1 : -1));
+      const prices = g.buys.map(b => b.price).filter(p => p > 0);
+      return {
+        name: g.name, count: g.buys.length,
+        last: g.buys[0] || null,
+        lo: prices.length ? Math.min.apply(null, prices) : 0,
+        hi: prices.length ? Math.max.apply(null, prices) : 0,
+        qtyTotal: g.buys.reduce((a, b) => a + b.qty, 0),
+        unit: (g.buys[0] && g.buys[0].unit) || '',
+        buys: g.buys.slice(0, 8)
+      };
+    }).sort((a, b) => b.count - a.count).slice(0, 6);
+  }
   caseStatusTh(s) { return { waiting: 'รอหลักฐาน', complete: 'หลักฐานครบ', doc_created: 'ออกเอกสารแล้ว', closed: 'เสร็จสมบูรณ์', cancelled: 'ยกเลิกแล้ว' }[s] || (s || 'บันทึกแล้ว'); }
   beRouteLabel(code) { return { '1a': 'ใบกำกับภาษี (มี VAT)', '1b': 'บิล/ใบเสร็จ', '2a': 'ใบสำคัญจ่าย + สลิป', '2b_travel': 'ใบรับรองแทนใบเสร็จ', '2b_inhouse': 'เฉพาะงบส่วนตัว' }[code] || (code || ''); }
   monthRows(ym) {
@@ -3217,42 +3571,204 @@ class Component extends DCLogic {
       const m = this.state.modal;
       if (!m || m.kind !== 'case' || m.caseId !== caseId || !res || !res.ok || !res.data) return;
       const d = res.data;
-      const photos = (d.files || []).filter(f => f.thumb_url).map(f => ({ src: f.thumb_url, full: f.thumb_url, drive: f.drive_file_id || null }));
+      const KIND_TH = { slip: 'สลิป', goods_photo: 'รูปสินค้า', order_screenshot: 'แคปแชท', tax_invoice: 'บิล/ใบกำกับ', signature: 'ลายเซ็น', other: 'อื่นๆ' };
+      const photos = (d.files || []).filter(f => f.thumb_url).map(f => ({
+        src: f.thumb_url, full: f.thumb_url, drive: f.drive_file_id || null,
+        fileId: f.id, kindLabel: KIND_TH[f.kind] || '', name: f.original_name || '',
+        del: () => this.deleteEvFile(caseId, f.id, f.original_name)
+      }));
       const journal = [];
       (d.journal || []).forEach(e => (e.fin_journal_lines || []).forEach(l => journal.push({
         name: ((this._accounts && this._accounts[l.account_code]) || l.account_code) + (l.book_scope === 'inhouse_only' ? ' (งบร้าน)' : l.book_scope === 'statutory_only' ? ' (งบนิติ)' : ''),
         dr: +l.debit || 0, cr: +l.credit || 0
       })));
-      const DOCL = { payment_voucher: 'ใบสำคัญจ่าย', expense_certificate: 'ใบรับรองแทนใบเสร็จ', receipt_substitute: 'ใบรับรองแทนใบเสร็จ' };
+      const DOCL = this.docTypeLabel;
       // เอกสารดูบนจอได้ทันที (สร้างจากข้อมูลใน Supabase — ไม่ต้องรอ Google Drive) + เซ็นได้จากตรงนี้เลย
-      const docs = (d.documents || []).map(x => ({
+      const ORD = { expense_note: 1, payment_journal: 2, vat_record: 3, payment_voucher: 4, receipt_substitute: 5, expense_certificate: 5 };
+      const docs = (d.documents || []).slice().sort((a, b) => (ORD[a.type] || 9) - (ORD[b.type] || 9)).map(x => ({
         name: (DOCL[x.type] || x.type) + ' ' + (x.doc_no || ''),
-        sub: x.status === 'approved' ? 'เซ็นแล้ว ✓' + ((x.payload && x.payload.signed_by_name) ? ' โดย ' + x.payload.signed_by_name : '') : x.status === 'void' ? 'ยกเลิกแล้ว' : 'ร่าง รอเซ็น — เซ็นเมื่อไหร่ก็ได้',
-        subColor: x.status === 'approved' ? '#2B8A3E' : x.status === 'void' ? '#8A6D5C' : '#E67700',
+        sub: x.status === 'approved' ? 'เซ็นแล้ว ✓' + ((x.payload && x.payload.signed_by_name) ? ' โดย ' + x.payload.signed_by_name : '')
+          : x.status === 'void' ? 'ยกเลิกแล้ว'
+          : x.status === 'issued' ? 'ออกอัตโนมัติ ✓ ไม่ต้องเซ็น'
+          : 'ร่าง รอเซ็น — เซ็นเมื่อไหร่ก็ได้',
+        subColor: x.status === 'approved' ? '#2B8A3E' : x.status === 'void' ? '#8A6D5C' : x.status === 'issued' ? '#1971C2' : '#E67700',
         canView: true, view: () => this.openLiveDoc(x),
         canSign: x.status === 'draft', signNow: () => this.signDocNow(x.id, x.doc_no),
         hasPdf: !!x.pdf_gdrive_id, pdfId: x.pdf_gdrive_id || null
       }));
       const liveCase = d.case || m.liveCase || null;
-      this.setState({ modal: Object.assign({}, m, { photos, journal: journal.length ? journal : m.journal, docs, liveCase }) });
+      this.setState({ modal: Object.assign({}, m, { photos, journal: journal.length ? journal : m.journal, docs, liveCase, po: d.po || m.po || null }) });
     });
   }
-  // เปิดดูเอกสารจริงบนจอ (ประกอบจาก payload ใน fin_documents — โชว์ได้ทันที Drive มีไว้เก็บ PDF เฉยๆ)
+  docTypeLabel = { payment_voucher: 'ใบสำคัญจ่าย', expense_certificate: 'ใบรับรองแทนใบเสร็จ', receipt_substitute: 'ใบรับรองแทนใบเสร็จ', expense_note: 'บันทึกค่าใช้จ่าย', payment_journal: 'สมุดรายวันจ่าย', vat_record: 'บันทึกภาษีซื้อ' };
+  // เปิดดูเอกสารจริงบนจอ — ส่งแถวเอกสารทั้งแถวให้ตัวประกอบเอกสาร (docVals) วาดเต็มรูปแบบตาม template
   openLiveDoc(x) {
-    const pl = x.payload || {};
-    const DOCL = { payment_voucher: 'ใบสำคัญจ่าย', expense_certificate: 'ใบรับรองแทนใบเสร็จ', receipt_substitute: 'ใบรับรองแทนใบเสร็จ' };
-    const ent = this.entityById(x.entity_id);
+    if (x && x.payload && !x.payload.entity_name) {
+      const ent = this.entityById(x.entity_id);
+      if (ent) x = Object.assign({}, x, { payload: Object.assign({}, x.payload, { entity_name: ent.name, entity_tax_id: x.payload.entity_tax_id || ent.tax_id, entity_address: x.payload.entity_address || ent.address }) });
+    }
+    this.openModal({ kind: 'doc', d: x });
+  }
+  /* ---------- ตั้งค่าเอกสาร (A7): หัวกระดาษ per ใบ + ชื่อกิจการในใบรับรอง ---------- */
+  docSettings() {
+    const s = this.state.docSet || {};
+    return {
+      headers: Object.assign({ expense_note: true, payment_journal: true, payment_voucher: false, receipt_substitute: false, expense_certificate: false, vat_record: true }, s.headers || {}),
+      certName: s.certName || ''
+    };
+  }
+  persistDocSet(patch) {
+    const docSet = Object.assign({}, this.state.docSet || {}, patch);
+    this.setState({ docSet }, () => this.save());
+    if (this.state.liveMode) this.pushQuiet('settings_save', { rule_key: 'liff_doc_settings', value: docSet, description: 'ตั้งค่าเอกสาร (หัวกระดาษ/ชื่อกิจการในใบรับรอง)' });
+  }
+  previewDoc(type) {
+    const H = window.KK_HELPERS;
+    const pe = this.payerEntity() || {};
+    const today = H ? H.todayIso() : new Date().toISOString().slice(0, 10);
+    const pfx = { expense_note: 'EXP', payment_journal: 'JV', payment_voucher: 'PV', receipt_substitute: 'RC', vat_record: 'VAT' }[type] || 'DOC';
+    const ymm = String(new Date().getFullYear()).slice(2) + String(new Date().getMonth() + 1).padStart(2, '0');
+    this.openModal({ kind: 'doc', d: { type, doc_no: pfx + '-' + ymm + '001', status: 'draft', sample: true, payload: {
+      payee: 'ร้านตัวอย่างค้าส่ง', vendor_name: 'ร้านตัวอย่างค้าส่ง',
+      vendor_address: type === 'payment_voucher' ? '99/1 ถ.ตัวอย่าง เขตบางรัก กรุงเทพฯ' : null,
+      vendor_tax_id: (type === 'payment_voucher' || type === 'vat_record') ? '0105551234567' : null,
+      date: today, route: '2a', description: 'ตัวอย่างเอกสาร (ยังไม่บันทึกจริง)',
+      items: [{ item_name: 'เนื้อกุ้งขาว 16/20', qty: 4, unit: 'กก.', unit_price: 270, cat: 'อาหารทะเล' }, { item_name: 'แซลมอนเทรม', qty: 2, unit: 'กก.', unit_price: 140, cat: 'อาหารทะเล' }],
+      subtotal: 1360, shipping_cost: 120, packaging_cost: 50, total: 1530,
+      vat: type === 'vat_record' ? 100.1 : null,
+      payment_method: 'transfer',
+      entity_name: pe.name || 'กิจการของฉัน', entity_tax_id: pe.tax_id || null, entity_address: pe.address || null,
+      journal: [{ code: '1040', name: 'สินค้าคงเหลือ-วัตถุดิบ', dr: 1530, cr: 0 }, { code: '1020', name: 'ธนาคาร', dr: 0, cr: 1530 }],
+      ref_no: 'EXP-' + ymm + '001'
+    } } });
+  }
+  fmtDoc(n) { return (+n || 0).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  // ประกอบเอกสารเต็มรูปแบบจาก payload — กฎเหล็ก: ข้อมูลไหนไม่มี = ตัดบรรทัด/คอลัมน์ทิ้ง ไม่โชว์ช่องว่างเปล่า
+  docVals(dIn) {
+    const H = window.KK_HELPERS;
+    const empty = { docHasHeader: false, docHeadName: '', docHeadLines: [], docTitle: '', docTitleEn: '', docMeta: [], docHasParty: false, docParty: [], docCols: [], docRows: [], docTotals: [], docHasWords: false, docWords: '', docHasPayLine: false, docPayLine: '', docHasCert: false, docCertText: '', docSigns: [], docHasExtra: false, docExtraText: '' };
+    if (!dIn) return empty;
+    let d = dIn;
+    if (!d.payload) { // เอกสารเดโม่แบบเก่า (ไม่มี payload) — แปลงให้เข้าโครงเดียวกัน
+      const t = (d.type || '').indexOf('ใบรับรอง') >= 0 ? 'receipt_substitute' : 'payment_voucher';
+      d = { type: t, doc_no: d.id || '', status: (d.sigData || d.signedBy) ? 'approved' : 'draft', payload: {
+        payee: d.payee || '', total: +d.amount || 0, date_label: d.date || '',
+        entity_name: d.entity || '', entity_tax_id: d.entityTaxId || null,
+        signature_data: d.sigData || '', signed_by_name: d.signedBy || '', extra: d.extra || ''
+      } };
+    }
+    const pl = d.payload || {};
+    const ds = this.docSettings();
+    const type = d.type;
+    const L = {
+      expense_note: ['บันทึกค่าใช้จ่าย', 'Expense Note'],
+      payment_journal: ['สมุดรายวันจ่าย', 'Payment Journal'],
+      payment_voucher: ['ใบสำคัญจ่าย', 'Payment Voucher'],
+      receipt_substitute: ['ใบรับรองแทนใบเสร็จรับเงิน', 'Receipt Substitute'],
+      expense_certificate: ['ใบรับรองแทนใบเสร็จรับเงิน', 'Receipt Substitute'],
+      vat_record: ['บันทึกภาษีซื้อ', 'Input VAT Record']
+    }[type] || [this.docTypeLabel[type] || type || 'เอกสาร', ''];
+    const fm = (n) => this.fmtDoc(n);
+    const dateLabel = pl.date_label || (pl.date && H ? H.dayLabel(String(pl.date).slice(0, 10)) : (pl.date || ''));
+    const total = +pl.total || 0;
+    const vat = +pl.vat || 0;
+    const items = Array.isArray(pl.items) ? pl.items.filter(it => it && it.item_name) : [];
+    const hasCat = items.some(it => it.cat);
+    const headLines = [];
+    if (pl.entity_address) headLines.push(pl.entity_address);
+    if (pl.entity_tax_id) headLines.push('เลขประจำตัวผู้เสียภาษี ' + pl.entity_tax_id);
+    const meta = [{ k: 'เลขที่', v: d.doc_no || '' }];
+    if (dateLabel) meta.push({ k: 'วันที่', v: dateLabel });
+    if (pl.ref_no && type !== 'expense_note') meta.push({ k: 'อ้างอิง', v: pl.ref_no });
+    const party = [];
+    const payee = pl.payee || pl.vendor_name || '';
+    if (type === 'expense_note' && payee) party.push({ k: 'ผู้จำหน่าย/ผู้รับเงิน:', v: payee });
+    if (type === 'payment_voucher' && payee) party.push({ k: 'จ่ายให้:', v: payee });
+    if (type === 'vat_record' && payee) party.push({ k: 'ผู้ขาย:', v: payee });
+    if (type === 'expense_note' || type === 'payment_voucher' || type === 'vat_record') {
+      if (pl.vendor_address) party.push({ k: 'ที่อยู่:', v: pl.vendor_address });
+      if (pl.vendor_tax_id) party.push({ k: 'เลขประจำตัวผู้เสียภาษี:', v: pl.vendor_tax_id });
+    }
+    let cols = [], rows = [], totals = [];
+    const R = (cells) => ({ cells });
+    const C = (t, w, a) => ({ t: String(t == null ? '' : t), w, a: a || 'left' });
+    if (type === 'payment_journal') {
+      const jl = Array.isArray(pl.journal) ? pl.journal : [];
+      cols = [C('รหัสบัญชี', '17%'), C('ชื่อบัญชี', '43%'), C('เดบิต', '20%', 'right'), C('เครดิต', '20%', 'right')];
+      rows = jl.map(l => R([C(l.code, '17%'), C(l.name || l.code, '43%'), C(+l.dr ? fm(l.dr) : '', '20%', 'right'), C(+l.cr ? fm(l.cr) : '', '20%', 'right')]));
+      const sd = jl.reduce((a, l) => a + (+l.dr || 0), 0), sc = jl.reduce((a, l) => a + (+l.cr || 0), 0);
+      totals = [{ k: 'รวมเดบิต ' + fm(sd) + ' = รวมเครดิต', v: fm(sc), fw: 900 }];
+    } else if (type === 'receipt_substitute' || type === 'expense_certificate') {
+      cols = [C('วัน เดือน ปี', '24%'), C('รายละเอียดรายจ่าย', '48%'), C('จำนวนเงิน (บาท)', '28%', 'right')];
+      if (items.length) rows = items.map(it => R([C(dateLabel, '24%'), C(it.item_name + (+it.qty ? ' × ' + (+it.qty) + ' ' + (it.unit || '') : ''), '48%'), C(fm((+it.qty || 1) * (+it.unit_price || 0)), '28%', 'right')]));
+      else rows = [R([C(dateLabel, '24%'), C(pl.description || payee || 'ค่าใช้จ่าย', '48%'), C(fm(total), '28%', 'right')])];
+      if (+pl.shipping_cost) rows.push(R([C(dateLabel, '24%'), C('ค่าส่ง', '48%'), C(fm(pl.shipping_cost), '28%', 'right')]));
+      if (+pl.packaging_cost) rows.push(R([C(dateLabel, '24%'), C('ค่าลังโฟม/แพ็กกิ้ง', '48%'), C(fm(pl.packaging_cost), '28%', 'right')]));
+      totals = [{ k: 'รวมทั้งสิ้น', v: fm(total), fw: 900 }];
+    } else if (type === 'vat_record') {
+      cols = [C('รายละเอียด', '46%'), C('ก่อน VAT', '20%', 'right'), C('VAT 7%', '14%', 'right'), C('รวม', '20%', 'right')];
+      rows = [R([C(pl.description || payee || 'ซื้อสินค้า/บริการ', '46%'), C(fm(total - vat), '20%', 'right'), C(fm(vat), '14%', 'right'), C(fm(total), '20%', 'right')])];
+      totals = [{ k: 'ภาษีซื้อที่บันทึก', v: fm(vat), fw: 900 }];
+    } else if (type === 'payment_voucher') {
+      cols = [C('ลำดับ', '11%', 'center'), C('รายการ', '61%'), C('จำนวนเงิน (บาท)', '28%', 'right')];
+      let i = 0;
+      if (items.length) rows = items.map(it => { i++; return R([C(i, '11%', 'center'), C(it.item_name + (+it.qty ? ' — ' + (+it.qty) + ' ' + (it.unit || '') + (+it.unit_price ? ' × ' + fm(it.unit_price) : '') : ''), '61%'), C(fm((+it.qty || 1) * (+it.unit_price || 0)), '28%', 'right')]); });
+      else rows = [R([C(1, '11%', 'center'), C(pl.description || 'ค่าสินค้า/บริการ', '61%'), C(fm(total), '28%', 'right')])];
+      if (+pl.shipping_cost) { i++; rows.push(R([C(i, '11%', 'center'), C('ค่าส่ง', '61%'), C(fm(pl.shipping_cost), '28%', 'right')])); }
+      if (+pl.packaging_cost) { i++; rows.push(R([C(i, '11%', 'center'), C('ค่าลังโฟม/แพ็กกิ้ง', '61%'), C(fm(pl.packaging_cost), '28%', 'right')])); }
+      totals = [{ k: 'รวมเงิน', v: fm(total), fw: 900 }];
+    } else { // expense_note
+      if (hasCat) {
+        cols = [C('ที่', '8%', 'center'), C('รายละเอียด', '30%'), C('หมวดหมู่', '18%'), C('จำนวน', '12%', 'right'), C('ราคา/หน่วย', '15%', 'right'), C('ยอดรวม', '17%', 'right')];
+        rows = items.map((it, i) => R([C(i + 1, '8%', 'center'), C(it.item_name, '30%'), C(it.cat || '', '18%'), C((+it.qty || 1) + ' ' + (it.unit || ''), '12%', 'right'), C(fm(it.unit_price), '15%', 'right'), C(fm((+it.qty || 1) * (+it.unit_price || 0)), '17%', 'right')]));
+      } else {
+        cols = [C('ที่', '9%', 'center'), C('รายละเอียด', '41%'), C('จำนวน', '14%', 'right'), C('ราคา/หน่วย', '17%', 'right'), C('ยอดรวม', '19%', 'right')];
+        rows = items.length ? items.map((it, i) => R([C(i + 1, '9%', 'center'), C(it.item_name, '41%'), C((+it.qty || 1) + ' ' + (it.unit || ''), '14%', 'right'), C(fm(it.unit_price), '17%', 'right'), C(fm((+it.qty || 1) * (+it.unit_price || 0)), '19%', 'right')]))
+          : [R([C(1, '9%', 'center'), C(pl.description || 'ค่าใช้จ่าย', '41%'), C('1', '14%', 'right'), C(fm(total), '17%', 'right'), C(fm(total), '19%', 'right')])];
+      }
+      const sub = pl.subtotal != null ? +pl.subtotal : items.reduce((a, it) => a + (+it.qty || 1) * (+it.unit_price || 0), 0);
+      if (sub && (Math.round(sub) !== Math.round(total) || vat || +pl.shipping_cost || +pl.packaging_cost)) totals.push({ k: 'รวมเป็นเงิน', v: fm(sub), fw: 700 });
+      if (+pl.shipping_cost) totals.push({ k: 'ค่าส่ง', v: fm(pl.shipping_cost), fw: 700 });
+      if (+pl.packaging_cost) totals.push({ k: 'ค่าลังโฟม/แพ็กกิ้ง', v: fm(pl.packaging_cost), fw: 700 });
+      // ยอดรวมเป็นราคารวมภาษีแล้ว (VAT in) → แยกฐานก่อนภาษีให้เห็น ไม่ให้บวกเกินยอดจริง
+      if (vat) {
+        totals.push({ k: 'มูลค่าก่อนภาษี', v: fm(total - vat), fw: 700 });
+        totals.push({ k: 'ภาษีมูลค่าเพิ่ม 7% (รวมอยู่ในยอดแล้ว)', v: fm(vat), fw: 700 });
+      }
+      totals.push({ k: 'จำนวนเงินรวมทั้งสิ้น', v: fm(total), fw: 900 });
+    }
+    const words = (H && H.bahtText) ? H.bahtText(total) : '';
+    let payLine = '';
+    if (pl.payment_method) payLine = 'ชำระเป็น: ' + (pl.payment_method === 'cash' ? 'เงินสด / Cash' : 'โอนเงิน / Bank Transfer') + (dateLabel ? ' · วันที่ชำระ ' + dateLabel : '');
+    if (pl.reimburser) payLine += (payLine ? ' · ' : '') + 'สำรองจ่ายโดย: ' + pl.reimburser;
+    const certName = ds.certName || pl.entity_name || 'กิจการ';
+    const certText = 'ข้าพเจ้าขอรับรองว่ารายจ่ายข้างต้นนี้ ไม่อาจเรียกใบเสร็จรับเงินจากผู้รับได้ และข้าพเจ้าได้จ่ายไปในงานของ ' + certName + ' โดยแท้จริง';
+    const sig = pl.signature_data || '';
+    const signedBy = pl.signed_by_name || '';
+    const approved = d.status === 'approved';
+    const mk = (label, useSig) => ({ label, hasSig: !!(useSig && sig && approved), sig: (useSig && approved) ? sig : '', hasName: !!(useSig && approved && signedBy), name: signedBy ? 'เซ็นโดย ' + signedBy : '' });
+    let signs = [];
+    if (type === 'expense_note') signs = [mk('ผู้รับเงิน'), mk('ผู้จัดทำ'), mk('ผู้อนุมัติ', true)];
+    else if (type === 'payment_journal') signs = [mk('ผู้จัดทำ'), mk('ผู้สอบทาน'), mk('ผู้อนุมัติ', true)];
+    else if (type === 'payment_voucher') signs = [mk('ผู้จ่ายเงิน'), mk('ผู้อนุมัติ', true)];
+    else if (type === 'receipt_substitute' || type === 'expense_certificate') signs = [mk('ผู้เบิกจ่าย'), mk('ผู้อนุมัติ', true)];
     const extra = [
-      pl.payment_method === 'cash' ? 'จ่ายสด (เครดิตเงินสด)' : (pl.payment_method ? 'จ่ายโอน (เครดิตธนาคาร)' : ''),
-      pl.reimburser ? 'สำรองจ่ายโดย: ' + pl.reimburser : '',
-      x.status === 'void' ? '⚠ เอกสารนี้ถูกยกเลิกแล้ว' : ''
+      d.sample ? 'เอกสารตัวอย่าง — ยังไม่บันทึกจริง' : '',
+      d.status === 'void' ? '⚠ เอกสารนี้ถูกยกเลิกแล้ว (void)' : '',
+      (!approved && !d.sample && (type === 'payment_voucher' || type === 'receipt_substitute' || type === 'expense_certificate')) ? 'ลายเซ็นจะแปะเมื่อกดเซ็นอนุมัติ' : '',
+      pl.extra || ''
     ].filter(Boolean).join(' · ');
-    this.openModal({ kind: 'doc', d: {
-      type: DOCL[x.type] || x.type, id: x.doc_no || '', entity: pl.entity_name || (ent && ent.name) || this._entityName || '',
-      entityTaxId: pl.entity_tax_id || (ent && ent.tax_id) || '',
-      date: pl.date || '', payee: pl.payee || pl.vendor_name || '',
-      amount: +pl.total || 0, sigData: pl.signature_data || '', signedBy: pl.signed_by_name || '', extra
-    } });
+    return {
+      docHasHeader: !!ds.headers[type] && !!pl.entity_name, docHeadName: pl.entity_name || '', docHeadLines: headLines,
+      docTitle: L[0], docTitleEn: L[1], docMeta: meta,
+      docHasParty: party.length > 0, docParty: party,
+      docCols: cols, docRows: rows, docTotals: totals,
+      docHasWords: !!words && type !== 'payment_journal' && type !== 'vat_record', docWords: words,
+      docHasPayLine: !!payLine && type !== 'payment_journal' && type !== 'vat_record', docPayLine: payLine,
+      docHasCert: type === 'receipt_substitute' || type === 'expense_certificate', docCertText: certText,
+      docSigns: signs,
+      docHasExtra: !!extra, docExtraText: extra
+    };
   }
   casePdf(d) {
     if (d.pdfId) { window.open('https://drive.google.com/file/d/' + d.pdfId + '/view', '_blank'); return; }
@@ -3335,7 +3851,9 @@ class Component extends DCLogic {
     const diaryEntries = dayRows.map(r => {
       const [c, b] = this.statusTone(r.status);
       const thumbs = md.live ? (r.thumbPaths || []).map(p => st.thumbs[p]).filter(Boolean).slice(0, 6) : (r.thumbs || []).slice(0, 6);
-      return { name: r.vendorName, logo: r.logo, sub: r.route || '—', totalText: fmt(r.total), status: r.status, statusColor: c, statusBg: b, hasThumbs: thumbs.length > 0, thumbs, open: () => this.openCase(r) };
+      const dItems = this.caseItemsOf(r.live ? r.live.id : null);
+      return { name: r.vendorName, logo: r.logo, sub: r.route || '—', totalText: fmt(r.total), status: r.status, statusColor: c, statusBg: b, hasThumbs: thumbs.length > 0, thumbs, open: () => this.openCase(r),
+        hasItems: dItems.length > 0, itemsText: this.itemsLine(dItems) };
     });
     const byV = {}; let mTotal = 0;
     fRows.forEach(r => { byV[r.vendorName] = (byV[r.vendorName] || 0) + r.total; mTotal += r.total; });
@@ -3392,7 +3910,34 @@ class Component extends DCLogic {
     const caseJournal = isCase ? (m.journal || []).map(j => ({
       name: j.name, amtText: (j.dr ? 'Dr ' + fmt(j.dr) : 'Cr ' + fmt(j.cr)), color: j.dr ? '#2B8A3E' : '#D9480F'
     })) : [];
-    const casePhotos = isCase ? (m.photos || []).map(p => ({ src: p.src, open: () => this.caseOpenFull(p) })) : [];
+    const casePhotos = isCase ? (m.photos || []).map(p => ({
+      src: p.src, open: () => this.caseOpenFull(p),
+      hasKind: !!p.kindLabel, kindLabel: p.kindLabel || '',
+      canDel: !!p.del && !!st.liveMode, del: p.del || null
+    })) : [];
+    // C1: รายการสินค้า + ค่าส่ง/ค่าลัง + วิธีจ่าย/route ครบในหน้าเดียว (จาก PO ที่ ledger_detail ส่งมา)
+    const po = isCase ? (m.po || null) : null;
+    const poItems = (po && po.fin_po_items) || [];
+    // ยังโหลดรายละเอียดไม่เสร็จ → ใช้รายการสินค้าที่โหลดไว้ล่วงหน้า (stats.case_items) โชว์ทันที
+    const quickItems = (!poItems.length && isCase && m.caseId)
+      ? this.caseItemsOf(m.caseId).map(i => ({ item_name: i.name, qty: i.qty, unit: i.unit, unit_price: i.price }))
+      : [];
+    const caseItems = (poItems.length ? poItems : quickItems).map(it => ({
+      name: it.item_name,
+      qtyText: '× ' + (+it.qty || 1) + ' ' + (it.unit || '') + (+it.unit_price ? ' @' + Math.round(+it.unit_price).toLocaleString('th-TH') : ''),
+      amtText: fmt((+it.qty || 1) * (+it.unit_price || 0))
+    }));
+    const caseSums = po ? [
+      { k: 'รวมสินค้า', v: fmt(+po.subtotal || 0), fw: 700, color: '#5C4438' },
+      (+po.shipping_cost ? { k: 'ค่าส่ง', v: fmt(po.shipping_cost), fw: 700, color: '#8A6D5C' } : null),
+      (+po.packaging_cost ? { k: 'ค่าลังโฟม/แพ็กกิ้ง', v: fmt(po.packaging_cost), fw: 700, color: '#8A6D5C' } : null),
+      { k: 'รวมทั้งบิล', v: fmt(+po.total || 0), fw: 900, color: '#7048E8' }
+    ].filter(Boolean) : [];
+    const caseMetaText = po ? [
+      'จ่ายโดย: ' + (po.payment_method === 'cash' ? 'เงินสด' : 'โอน/ธนาคาร'),
+      'เอกสาร: ' + this.beRouteLabel(po.intake_route),
+      (po.notes && po.notes.indexOf('สำรองจ่ายโดย') >= 0 ? po.notes.slice(po.notes.indexOf('สำรองจ่ายโดย')) : '')
+    ].filter(Boolean).join(' · ') : '';
     const caseDocs = isCase ? (m.docs || []).map(d => ({
       name: d.name, sub: d.sub, subColor: d.subColor || '#B08968',
       canView: !!d.view, view: d.view || null,
@@ -3447,11 +3992,13 @@ class Component extends DCLogic {
       modalIsCase: isCase,
       caseTitle: isCase ? m.title : '', caseSub: isCase ? m.sub : '',
       caseBadges, casePhotos, caseHasPhotos: casePhotos.length > 0,
+      caseHasItems: caseItems.length > 0, caseItems, caseSums,
+      caseHasMeta: !!caseMetaText, caseMetaText,
       caseJournal, caseDocs, caseHasDocs: caseDocs.length > 0,
       caseCanCancel: isCase && !!m.canCancel, caseCancel: isCase ? m.onCancel : null,
-      // อัปหลักฐานเพิ่มย้อนหลังได้ตลอด (เฉพาะเคสจริงในระบบ)
+      // อัปหลักฐานเพิ่มย้อนหลังได้ตลอด — เปิดตัวเลือกประเภทก่อน (เฉพาะเคสจริงในระบบ)
       caseCanAddEv: isCase && !!m.caseId && !!st.liveMode,
-      caseAddEv: isCase && m.caseId ? (e) => this.caseAddEvidence(m.caseId, (m.liveCase && m.liveCase.required_parts) || [], (m.liveCase && m.liveCase.collected_parts) || {}, e) : null
+      caseAddEv: isCase && m.caseId ? () => this.openEvKind(m.caseId, (m.liveCase && m.liveCase.required_parts) || [], (m.liveCase && m.liveCase.collected_parts) || {}) : null
     };
   }
   exportDiaryCsv(ym, rows) {
@@ -3533,8 +4080,20 @@ class Component extends DCLogic {
     }));
     const mMatch = mTot > 0 && Math.round(mSum) === Math.round(mTot);
 
-    const EX = st.expense || { cat: '', amount: '', note: '', isAsset: false };
+    const EX = st.expense || { cat: '', amount: '', note: '', isAsset: false, route: '2a', pay: 'transfer', ev: [] };
     const expCats = ['ค่าไฟฟ้า', 'ค่าน้ำประปา', 'ค่าเช่า', 'ค่าขนส่ง/เดินทาง', 'ค่าการตลาด', 'ค่าธรรมเนียมธนาคาร', 'เบ็ดเตล็ด'].map(c => ({ name: c, bg: EX.cat === c ? '#7048E8' : '#fff', fg: EX.cat === c ? '#fff' : '#8A6D5C', pick: () => this.expSet({ cat: c }) }));
+    // B: ค่าใช้จ่ายทั่วไปต้องมีเอกสารรองรับเสมอ — เลือกตามหลักฐานที่มีจริง
+    const exRoute = EX.route || '2a';
+    const expDocCards = [
+      { k: '1b', t: 'มีบิล/ใบเสร็จในชื่อเรา', d: 'ครบอยู่แล้ว — ออกเอกสารชุดพื้นฐาน + แนบบิลเก็บไว้' },
+      { k: '2a', t: 'บิลเป็นชื่อคนอื่น / มีแค่สลิปโอน', d: 'เช่น ค่าน้ำ-ไฟ-เช่า บิลชื่อเจ้าของตึก → ออกใบสำคัญจ่าย + แนบบิล/สลิป/สัญญา' },
+      { k: '2b_travel', t: 'ไม่มีเอกสารเลย (จ่ายสด)', d: 'ตลาด/วิน/แผงลอย → ออกใบรับรองแทนใบเสร็จ' }
+    ].map(o => ({ title: o.t, desc: o.d, border: exRoute === o.k ? '#FF8A3D' : '#FFEEDD', pick: () => this.expSet({ route: o.k }) }));
+    const expPayChips = [{ k: 'cash', n: '💵 จ่ายสด' }, { k: 'transfer', n: '🏦 โอน/ธนาคาร' }].map(o => {
+      const on = (EX.pay || 'transfer') === o.k;
+      return { name: o.n, bg: on ? '#FF8A3D' : '#fff', fg: on ? '#fff' : '#8A6D5C', border: on ? '#FF8A3D' : '#FFD8A8', pick: () => this.expSet({ pay: o.k }) };
+    });
+    const expEvThumbs = (EX.ev || []).map((u, i) => ({ src: u, del: () => { const a = (this.state.expense.ev || []).slice(); a.splice(i, 1); this.expSet({ ev: a }); } }));
 
     const H = st.health || null;
     // สถานะบริการจริงจาก health ของเกตเวย์ — สวิตช์: รหัสผ่าน = เปิดหน้าเปลี่ยนรหัส · ตัวอื่น = เช็คซ้ำ
@@ -3592,6 +4151,46 @@ class Component extends DCLogic {
     const HM = window.KK_HELPERS;
     // ── AI: modal เลือกโหมดหลายรูป + คิวบิลถัดไป ──
     const isAiMode = !!m && m.kind === 'aimode';
+    // ── อัปหลักฐานเพิ่ม: เลือกประเภทก่อน (D2) ──
+    const isEvKind = !!m && m.kind === 'evkind';
+    const evKindDefs = [
+      { part: 'slip', name: 'สลิปโอนเงิน', desc: 'หลักฐานการจ่ายเงิน', icon: 'assets/icons/icon_payment_slip.webp' },
+      { part: 'vendor_doc', name: 'ใบกำกับภาษี / บิล / ใบเสร็จ', desc: 'เอกสารจากร้านค้า', icon: 'assets/icons/icon_tax_invoice.webp' },
+      { part: 'goods_photo', name: 'รูปสินค้าที่รับ', desc: 'ถ่ายของที่มาส่งจริง', icon: 'assets/icons/icon_camera.webp' },
+      { part: 'order_capture', name: 'แคปแชทคำสั่งซื้อ', desc: 'ภาพแชทตอนสั่งของ', icon: 'assets/icons/icon_po_clipboard.webp' },
+      { part: 'other', name: 'อื่นๆ', desc: 'สัญญาเช่า / เอกสารอื่น', icon: 'assets/icons/icon_document_folder.webp' }
+    ];
+    // ── จัดการหมวดสินค้า (C3) ──
+    const isCatMgr = !!m && m.kind === 'catmgr';
+    let catMgrRows = [], catMgrVendorName = '';
+    if (isCatMgr) {
+      const cv = this.vendorById(m.vendorId);
+      catMgrVendorName = cv.name;
+      catMgrRows = this.vendorCats(cv).map(c => ({ name: c, count: this.catCount(cv, c), rename: () => this.catRename(cv, c), del: () => this.catDelete(cv, c) }));
+    }
+    // ── ตั้งค่าเอกสาร (A7) ──
+    const dsCfg = this.docSettings();
+    const docHeadToggles = [
+      { k: 'expense_note', name: 'บันทึกค่าใช้จ่าย (Expense Note)' },
+      { k: 'payment_journal', name: 'สมุดรายวันจ่าย (ตารางลงบัญชี)' },
+      { k: 'payment_voucher', name: 'ใบสำคัญจ่าย (ต้องเซ็น)' },
+      { k: 'receipt_substitute', name: 'ใบรับรองแทนใบเสร็จ (ต้องเซ็น)' }
+    ].map(o => {
+      const on = !!dsCfg.headers[o.k];
+      return {
+        name: o.name,
+        sub: on ? 'มีหัวกระดาษชื่อกิจการ' : 'ไม่มีหัวกระดาษ (ตามฟอร์มมาตรฐาน)',
+        subColor: on ? '#2B8A3E' : '#B08968',
+        bg: on ? '#37B24D' : '#D9C6B2', knob: on ? '28px' : '4px',
+        toggle: () => {
+          const heads = Object.assign({}, dsCfg.headers); heads[o.k] = !on;
+          if (o.k === 'receipt_substitute') heads.expense_certificate = !on;
+          this.persistDocSet({ headers: heads });
+          this.pop(!on ? 'เปิดหัวกระดาษ "' + o.name + '" แล้ว' : 'ปิดหัวกระดาษ "' + o.name + '" แล้ว');
+        },
+        preview: () => this.previewDoc(o.k)
+      };
+    });
     // ── จัดการของใช้บ่อย ──
     const isFreqCfg = !!m && m.kind === 'freqcfg';
     let freqCfgRows = [], freqCfgVendorName = '';
@@ -3627,6 +4226,16 @@ class Component extends DCLogic {
       modalIsAiMode: isAiMode, aiModeCount: isAiMode ? (m.n || 2) : 0,
       aiPickOne: () => this.aiModePick('one'), aiPickMany: () => this.aiModePick('many'),
       hasAiQueue: (st.aiQueue || []).length > 0, aiQueueCount: (st.aiQueue || []).length, nextAiBill: this.nextAiBill,
+      /* อัปหลักฐานเพิ่ม (เลือกประเภท) + จัดการหมวด + ตั้งค่าเอกสาร */
+      modalIsEvKind: isEvKind,
+      evKindOpts: isEvKind ? evKindDefs.map(o => ({ name: o.name, desc: o.desc, icon: o.icon, onFile: (e) => this.uploadEvKind(m.caseId, o.part, e) })) : [],
+      modalIsCatMgr: isCatMgr, catMgrVendor: catMgrVendorName, catMgrRows,
+      catMgrAdd: () => this.catAdd(this.vendorById((m && m.vendorId) || st.dataVendorId)),
+      openCatMgr: this.openCatMgr,
+      docHeadToggles,
+      certNameVal: (st.docSet && st.docSet.certName) || '',
+      certNamePh: (this.payerEntity() || {}).name || 'ชื่อกิจการ (ตามผู้จ่ายที่เลือก)',
+      onCertName: (e) => this.persistDocSet({ certName: e.target.value }),
       /* จัดการของใช้บ่อย */
       modalIsFreqCfg: isFreqCfg, freqCfgVendor: freqCfgVendorName, freqCfgRows,
       freqThresholdVal: String(st.freqThreshold || 60),
@@ -3652,6 +4261,10 @@ class Component extends DCLogic {
       expNoteVal: EX.note, onExpNote: (e) => this.expSet({ note: e.target.value }),
       expAssetOn: !!EX.isAsset, toggleExpAsset: () => this.expSet({ isAsset: !EX.isAsset }),
       expAssetBg: EX.isAsset ? '#37B24D' : '#D9C6B2', expAssetKnob: EX.isAsset ? '32px' : '4px',
+      expDocCards, expPayChips,
+      expHasEv: expEvThumbs.length > 0, expEvThumbs,
+      onExpEv: (e) => this.readFiles(e, (url) => this.expSet({ ev: (this.state.expense.ev || []).concat([url]) }), true),
+      expDocNote: 'ระบบจะออก บันทึกค่าใช้จ่าย + สมุดรายวันจ่าย' + (exRoute === '2a' ? ' + ใบสำคัญจ่าย (รอเซ็น)' : exRoute === '2b_travel' ? ' + ใบรับรองแทนใบเสร็จ (รอเซ็น)' : '') + ' + ลงบัญชีให้อัตโนมัติ (แนบหลักฐานทีหลังได้ · never block)',
       confirmExpense: this.confirmExpense,
       aiRunning: !!st.aiRunning, aiFilled: !!st.aiFilled, aiScan: this.aiScan,
       aiEnabled: this.aiEnabled(), aiDisabled: !this.aiEnabled(), aiScanBlocked: this.aiScanBlocked,
@@ -3822,7 +4435,9 @@ class Component extends DCLogic {
       const v = vmock ? this.vendorById(vmock) : null;
       const req = c.required_parts || []; const got = c.collected_parts || {};
       const miss = (Array.isArray(req) ? req : []).filter(p => !got[p]).map(p => p === 'slip' ? 'สลิปโอน' : p === 'vendor_doc' ? 'ใบเสร็จ/ใบกำกับ' : p);
+      const cItems = this.caseItemsOf(c.id);
       return {
+        hasItems: cItems.length > 0, itemsText: this.itemsLine(cItems), itemsAll: this.itemsSearchText(cItems),
         id: c.case_no || '', logo: (v && v.logo) || 'assets/icons/icon_document_folder.webp',
         vendorName: c.vendor_name || (v && v.name) || 'รายการ',
         date: (window.KK_HELPERS ? KK_HELPERS.dayLabel(String(c.created_at || '').slice(0, 10)) : String(c.created_at || '').slice(0, 10)),
@@ -3830,7 +4445,7 @@ class Component extends DCLogic {
         status: label, statusColor: fg, statusBg: bg, isAsset: false,
         hasHistory: false, openHistory: null,
         canOpen: true, open: () => this.openCase({ live: c, vendorName: c.vendor_name || (v && v.name) || 'รายการ', iso: String(c.created_at || '').slice(0, 10), route: this.beRouteLabel(c.intake_route), status: label, total: +c.total || 0 }),
-        canAddEv: c.status !== 'cancelled', addEv: (e) => this.caseAddEvidence(c.id, req, got, e),
+        canAddEv: c.status !== 'cancelled', addEv: () => this.openEvKind(c.id, req, got),
         canCancel: c.status !== 'cancelled', cancel: () => this.cancelCaseLive(c.id),
         hasMissing: miss.length > 0, missingText: miss.join(' · '),
         onFill: (e) => this.caseAddEvidence(c.id, req, got, e)
@@ -3838,11 +4453,26 @@ class Component extends DCLogic {
     }) : null;
     const purchasesView = liveRows
       ? liveRows.filter(r => (st.listTab === 'ทั้งหมด' || liveTabOf(r.status) === st.listTab)
-          && (!lsearch || [r.id, r.route || '', r.vendorName].join(' ').indexOf(lsearch) >= 0))
+          && (!lsearch || [r.id, r.route || '', r.vendorName, r.itemsAll || ''].join(' ').indexOf(lsearch) >= 0))
       : db.purchases
         .filter(p => (st.listTab === 'ทั้งหมด' || p.status === st.listTab)
           && (!lsearch || [p.id, p.route || '', (p.isExpense ? (p.expName || '') : this.vendorById(p.vendorId).name)].join(' ').indexOf(lsearch) >= 0))
         .map(pView);
+
+    // ค้นชื่อสินค้าข้ามทุกเดือน: โชว์ว่าซื้อวันไหน ร้านไหน ราคาเท่าไร + ช่วงราคา
+    const itemHits = (st.liveMode && lsearch) ? this.itemSearchHits(lsearch).map(h => ({
+      name: h.name,
+      countText: 'ซื้อ ' + h.count + ' ครั้ง' + (h.qtyTotal ? ' · รวม ' + this.qtyText(h.qtyTotal) + (h.unit || '') : ''),
+      priceText: h.lo ? (h.lo === h.hi ? this.fmt(h.lo) + '/' + (h.unit || 'หน่วย')
+        : this.fmt(h.lo) + '–' + this.fmt(h.hi) + '/' + (h.unit || 'หน่วย')) : '—',
+      lastText: h.last ? ('ล่าสุด ' + (window.KK_HELPERS ? KK_HELPERS.dayLabel(h.last.d) : h.last.d) + (h.last.price ? ' · ' + this.fmt(h.last.price) : '')) : '',
+      buys: h.buys.map(b => ({
+        dateText: (window.KK_HELPERS ? KK_HELPERS.dayLabel(b.d) : b.d),
+        vendorName: b.vendorName || '—',
+        qtyText: this.qtyText(b.qty) + (b.unit || ''),
+        priceText: b.price ? this.fmt(b.price) + '/' + (b.unit || 'หน่วย') : '—'
+      }))
+    })) : [];
 
     const receivesView = st.receives.map(j => {
       const v = this.vendorById(j.vendorId);
@@ -3888,7 +4518,7 @@ class Component extends DCLogic {
           if (!d.ready) { this.pop('ใบนี้ยังเซ็นไม่ได้ — ขาด: ' + d.missingField); return; }
           const sel = Object.assign({}, st.sel); sel[d.id] = !sel[d.id]; this.setState({ sel });
         },
-        view: () => this.openModal({ kind: 'doc', d })
+        view: () => d.raw ? this.openLiveDoc(d.raw) : this.openModal({ kind: 'doc', d })
       };
     });
     const selCount = Object.keys(st.sel).filter(k => st.sel[k]).length;
@@ -3939,6 +4569,7 @@ class Component extends DCLogic {
       name: it.name, spec: it.spec || '—', unit: it.unit, priceText: this.fmt(it.price), img: it.img || 'assets/logos/other.png',
       hasCat: !!it.cat, cat: it.cat,
       edit: () => this.itemForm(dv, it), del: () => this.delItem(dv, it),
+      move: () => this.moveItemTo(dv, it),
       up: () => this.moveItem(dv, it, -1), down: () => this.moveItem(dv, it, 1),
       onImg: (e) => this.readFile(e, (url) => {
         it.img = url; this.setState({ db }); this.save(); this.pop('เปลี่ยนรูปสินค้าแล้ว (บีบ+WebP ให้แล้ว)');
@@ -3952,7 +4583,16 @@ class Component extends DCLogic {
     const modalFields = (m && m.fields) ? m.fields.map(f => ({
       label: f.label, type: f.type === 'select' ? 'text' : f.type, val: m.vals[f.key],
       isSelect: f.type === 'select', isInput: f.type !== 'select', opts: f.opts || [],
-      onChange: (e) => { m.vals[f.key] = e.target.value; this.forceUpdate(); }
+      onChange: (e) => {
+        let val = e.target.value;
+        // เลือก "+ เพิ่มหมวดใหม่…" ในฟอร์มสินค้า → ถามชื่อแล้วเพิ่มเข้าตัวเลือกทันที (ห้ามพิมพ์เองในช่อง — กันหมวดซ้ำ)
+        if (m.kind === 'item' && f.key === 'cat' && val === '__new__') {
+          const nn = (window.prompt('ตั้งชื่อหมวดใหม่ (เช่น ผัก, ของแห้ง)') || '').trim();
+          if (nn) { if (!f.opts.some(o => o.v === nn)) f.opts.splice(f.opts.length - 1, 0, { v: nn, t: nn }); val = nn; }
+          else val = m.vals[f.key] || '';
+        }
+        m.vals[f.key] = val; this.forceUpdate();
+      }
     })) : [];
     const thaiBaht = (n) => Math.round(n).toLocaleString('th-TH') + ' บาทถ้วน';
 
@@ -4008,13 +4648,15 @@ class Component extends DCLogic {
       recent3: (st.liveMode && Array.isArray(st.liveList))
         ? st.liveList.slice(0, 3).map(c => {
             const label = this.caseStatusTh(c.status); const [fg, bg] = this.statusTone(label);
+            const rItems = this.caseItemsOf(c.id);
             const vmock = Object.keys(this._vmap || {}).find(k => this._vmap[k] === c.vendor_id);
             const v = vmock ? this.vendorById(vmock) : null;
             return { logo: (v && v.logo) || 'assets/icons/icon_document_folder.webp',
               vendorName: c.vendor_name || (v && v.name) || 'รายการ',
               date: (window.KK_HELPERS ? KK_HELPERS.dayLabel(String(c.created_at || '').slice(0, 10)) : ''),
               route: this.beRouteLabel(c.intake_route), totalText: this.fmt(+c.total || 0),
-              status: label, statusColor: fg, statusBg: bg };
+              status: label, statusColor: fg, statusBg: bg,
+              hasItems: rItems.length > 0, itemsText: this.itemsLine(rItems) };
           })
         : db.purchases.slice(0, 3).map(pView),
       // การ์ดร้านซื้อบ่อยหน้าแรก — แตะแล้วเข้า flow ซื้อของร้านนั้นทันที
@@ -4069,6 +4711,7 @@ class Component extends DCLogic {
       listTabs, listIsReceive, listIsPurchases: !listIsReceive,
       listSearchVal: st.listSearch || '', onListSearch: (e) => this.setState({ listSearch: e.target.value }), exportCsv: this.exportCsv,
       purchasesView, listEmpty: purchasesView.length === 0, receivesView,
+      hasItemHits: itemHits.length > 0, itemHits,
 
       draftsView, approveEmpty: st.drafts.length === 0, canSign: selCount > 0, selCount,
       openSign: () => this.setState({ modal: { kind: 'sign' }, signPick: st.signPick || (this.signersList()[0] || {}).id || null }),
@@ -4128,16 +4771,8 @@ class Component extends DCLogic {
       priceSaveBorder: m && m.saveToVendor ? '#37B24D' : '#EAD9C8',
       priceSaveBg: m && m.saveToVendor ? '#37B24D' : '#E4D5C3', priceSaveMark: m && m.saveToVendor ? '✓' : '',
       togglePriceSave: () => { m.saveToVendor = !m.saveToVendor; this.forceUpdate(); },
-      docType: m && m.d ? m.d.type : '', docNo: m && m.d ? m.d.id : '', docEntity: m && m.d ? m.d.entity : '',
-      docEntityTax: m && m.d && m.d.entityTaxId ? ('เลขภาษีผู้จ่าย ' + m.d.entityTaxId) : '', docHasEntityTax: !!(m && m.d && m.d.entityTaxId),
-      docDate: m && m.d ? m.d.date : '', docPayee: m && m.d ? m.d.payee : '',
-      docAmountText: m && m.d ? this.fmt(m.d.amount) : '', docAmountWords: m && m.d ? thaiBaht(m.d.amount) : '',
-      docHasExtra: !!(m && m.d && m.d.extra), docExtraText: (m && m.d && m.d.extra) || '',
-      // ลายเซ็นในเอกสาร: ของจริงมาจาก payload (เซ็นแล้ว) · ยังไม่เซ็น = โชว์ข้อความว่าจะแปะตอนอนุมัติ
-      docHasSig: !!(m && m.d && (m.d.sigData || (!m.d.signedBy && ((this.signersList()[0] || {}).sig || st.sig)))),
-      docNoSig: !(m && m.d && (m.d.sigData || (!m.d.signedBy && ((this.signersList()[0] || {}).sig || st.sig)))),
-      docSigThumb: (m && m.d && (m.d.sigData || (!m.d.signedBy && ((this.signersList()[0] || {}).sig || st.sig)))) || '',
-      docHasSignedBy: !!(m && m.d && m.d.signedBy), docSignedBy: (m && m.d && m.d.signedBy) ? ('เซ็นโดย ' + m.d.signedBy) : '',
+      // เอกสารเต็มรูปแบบ (ทุกชนิด) — ประกอบจาก payload โดย docVals
+      ...this.docVals(m && m.kind === 'doc' ? m.d : null),
 
       navHomeC: navC('home'), navHomeF: navF('home'),
       navListC: (st.screen === 'diary' || st.screen === 'list') ? '#F76707' : '#B8A08D',

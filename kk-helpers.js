@@ -153,7 +153,37 @@ window.KK_HELPERS = (function () {
     return new Blob([...parts, ...central, ...end], { type: 'application/zip' });
   }
 
+  // จำนวนเงินเป็นตัวอักษรไทย (ใช้บนเอกสาร) เช่น 218.28 → สองร้อยสิบแปดบาทยี่สิบแปดสตางค์
+  function bahtText(n) {
+    n = Math.round((+n || 0) * 100) / 100;
+    const D = ['ศูนย์', 'หนึ่ง', 'สอง', 'สาม', 'สี่', 'ห้า', 'หก', 'เจ็ด', 'แปด', 'เก้า'];
+    const P = ['', 'สิบ', 'ร้อย', 'พัน', 'หมื่น', 'แสน'];
+    function grp(s) { // อ่านเลข ≤ 6 หลัก
+      let out = '';
+      for (let i = 0; i < s.length; i++) {
+        const d = +s[i], pos = s.length - i - 1;
+        if (!d) continue;
+        if (pos === 0 && d === 1 && s.length > 1) out += 'เอ็ด';
+        else if (pos === 1 && d === 2) out += 'ยี่สิบ';
+        else if (pos === 1 && d === 1) out += 'สิบ';
+        else out += D[d] + P[pos];
+      }
+      return out;
+    }
+    function readInt(s) {
+      s = String(s).replace(/^0+/, '') || '0';
+      if (s === '0') return 'ศูนย์';
+      let out = '';
+      while (s.length > 6) { const head = s.slice(0, s.length - 6); out += readInt(head) + 'ล้าน'; s = s.slice(-6); }
+      return out + (grp(s) || '');
+    }
+    const baht = Math.floor(n), st = Math.round((n - baht) * 100);
+    let out = readInt(String(baht)) + 'บาท';
+    out += st > 0 ? grp(String(st)) + 'สตางค์' : 'ถ้วน';
+    return out;
+  }
+
   return { TH_M, todayIso, thisYm, ymLabel, ymShort, dayLabel, addMonths, monthGrid, parseThaiDate,
     defaultRules, docLabel, bookLabel, ruleResult, ruleIcon, backendRoute, journalPreview,
-    demoMonth, csv, download, dataUrlBytes, makeZip };
+    demoMonth, csv, download, dataUrlBytes, makeZip, bahtText };
 })();
