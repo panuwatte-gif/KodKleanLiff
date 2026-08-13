@@ -805,13 +805,13 @@
   </div>
   </sc-if>
 
-  <!-- ═══════════ งบ 2 ชุด (ส่วนตัว vs จำลองนิติ) ═══════════ -->
+  <!-- ═══════════ งบการเงิน 2 ชุด (ส่วนตัว vs จำลองนิติ) ═══════════ -->
   <sc-if value="{{ isBooks }}" hint-placeholder-val="{{ false }}">
-  <div data-screen-label="งบ 2 ชุด">
+  <div data-screen-label="งบการเงิน 2 ชุด">
     <div style="display:flex;align-items:center;gap:12px;padding:16px 16px 6px 16px">
       <button onClick="{{ goDash }}" style="background:#fff;border:none;border-radius:14px;width:44px;height:44px;font-size:22px;font-weight:900;color:#F76707;box-shadow:0 3px 10px rgba(255,140,90,.2);cursor:pointer">‹</button>
       <div style="flex:1">
-        <div style="font-size:22px;font-weight:900">งบ 2 ชุด</div>
+        <div style="font-size:22px;font-weight:900">งบการเงิน 2 ชุด</div>
         <div style="font-size:13px;font-weight:600;color:#8A6D5C">ส่วนตัว (ทุกรายการ) vs จำลองถ้าจดนิติ</div>
       </div>
       <sc-if value="{{ showMascots }}" hint-placeholder-val="{{ true }}">
@@ -822,59 +822,148 @@
       </sc-if>
     </div>
     <div style="padding:8px 16px;display:flex;flex-direction:column;gap:12px">
-      <div style="background:#fff;border-radius:18px;padding:10px;box-shadow:0 3px 12px rgba(255,140,90,.1);display:flex;align-items:center;gap:8px">
-        <button onClick="{{ booksPrev }}" style="background:#FFF3E6;border:none;border-radius:12px;width:40px;height:40px;font-size:18px;font-weight:900;color:#E8590C;cursor:pointer">‹</button>
-        <div style="flex:1;text-align:center;font-size:16px;font-weight:900">{{ booksMonthLabel }}</div>
-        <button onClick="{{ booksNext }}" style="background:#FFF3E6;border:none;border-radius:12px;width:40px;height:40px;font-size:18px;font-weight:900;color:#E8590C;cursor:pointer">›</button>
+      <div style="background:#fff;border-radius:18px;padding:10px;box-shadow:0 3px 12px rgba(255,140,90,.1);display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <button onClick="{{ booksPrev }}" style="background:#FFF3E6;border:none;border-radius:12px;width:40px;height:40px;font-size:18px;font-weight:900;color:#E8590C;cursor:pointer">‹</button>
+          <div style="flex:1;text-align:center;font-size:17px;font-weight:900">{{ booksPeriodText }}</div>
+          <button onClick="{{ booksNext }}" style="background:#FFF3E6;border:none;border-radius:12px;width:40px;height:40px;font-size:18px;font-weight:900;color:#E8590C;cursor:pointer">›</button>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button onClick="{{ booksSpanM }}" style="flex:1;border:2px solid #EFE0D0;border-radius:12px;padding:10px;font-size:14px;font-weight:800;cursor:pointer;background:{{ booksSpanMBg }};color:{{ booksSpanMFg }}">รายเดือน</button>
+          <button onClick="{{ booksSpanY }}" style="flex:1;border:2px solid #EFE0D0;border-radius:12px;padding:10px;font-size:14px;font-weight:800;cursor:pointer;background:{{ booksSpanYBg }};color:{{ booksSpanYFg }}">รายปี</button>
+        </div>
       </div>
+
       <div style="display:flex;gap:8px">
         <button onClick="{{ bookPickP }}" style="flex:1;border:none;border-radius:16px;padding:13px 8px;font-size:15px;font-weight:800;cursor:pointer;background:{{ bookTabPBg }};color:{{ bookTabPFg }}">งบส่วนตัว<br><span style="font-size:12px;font-weight:600">ทุกรายการ</span></button>
         <button onClick="{{ bookPickB }}" style="flex:1;border:none;border-radius:16px;padding:13px 8px;font-size:15px;font-weight:800;cursor:pointer;background:{{ bookTabBBg }};color:{{ bookTabBFg }}">งบจำลองนิติ<br><span style="font-size:12px;font-weight:600">เฉพาะเอกสารครบ</span></button>
       </div>
+
       <div style="background:linear-gradient(120deg,#5F3DC4,#7048E8);border-radius:22px;padding:16px;color:#fff">
         <div style="font-size:14px;font-weight:700;opacity:.9">{{ bkMoneyLabel }}</div>
         <div style="font-size:32px;font-weight:900;line-height:1.2">{{ bkMoneyText }}</div>
         <div style="font-size:13px;font-weight:600;opacity:.85;margin-top:2px">{{ bkMoneySub }}</div>
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <div style="flex:1;background:rgba(255,255,255,.16);border-radius:14px;padding:10px 12px">
+            <div style="font-size:12px;font-weight:700;opacity:.9">รายได้</div>
+            <div style="font-size:18px;font-weight:900">{{ bkRevText }}</div>
+          </div>
+          <div style="flex:1;background:rgba(255,255,255,.16);border-radius:14px;padding:10px 12px">
+            <div style="font-size:12px;font-weight:700;opacity:.9">ค่าใช้จ่าย</div>
+            <div style="font-size:18px;font-weight:900">{{ bkExpText }}</div>
+          </div>
+          <div style="flex:1;background:rgba(255,255,255,.16);border-radius:14px;padding:10px 12px">
+            <div style="font-size:12px;font-weight:700;opacity:.9">กำไร (ขาดทุน)</div>
+            <div style="font-size:18px;font-weight:900">{{ bkNetText }}</div>
+          </div>
+        </div>
       </div>
-      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
-        <div style="font-size:17px;font-weight:900;margin-bottom:10px">{{ bkPlTitle }}</div>
-        <sc-if value="{{ bkEmpty }}" hint-placeholder-val="{{ false }}">
-          <div style="font-size:14px;font-weight:700;color:#B08968;text-align:center;padding:10px">เดือนนี้ยังไม่มีรายการในงบชุดนี้</div>
-        </sc-if>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <sc-for list="{{ bkRows }}" as="r" hint-placeholder-count="4">
-            <div style="display:flex;justify-content:space-between;gap:10px;font-size:15px;font-weight:700;color:#5C4438">
-              <span>{{ r.name }}</span><span style="font-weight:900">{{ r.amtText }}</span>
+
+      <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:2px">
+        <sc-for list="{{ stmtTabs }}" as="t" hint-placeholder-count="7">
+          <button onClick="{{ t.pick }}" style="flex-shrink:0;border:none;border-radius:999px;padding:10px 16px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 2px 8px rgba(255,140,90,.12);background:{{ t.bg }};color:{{ t.fg }}">{{ t.t }}</button>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ booksLoading }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#fff;border-radius:20px;padding:20px;text-align:center;font-size:15px;font-weight:800;color:#B08968">กำลังโหลดงบจากระบบจริง… ⏳</div>
+      </sc-if>
+      <sc-if value="{{ bkNoData }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#fff;border-radius:20px;padding:20px;text-align:center;font-size:15px;font-weight:800;color:#B08968">งวดนี้ยังไม่มีรายการที่ลงบัญชีไว้</div>
+      </sc-if>
+
+      <sc-if value="{{ bkIsList }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ bkSections }}" as="sc" hint-placeholder-count="2">
+            <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+              <div style="font-size:17px;font-weight:900;margin-bottom:10px">{{ sc.title }}</div>
+              <sc-if value="{{ sc.hasRows }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <sc-for list="{{ sc.rows }}" as="r" hint-placeholder-count="3">
+                    <div style="display:flex;justify-content:space-between;gap:10px;font-size:15px;font-weight:700;color:#5C4438">
+                      <span style="min-width:0">{{ r.name }}</span><span style="font-weight:900;flex-shrink:0">{{ r.amtText }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <div style="display:flex;justify-content:space-between;font-size:17px;font-weight:900;border-top:2px dashed #FFE8CC;padding-top:10px;margin-top:10px;color:#7048E8">
+                <span>{{ sc.totalLabel }}</span><span>{{ sc.totalText }}</span>
+              </div>
             </div>
           </sc-for>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:17px;font-weight:900;border-top:2px dashed #FFE8CC;padding-top:10px;margin-top:10px;color:#7048E8">
-          <span>รวมค่าใช้จ่าย</span><span>{{ bkTotalText }}</span>
-        </div>
-      </div>
-      <sc-if value="{{ bookIsB }}" hint-placeholder-val="{{ false }}">
-        <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-            <img src="assets/mascots/small_04-mascot-vat.webp" alt="" style="width:40px;height:40px">
-            <div style="font-size:17px;font-weight:900">ตาราง VAT ซื้อ</div>
-          </div>
-          <sc-if value="{{ bkVatEmpty }}" hint-placeholder-val="{{ false }}">
-            <div style="font-size:14px;font-weight:700;color:#B08968;text-align:center;padding:8px">เดือนนี้ยังไม่มีรายการ VAT ซื้อ</div>
+          <sc-if value="{{ bkShowNet }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#F3F0FF;border:2px solid #D0BFFF;border-radius:20px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center">
+              <div style="font-size:16px;font-weight:900;color:#5F3DC4">{{ bkNetLabel }}</div>
+              <div style="font-size:22px;font-weight:900;color:#5F3DC4">{{ bkNetText }}</div>
+            </div>
           </sc-if>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <sc-for list="{{ bkVatRows }}" as="r" hint-placeholder-count="3">
-              <div style="display:flex;justify-content:space-between;gap:10px;font-size:14px;font-weight:700;color:#5C4438">
-                <span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.date }} · {{ r.name }}</span><span style="font-weight:900;flex-shrink:0">{{ r.vatText }}</span>
+          <sc-if value="{{ bkBsCheck }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#EBFBEE;border-radius:16px;padding:12px 14px;font-size:14px;font-weight:800;color:#2B8A3E">{{ bkBsCheckText }}</div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ bkIsTb }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#fff;border-radius:22px;padding:14px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+          <div style="display:flex;font-size:13px;font-weight:800;color:#B08968;padding-bottom:8px;border-bottom:2px solid #FFE8CC">
+            <span style="flex:1">บัญชี</span><span style="width:92px;text-align:right">เดบิต</span><span style="width:92px;text-align:right">เครดิต</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+            <sc-for list="{{ bkTbRows }}" as="r" hint-placeholder-count="5">
+              <div style="display:flex;align-items:baseline;font-size:14px;font-weight:700;color:#5C4438">
+                <span style="flex:1;min-width:0">{{ r.code }} {{ r.name }}</span>
+                <span style="width:92px;text-align:right;font-weight:900">{{ r.drText }}</span>
+                <span style="width:92px;text-align:right;font-weight:900">{{ r.crText }}</span>
               </div>
             </sc-for>
           </div>
-          <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:900;border-top:2px dashed #FFE8CC;padding-top:8px;margin-top:8px">
-            <span>รวม VAT ซื้อ</span><span style="color:#7048E8">{{ bkVatTotalText }}</span>
+          <div style="display:flex;font-size:15px;font-weight:900;border-top:2px dashed #FFE8CC;padding-top:10px;margin-top:10px;color:#7048E8">
+            <span style="flex:1">รวม</span><span style="width:92px;text-align:right">{{ bkTbDrText }}</span><span style="width:92px;text-align:right">{{ bkTbCrText }}</span>
           </div>
+          <sc-if value="{{ bkTbBalanced }}" hint-placeholder-val="{{ true }}">
+            <div style="margin-top:8px;font-size:14px;font-weight:800;color:#2B8A3E">เดบิต = เครดิต สมดุล ✓</div>
+          </sc-if>
         </div>
       </sc-if>
-      <div style="background:#FFF9DB;border-radius:16px;padding:12px 14px;font-size:14px;font-weight:700;color:#8A6D00">หมายเหตุ: ต้นทุนขายจริงรอเชื่อม App_stock — ตอนนี้เห็นเฉพาะค่าใช้จ่ายฝั่งซื้อ + เงินไหลออก</div>
-      <button onClick="{{ booksExport }}" style="background:#37B24D;color:#fff;border:none;border-radius:16px;padding:14px;font-size:16px;font-weight:800;cursor:pointer">⬇ ส่งออก Excel งบเดือนนี้ (2 ชุด + VAT)</button>
+
+      <sc-if value="{{ bkIsJn }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-if value="{{ bkJnEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#fff;border-radius:20px;padding:18px;text-align:center;font-size:15px;font-weight:800;color:#B08968">งวดนี้ยังไม่มีสมุดรายวัน</div>
+          </sc-if>
+          <sc-for list="{{ bkJournal }}" as="e" hint-placeholder-count="3">
+            <div style="background:#fff;border-radius:20px;padding:14px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+              <div style="display:flex;gap:8px;align-items:baseline">
+                <div style="font-size:14px;font-weight:900;color:#5C4438;flex-shrink:0">{{ e.dateText }}</div>
+                <div style="font-size:14px;font-weight:700;color:#8A6D5C;flex:1;min-width:0">{{ e.descr }}</div>
+              </div>
+              <sc-if value="{{ e.isRev }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:6px;font-size:12px;font-weight:800;color:#D9480F;background:#FFF4E6;border-radius:999px;padding:3px 10px;display:inline-block">รายการกลับ (reversal)</div>
+              </sc-if>
+              <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
+                <sc-for list="{{ e.lines }}" as="l" hint-placeholder-count="2">
+                  <div style="display:flex;align-items:baseline;font-size:14px;font-weight:700;color:#5C4438">
+                    <span style="flex:1;min-width:0">{{ l.code }} {{ l.name }}</span>
+                    <span style="width:88px;text-align:right;font-weight:900;color:#1971C2">{{ l.drText }}</span>
+                    <span style="width:88px;text-align:right;font-weight:900;color:#7048E8">{{ l.crText }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <div style="background:#FFF9DB;border-radius:16px;padding:12px 14px;font-size:14px;font-weight:700;color:#8A6D00">หมายเหตุ: ต้นทุนขายจริงรอเชื่อม App_stock · ช่องรายได้เตรียมไว้แล้ว ยังไม่กรอก — ตอนนี้เห็นเฉพาะฝั่งซื้อ + เงินไหลออก</div>
+
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1);display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:17px;font-weight:900">ส่งออก / ส่งให้บัญชี</div>
+        <button onClick="{{ booksPrint }}" style="background:#5C4438;color:#fff;border:none;border-radius:16px;padding:14px;font-size:16px;font-weight:800;cursor:pointer">🖨 พิมพ์ / บันทึก PDF (ทั้งชุด + ช่องเซ็น)</button>
+        <button onClick="{{ booksPrintOne }}" style="background:#fff;color:#5C4438;border:2px solid #EFE0D0;border-radius:16px;padding:13px;font-size:15px;font-weight:800;cursor:pointer">🖨 พิมพ์เฉพาะงบที่เปิดอยู่</button>
+        <button onClick="{{ booksExportAll }}" style="background:#37B24D;color:#fff;border:none;border-radius:16px;padding:14px;font-size:16px;font-weight:800;cursor:pointer">⬇ Excel/CSV ทั้งชุด (งวดนี้)</button>
+        <button onClick="{{ booksExportOne }}" style="background:#fff;color:#2B8A3E;border:2px solid #B2F2BB;border-radius:16px;padding:13px;font-size:15px;font-weight:800;cursor:pointer">⬇ Excel/CSV เฉพาะงบที่เปิดอยู่</button>
+        <button onClick="{{ booksExportZip }}" style="background:#fff;color:#1971C2;border:2px solid #A5D8FF;border-radius:16px;padding:13px;font-size:15px;font-weight:800;cursor:pointer">⬇ ZIP แยกไฟล์รายเดือนทั้งปี + ไฟล์รวมปี</button>
+      </div>
     </div>
   </div>
   </sc-if>
@@ -3801,6 +3890,210 @@ class Component extends DCLogic {
     }));
     return { personal: grp(rows), statutory: grp(statRows), vatRows, moneyOut: rows.reduce((a, x) => a + (x.p.total || 0), 0) };
   }
+  /* ══════ งบการเงินเต็มรูปแบบ 2 ชุด ══════
+     fin = ก้อนข้อมูลจาก RPC liff_month (รับ 'YYYY-MM' = รายเดือน หรือ 'YYYY' = รายปี)
+     isP = true คืองบส่วนตัว (ทุกรายการ) · false คืองบจำลองนิติ (เฉพาะที่ใช้ได้ทางภาษี) */
+  finStatements(fin, isP) {
+    const R = { rev: [], exp: [], revTotal: 0, expTotal: 0, net: 0,
+      tb: [], tbDr: 0, tbCr: 0,
+      asset: [], liab: [], equity: [], assetTotal: 0, liabTotal: 0, equityTotal: 0, retained: 0,
+      cf: { open: 0, in: 0, out: 0, close: 0, oper: [], invest: [], finance: [] }, journal: [], entities: [] };
+    if (!fin) return R;
+    const dr = (r) => +(isP ? r.p_dr : r.s_dr) || 0;
+    const cr = (r) => +(isP ? r.p_cr : r.s_cr) || 0;
+    (fin.tb || []).forEach(r => {
+      const d = dr(r), c = cr(r);
+      if (!d && !c) return;
+      R.tb.push({ code: r.code, name: r.name, dr: d, cr: c }); R.tbDr += d; R.tbCr += c;
+      if (r.type === 'revenue' && (c - d) !== 0) R.rev.push({ code: r.code, name: r.name, amt: c - d });
+      if (r.type === 'expense' && (d - c) !== 0) R.exp.push({ code: r.code, name: r.name, amt: d - c });
+    });
+    R.rev.sort((a, b) => b.amt - a.amt); R.exp.sort((a, b) => b.amt - a.amt);
+    R.revTotal = R.rev.reduce((a, x) => a + x.amt, 0);
+    R.expTotal = R.exp.reduce((a, x) => a + x.amt, 0);
+    R.net = R.revTotal - R.expTotal;
+    const bal = (r) => +(isP ? r.p_bal : r.s_bal) || 0;
+    (fin.bs || []).forEach(r => {
+      const b = bal(r); if (!b) return;
+      if (r.type === 'asset') { R.asset.push({ code: r.code, name: r.name, amt: b }); R.assetTotal += b; }
+      else if (r.type === 'liability') { R.liab.push({ code: r.code, name: r.name, amt: -b }); R.liabTotal += -b; }
+      else if (r.type === 'equity') { R.equity.push({ code: r.code, name: r.name, amt: -b }); R.equityTotal += -b; }
+      else R.retained += -b; // รายได้/ค่าใช้จ่ายสะสม → กำไร(ขาดทุน)สะสม
+    });
+    const c = fin.cash || {};
+    R.cf.open = +(isP ? c.p_open : c.s_open) || 0;
+    R.cf.in = +(isP ? c.p_in : c.s_in) || 0;
+    R.cf.out = +(isP ? c.p_out : c.s_out) || 0;
+    R.cf.close = R.cf.open + R.cf.in - R.cf.out;
+    (fin.cash_by_account || []).forEach(r => {
+      const amt = +(isP ? r.p_amt : r.s_amt) || 0; if (!amt) return;
+      const row = { code: r.code, name: r.name, amt };
+      if (/^15/.test(r.code)) R.cf.invest.push(row);
+      else if (/^3/.test(r.code) || r.code === '2010') R.cf.finance.push(row);
+      else R.cf.oper.push(row);
+    });
+    const keep = (sc) => isP ? (sc === 'both' || sc === 'inhouse_only') : (sc === 'both' || sc === 'statutory_only');
+    R.journal = (fin.journal || []).map(e => ({
+      id: e.id, d: e.d, descr: e.descr || '', src: e.src || '', rev: !!e.rev,
+      lines: (e.lines || []).filter(l => keep(l.scope))
+    })).filter(e => e.lines.length);
+    R.entities = (fin.by_entity || []).map(x => ({
+      name: x.name, exp: +(isP ? x.p_exp : x.s_exp) || 0, rev: +(isP ? x.p_rev : x.s_rev) || 0
+    })).filter(x => x.exp || x.rev).sort((a, b) => b.exp - a.exp);
+    return R;
+  }
+  // ตารางงบ (ใช้ทั้งบนจอ / CSV / หน้าพิมพ์) — [หัวข้อ, [แถว...]]
+  finTables(R, stmt, title) {
+    const n = (v) => (Math.round(v * 100) / 100).toFixed(2);
+    const T = [];
+    if (stmt === 'pl' || stmt === 'all') {
+      const rows = [['รหัส', 'รายการ', 'จำนวนเงิน']];
+      R.rev.forEach(r => rows.push([r.code, r.name, n(r.amt)]));
+      rows.push(['', 'รวมรายได้', n(R.revTotal)]);
+      R.exp.forEach(r => rows.push([r.code, r.name, n(r.amt)]));
+      rows.push(['', 'รวมค่าใช้จ่าย', n(R.expTotal)]);
+      rows.push(['', 'กำไร (ขาดทุน) สุทธิ', n(R.net)]);
+      T.push(['งบกำไรขาดทุน — ' + title, rows]);
+    }
+    if (stmt === 'bs' || stmt === 'all') {
+      const rows = [['รหัส', 'รายการ', 'จำนวนเงิน']];
+      R.asset.forEach(r => rows.push([r.code, r.name, n(r.amt)]));
+      rows.push(['', 'รวมสินทรัพย์', n(R.assetTotal)]);
+      R.liab.forEach(r => rows.push([r.code, r.name, n(r.amt)]));
+      rows.push(['', 'รวมหนี้สิน', n(R.liabTotal)]);
+      R.equity.forEach(r => rows.push([r.code, r.name, n(r.amt)]));
+      rows.push(['', 'กำไร (ขาดทุน) สะสม', n(R.retained)]);
+      rows.push(['', 'รวมส่วนของเจ้าของ', n(R.equityTotal + R.retained)]);
+      rows.push(['', 'รวมหนี้สินและส่วนของเจ้าของ', n(R.liabTotal + R.equityTotal + R.retained)]);
+      T.push(['งบแสดงฐานะการเงิน — ณ ' + title, rows]);
+    }
+    if (stmt === 'cf' || stmt === 'all') {
+      const rows = [['', 'รายการ', 'จำนวนเงิน']];
+      rows.push(['', 'เงินสด/ธนาคาร ยกมา', n(R.cf.open)]);
+      rows.push(['', 'เงินรับเข้า', n(R.cf.in)]);
+      rows.push(['', 'เงินจ่ายออก', n(R.cf.out)]);
+      rows.push(['', 'เงินสด/ธนาคาร คงเหลือ', n(R.cf.close)]);
+      const grp = (label, list) => { if (!list.length) return; rows.push(['', '— ' + label, '']); list.forEach(r => rows.push([r.code, r.name, n(r.amt)])); };
+      grp('กิจกรรมดำเนินงาน', R.cf.oper);
+      grp('กิจกรรมลงทุน', R.cf.invest);
+      grp('กิจกรรมจัดหาเงิน', R.cf.finance);
+      T.push(['งบกระแสเงินสด — ' + title, rows]);
+    }
+    if (stmt === 'tb' || stmt === 'all') {
+      const rows = [['รหัส', 'ชื่อบัญชี', 'เดบิต', 'เครดิต']];
+      R.tb.forEach(r => rows.push([r.code, r.name, n(r.dr), n(r.cr)]));
+      rows.push(['', 'รวม', n(R.tbDr), n(R.tbCr)]);
+      T.push(['งบทดลอง — ' + title, rows]);
+    }
+    if (stmt === 'jn' || stmt === 'all') {
+      const rows = [['วันที่', 'คำอธิบาย', 'รหัสบัญชี', 'ชื่อบัญชี', 'เดบิต', 'เครดิต']];
+      R.journal.forEach(e => e.lines.forEach((l, i) => rows.push([i ? '' : e.d, i ? '' : e.descr, l.code, l.name, n(+l.dr || 0), n(+l.cr || 0)])));
+      T.push(['สมุดรายวันทั่วไป — ' + title, rows]);
+    }
+    if (stmt === 'ent' || stmt === 'all') {
+      const rows = [['ผู้จ่าย / กิจการ', 'ค่าใช้จ่าย', 'รายได้']];
+      R.entities.forEach(e => rows.push([e.name, n(e.exp), n(e.rev)]));
+      T.push(['แยกตามผู้จ่าย / กิจการ — ' + title, rows]);
+    }
+    return T;
+  }
+  booksPeriodLabel(key) {
+    const H = window.KK_HELPERS;
+    return key.length === 4 ? ('ปี ' + (+key + 543)) : (H ? H.ymLabel(key) : key);
+  }
+  // ส่งออก CSV (สเปรดชีตเดียว หลายตาราง) — ให้บัญชีคีย์ต่อได้เลย
+  exportFinCsv(stmt) {
+    const H = window.KK_HELPERS; if (!H) return;
+    const B = this.state.books || {}; const isP = B.tab !== 'b';
+    const key = this.booksKey(); const fin = this.finOf(key);
+    if (!fin) { this.pop('ยังโหลดข้อมูลงบไม่เสร็จ รอสักครู่แล้วกดอีกครั้ง'); return; }
+    const R = this.finStatements(fin, isP);
+    const label = this.booksPeriodLabel(key);
+    const bookName = isP ? 'งบส่วนตัว' : 'งบจำลองนิติ';
+    const rows = [['KodKlean_Money · ' + bookName, label], []];
+    this.finTables(R, stmt, label).forEach(([t, rs]) => { rows.push([t]); rs.forEach(r => rows.push(r)); rows.push([]); });
+    H.download('KodKlean-' + (isP ? 'personal' : 'statutory') + '-' + key + (stmt === 'all' ? '-ทั้งชุด' : '-' + stmt) + '.csv',
+      new Blob([H.csv(rows)], { type: 'text/csv;charset=utf-8' }));
+    this.pop('ส่งออกไฟล์แล้ว ✓ เปิดใน Excel ได้เลย');
+  }
+  // ZIP แยกไฟล์รายเดือนทั้งปี (ไฟล์ละเดือน + ไฟล์รวมปี)
+  async exportFinYearZip() {
+    const H = window.KK_HELPERS; if (!H) return;
+    const B = this.state.books || {}; const isP = B.tab !== 'b';
+    const year = this.booksKey().slice(0, 4);
+    this.pop('กำลังรวมไฟล์รายเดือนทั้งปี ' + (+year + 543) + '… ⏳');
+    const files = []; const enc = new TextEncoder();
+    const add = (name, text) => files.push({ name, data: enc.encode(text) });
+    for (let m = 1; m <= 12; m++) {
+      const key = year + '-' + String(m).padStart(2, '0');
+      let data = this.state.monthLive[key];
+      if (!data) { const r = await this.api('liff_month', { ym: key }); data = (r && r.ok) ? r.data : null; }
+      const fin = data && data.fin; if (!fin) continue;
+      const R = this.finStatements(fin, isP);
+      if (!R.tb.length) continue;
+      const label = this.booksPeriodLabel(key);
+      const rows = [['KodKlean_Money · ' + (isP ? 'งบส่วนตัว' : 'งบจำลองนิติ'), label], []];
+      this.finTables(R, 'all', label).forEach(([t, rs]) => { rows.push([t]); rs.forEach(r => rows.push(r)); rows.push([]); });
+      add(key + '.csv', H.csv(rows));
+    }
+    const ry = await this.api('liff_month', { ym: year });
+    if (ry && ry.ok && ry.data && ry.data.fin) {
+      const R = this.finStatements(ry.data.fin, isP);
+      const label = this.booksPeriodLabel(year);
+      const rows = [['KodKlean_Money · ' + (isP ? 'งบส่วนตัว' : 'งบจำลองนิติ'), label], []];
+      this.finTables(R, 'all', label).forEach(([t, rs]) => { rows.push([t]); rs.forEach(r => rows.push(r)); rows.push([]); });
+      add('รวมทั้งปี-' + year + '.csv', H.csv(rows));
+    }
+    if (!files.length) { this.pop('ปีนี้ยังไม่มีข้อมูลให้ส่งออก'); return; }
+    H.download('KodKlean-งบ-' + year + '.zip', H.makeZip(files));
+    this.pop('ได้ไฟล์ ZIP แยกรายเดือน ' + files.length + ' ไฟล์ ✓');
+  }
+  // หน้าพิมพ์ / บันทึก PDF (เปิดแท็บใหม่ กระดาษ A4 ขาว-ดำ อ่านง่าย ให้บัญชีเซ็น)
+  printFin(stmt) {
+    const B = this.state.books || {}; const isP = B.tab !== 'b';
+    const key = this.booksKey(); const fin = this.finOf(key);
+    if (!fin) { this.pop('ยังโหลดข้อมูลงบไม่เสร็จ รอสักครู่แล้วกดอีกครั้ง'); return; }
+    const R = this.finStatements(fin, isP);
+    const label = this.booksPeriodLabel(key);
+    const ent = (this.entityById(this.state.defaultEntityId) || this.entitiesList().find(e => e.is_default) || this.entitiesList()[0] || {});
+    const esc = (v) => String(v == null ? '' : v).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+    const isNum = (v) => /^-?[\d,]+\.\d{2}$/.test(String(v));
+    let body = '';
+    this.finTables(R, stmt, label).forEach(([t, rs]) => {
+      body += '<h2>' + esc(t) + '</h2><table><thead><tr>' + rs[0].map(h => '<th>' + esc(h) + '</th>').join('') + '</tr></thead><tbody>';
+      rs.slice(1).forEach(r => {
+        body += '<tr>' + r.map(c => '<td' + (isNum(c) ? ' class="n"' : '') + '>' + esc(c) + '</td>').join('') + '</tr>';
+      });
+      body += '</tbody></table>';
+    });
+    body += '<div class="sig"><div><div class="line"></div>ผู้จัดทำ</div><div><div class="line"></div>ผู้ตรวจสอบ / ผู้ทำบัญชี</div><div><div class="line"></div>ผู้มีอำนาจลงนาม</div></div>';
+    const html = '<!doctype html><html lang="th"><head><meta charset="utf-8"><title>' +
+      esc((isP ? 'งบส่วนตัว' : 'งบจำลองนิติ') + ' ' + label) + '</title>' +
+      '<style>@page{size:A4;margin:16mm}' +
+      'body{font-family:"Noto Sans Thai","Sarabun",sans-serif;color:#111;font-size:12pt;margin:0}' +
+      'h1{font-size:17pt;margin:0 0 2mm}h2{font-size:13pt;margin:8mm 0 2mm;page-break-after:avoid}' +
+      '.sub{font-size:11pt;color:#444;margin-bottom:4mm}' +
+      'table{width:100%;border-collapse:collapse;margin-bottom:3mm;page-break-inside:auto}' +
+      'th,td{border:1px solid #999;padding:2mm 2.5mm;font-size:11pt;text-align:left}' +
+      'th{background:#eee}td.n{text-align:right;font-variant-numeric:tabular-nums}' +
+      'tbody tr:last-child td{font-weight:700}' +
+      '.sig{display:flex;gap:10mm;margin-top:14mm;page-break-inside:avoid}' +
+      '.sig>div{flex:1;text-align:center;font-size:11pt}.line{border-bottom:1px solid #333;height:14mm}' +
+      '</style></head><body><h1>' + esc(ent.name || 'KodKlean Group') + '</h1><div class="sub">' +
+      esc((isP ? 'งบการเงิน — ชุดส่วนตัว (ทุกรายการ)' : 'งบการเงิน — ชุดจำลองนิติบุคคล (เฉพาะรายการที่มีเอกสารครบ)') + ' · ' + label) +
+      (ent.tax_id ? ' · เลขประจำตัวผู้เสียภาษี ' + esc(ent.tax_id) : '') + '</div>' + body + '</body></html>';
+    const w = window.open('', '_blank');
+    if (!w) { this.pop('เบราว์เซอร์บล็อกหน้าต่างใหม่ — อนุญาต pop-up แล้วลองอีกครั้ง'); return; }
+    w.document.write(html); w.document.close();
+    setTimeout(() => { try { w.focus(); w.print(); } catch (e) {} }, 400);
+  }
+  booksKey() {
+    const B = this.state.books || {};
+    const ym = B.ym || (window.KK_HELPERS ? KK_HELPERS.thisYm() : '');
+    return B.span === 'y' ? ym.slice(0, 4) : ym;
+  }
+  finOf(key) { const d = this.state.monthLive[key]; return (d && d.fin) || null; }
+
   pageVals() {
     const st = this.state; const H = window.KK_HELPERS;
     const fmt = (n) => this.fmt(n);
@@ -3862,26 +4155,71 @@ class Component extends DCLogic {
       name: x.n, color: pctColors[i % 7], w: Math.round(x.a / Math.max(mTotal, 1) * 100) + '%', pctText: Math.round(x.a / Math.max(mTotal, 1) * 100) + '%'
     }));
 
-    /* ---- งบ 2 ชุด ---- */
+    /* ---- งบการเงินเต็มรูปแบบ 2 ชุด ---- */
     const B = st.books || { ym, tab: 'p' };
     const bym = B.ym || ym;
+    const bIsYear = B.span === 'y';
+    const bkey = bIsYear ? bym.slice(0, 4) : bym;
     const isP = B.tab !== 'b';
-    let bkRows = [], bkVatRows = [], bkMoney = 0;
+    const bstmt = B.stmt || 'pl';
+    const bFin = st.liveMode ? this.finOf(bkey) : null;
+    const bkLoading = st.liveMode && !st.monthLive[bkey];
+    const FS = this.finStatements(bFin, isP);
+    let bkVatRows = [], bkMoney = 0;
     if (st.liveMode) {
-      const bmd = st.monthLive[bym];
-      const pl = (bmd && bmd.pl) || [];
-      bkRows = pl.map(r => ({ name: r.name || r.account_code, amt: +(isP ? r.personal : r.statutory) || 0 })).filter(r => r.amt !== 0).sort((a, b) => b.amt - a.amt);
+      const bmd = st.monthLive[bkey];
       bkVatRows = ((bmd && bmd.vat_rows) || []).map(r => ({ date: H.dayLabel(r.date), name: r.description || '', vat: +r.vat || 0 }));
       bkMoney = +((bmd && bmd.money_out) || 0);
     } else {
       const dbk = this.demoBooks(bym);
-      bkRows = (isP ? dbk.personal : dbk.statutory).map(r => ({ name: r.name, amt: r.amt }));
-      bkVatRows = dbk.vatRows;
-      bkMoney = dbk.moneyOut;
+      bkVatRows = dbk.vatRows; bkMoney = dbk.moneyOut;
     }
-    const bkTotal = bkRows.reduce((a, r) => a + r.amt, 0);
     const bkVatTotal = bkVatRows.reduce((a, r) => a + r.vat, 0);
-    const setBooksYm = (nym) => { this.setState({ books: Object.assign({}, B, { ym: nym }) }); this.ensureMonth(nym); };
+    const setBooksYm = (nym) => { this.setState({ books: Object.assign({}, B, { ym: nym }) }); this.ensureMonth(bIsYear ? nym.slice(0, 4) : nym); };
+    const stmtTabs = [
+      { k: 'pl', t: 'กำไรขาดทุน' }, { k: 'bs', t: 'ฐานะการเงิน' }, { k: 'cf', t: 'กระแสเงินสด' },
+      { k: 'tb', t: 'งบทดลอง' }, { k: 'jn', t: 'สมุดรายวัน' }, { k: 'ent', t: 'แยกผู้จ่าย' }, { k: 'vat', t: 'ภาษีซื้อ' }
+    ].map(x => ({
+      t: x.t, bg: bstmt === x.k ? (isP ? '#FF8A3D' : '#7048E8') : '#fff', fg: bstmt === x.k ? '#fff' : '#8A6D5C',
+      pick: () => this.setState({ books: Object.assign({}, B, { stmt: x.k }) })
+    }));
+    const money = (n) => fmt(n);
+    const sect = (title, rows, total, totalLabel) => ({ title, rows, hasRows: rows.length > 0, totalText: money(total), totalLabel });
+    const bkSections = (() => {
+      if (bstmt === 'pl') return [
+        sect('รายได้', FS.rev.map(r => ({ code: r.code, name: r.name, amtText: money(r.amt) })), FS.revTotal, 'รวมรายได้'),
+        sect('ค่าใช้จ่าย', FS.exp.map(r => ({ code: r.code, name: r.name, amtText: money(r.amt) })), FS.expTotal, 'รวมค่าใช้จ่าย')
+      ];
+      if (bstmt === 'bs') return [
+        sect('สินทรัพย์', FS.asset.map(r => ({ code: r.code, name: r.name, amtText: money(r.amt) })), FS.assetTotal, 'รวมสินทรัพย์'),
+        sect('หนี้สิน', FS.liab.map(r => ({ code: r.code, name: r.name, amtText: money(r.amt) })), FS.liabTotal, 'รวมหนี้สิน'),
+        sect('ส่วนของเจ้าของ', FS.equity.map(r => ({ code: r.code, name: r.name, amtText: money(r.amt) }))
+          .concat([{ code: '', name: 'กำไร (ขาดทุน) สะสม', amtText: money(FS.retained) }]),
+          FS.equityTotal + FS.retained, 'รวมส่วนของเจ้าของ')
+      ];
+      if (bstmt === 'cf') return [
+        sect('เงินสด / ธนาคาร', [
+          { code: '', name: 'ยกมาต้นงวด', amtText: money(FS.cf.open) },
+          { code: '', name: 'เงินรับเข้า', amtText: money(FS.cf.in) },
+          { code: '', name: 'เงินจ่ายออก', amtText: money(FS.cf.out) }
+        ], FS.cf.close, 'คงเหลือปลายงวด'),
+        sect('กิจกรรมดำเนินงาน', FS.cf.oper.map(r => ({ code: r.code, name: r.name, amtText: money(r.amt) })), FS.cf.oper.reduce((a, x) => a + x.amt, 0), 'รวมดำเนินงาน'),
+        sect('กิจกรรมลงทุน', FS.cf.invest.map(r => ({ code: r.code, name: r.name, amtText: money(r.amt) })), FS.cf.invest.reduce((a, x) => a + x.amt, 0), 'รวมลงทุน'),
+        sect('กิจกรรมจัดหาเงิน', FS.cf.finance.map(r => ({ code: r.code, name: r.name, amtText: money(r.amt) })), FS.cf.finance.reduce((a, x) => a + x.amt, 0), 'รวมจัดหาเงิน')
+      ].filter(x => x.hasRows);
+      if (bstmt === 'ent') return [
+        sect('แยกตามผู้จ่าย / กิจการ', FS.entities.map(e => ({ code: '', name: e.name, amtText: money(e.exp) })), FS.entities.reduce((a, x) => a + x.exp, 0), 'รวมค่าใช้จ่าย')
+      ];
+      if (bstmt === 'vat') return [
+        sect('ภาษีซื้อในงวดนี้', bkVatRows.map(r => ({ code: r.date, name: r.name, amtText: money(r.vat) })), bkVatTotal, 'รวมภาษีซื้อ')
+      ];
+      return [];
+    })();
+    const bkTbRows = FS.tb.map(r => ({ code: r.code, name: r.name, drText: r.dr ? money(r.dr) : '—', crText: r.cr ? money(r.cr) : '—' }));
+    const bkJournal = FS.journal.map(e => ({
+      dateText: H.dayLabel(e.d), descr: e.descr, isRev: e.rev,
+      lines: (e.lines || []).map(l => ({ code: l.code, name: l.name, drText: +l.dr ? money(+l.dr) : '', crText: +l.cr ? money(+l.cr) : '' }))
+    }));
 
     /* ---- กฎคัดกรอง ---- */
     const ruleCards = this.rulesList().map(r => ({
@@ -3971,21 +4309,41 @@ class Component extends DCLogic {
       diaryExportZip: () => this.exportDiaryZip(ym, fRows),
       /* books */
       booksMonthLabel: H.ymLabel(bym),
-      booksPrev: () => setBooksYm(H.addMonths(bym, -1)), booksNext: () => setBooksYm(H.addMonths(bym, 1)),
+      booksPrev: () => setBooksYm(bIsYear ? (String(+bym.slice(0, 4) - 1) + bym.slice(4)) : H.addMonths(bym, -1)),
+      booksNext: () => setBooksYm(bIsYear ? (String(+bym.slice(0, 4) + 1) + bym.slice(4)) : H.addMonths(bym, 1)),
       bookIsB: !isP,
       bookPickP: () => this.setState({ books: Object.assign({}, B, { tab: 'p' }) }),
       bookPickB: () => this.setState({ books: Object.assign({}, B, { tab: 'b' }) }),
       bookTabPBg: isP ? '#FF8A3D' : '#fff', bookTabPFg: isP ? '#fff' : '#8A6D5C',
       bookTabBBg: !isP ? '#7048E8' : '#fff', bookTabBFg: !isP ? '#fff' : '#8A6D5C',
-      bkMoneyLabel: isP ? 'เงินไหลออกเดือนนี้ (ทุกรายการ)' : 'ค่าใช้จ่ายที่ใช้ได้ในงบนิติ (เอกสารครบ)',
-      bkMoneyText: fmt(isP ? bkMoney : bkTotal),
-      bkMoneySub: isP ? 'จาก journal งบส่วนตัว — เงินออกเพิ่ม = ค่าใช้จ่ายสูงขึ้น' : 'P&L แบบภาษี · รายการพิสูจน์ผู้รับไม่ได้ถูกกันออกอัตโนมัติ',
-      bkPlTitle: isP ? 'ค่าใช้จ่ายตามหมวด (งบส่วนตัว)' : 'P&L แบบภาษี (งบจำลองนิติ)',
-      bkRows: bkRows.map(r => ({ name: r.name, amtText: fmt(r.amt) })), bkEmpty: bkRows.length === 0,
-      bkTotalText: fmt(bkTotal),
-      bkVatRows: bkVatRows.map(r => ({ date: r.date, name: r.name, vatText: fmt(r.vat) })),
-      bkVatEmpty: bkVatRows.length === 0, bkVatTotalText: fmt(bkVatTotal),
-      booksExport: () => this.exportBooksCsv(bym),
+      // งวด: รายเดือน / รายปี
+      booksSpanM: () => { this.setState({ books: Object.assign({}, B, { span: 'm' }) }); this.ensureMonth(bym); },
+      booksSpanY: () => { this.setState({ books: Object.assign({}, B, { span: 'y' }) }); this.ensureMonth(bym.slice(0, 4)); },
+      booksSpanMBg: !bIsYear ? '#5C4438' : '#fff', booksSpanMFg: !bIsYear ? '#fff' : '#8A6D5C',
+      booksSpanYBg: bIsYear ? '#5C4438' : '#fff', booksSpanYFg: bIsYear ? '#fff' : '#8A6D5C',
+      booksPeriodText: this.booksPeriodLabel(bkey),
+      booksLoading: bkLoading,
+      // หัวการ์ดสรุป
+      bkMoneyLabel: isP ? (bIsYear ? 'เงินไหลออกทั้งปี (ทุกรายการ)' : 'เงินไหลออกเดือนนี้ (ทุกรายการ)') : 'ค่าใช้จ่ายที่ใช้ได้ในงบนิติ (เอกสารครบ)',
+      bkMoneyText: fmt(isP ? Math.abs(FS.cf.out || bkMoney) : FS.expTotal),
+      bkMoneySub: isP ? 'งบชุดส่วนตัว — ทุกรายการที่บันทึกไว้ ใช้วิเคราะห์เอง' : 'งบชุดจำลองนิติ — เฉพาะรายการที่มีเอกสารครบ พร้อมให้บัญชีตรวจ',
+      bkNetLabel: 'กำไร (ขาดทุน) สุทธิงวดนี้', bkNetText: fmt(FS.net),
+      bkRevText: fmt(FS.revTotal), bkExpText: fmt(FS.expTotal),
+      // แท็บงบ + เนื้อหา
+      stmtTabs, bkIsTb: bstmt === 'tb', bkIsJn: bstmt === 'jn', bkIsList: bstmt !== 'tb' && bstmt !== 'jn',
+      bkSections, bkNoData: !bkLoading && FS.tb.length === 0,
+      bkShowNet: bstmt === 'pl', bkTbRows, bkTbDrText: fmt(FS.tbDr), bkTbCrText: fmt(FS.tbCr),
+      bkTbBalanced: Math.round(FS.tbDr * 100) === Math.round(FS.tbCr * 100),
+      bkJournal, bkJnEmpty: bkJournal.length === 0,
+      bkBsCheck: bstmt === 'bs',
+      bkBsCheckText: (Math.round(FS.assetTotal * 100) === Math.round((FS.liabTotal + FS.equityTotal + FS.retained) * 100))
+        ? 'สินทรัพย์ = หนี้สิน + ส่วนของเจ้าของ สมดุล ✓' : 'ยังไม่สมดุล — ตรวจรายการที่ลงบัญชีไม่ครบคู่',
+      // ส่งออก
+      booksExportOne: () => this.exportFinCsv(bstmt),
+      booksExportAll: () => this.exportFinCsv('all'),
+      booksExportZip: () => this.exportFinYearZip(),
+      booksPrint: () => this.printFin('all'),
+      booksPrintOne: () => this.printFin(bstmt),
       /* rules */
       ruleCards, addRule: () => this.ruleForm(null), ruleVendorRows,
       /* case modal */
