@@ -292,7 +292,7 @@
         </div>
         <sc-if value="{{ aiEnabled }}" hint-placeholder-val="{{ false }}">
           <label style="display:flex;align-items:center;gap:12px;margin-top:10px;background:linear-gradient(135deg,#EDE7FF,#E3F2FF);border:2px solid #B197FC;border-radius:16px;padding:12px 14px;cursor:pointer">
-            <input type="file" accept="image/*" multiple="multiple" onChange="{{ aiScan }}" style="display:none">
+            <input type="file" accept="image/*,.heic,.heif" multiple="multiple" onChange="{{ aiScan }}" style="display:none">
             <img src="assets/mascots/small_02-mascot-auto-decision.webp" alt="" style="width:44px;height:44px">
             <div style="flex:1"><div style="font-size:16px;font-weight:800;color:#5F3DC4">ให้ AI (Gemini) อ่านบิลจากรูป</div><div style="font-size:13px;font-weight:600;color:#7048E8">บิลยาวถ่ายหลายรูปได้ · AI เติมให้ ตรวจ/แก้ก่อนยืนยัน</div></div>
           </label>
@@ -423,7 +423,17 @@
     <!-- A5 แนบหลักฐาน -->
     <sc-if value="{{ isBuy5 }}" hint-placeholder-val="{{ false }}">
       <div style="padding:4px 16px;display:flex;flex-direction:column;gap:10px">
-        <div style="font-size:15px;font-weight:700;color:#8A6D5C">รูป/หลักฐานเป็น<b>ของเสริม ไม่บังคับ</b> — ถ่ายเก็บกันเอกสารกระดาษหาย ไม่ถ่ายก็กดยืนยันลงบัญชีได้เลย · ของเยอะถ่ายรวมช็อตเดียวได้</div>
+        <div style="font-size:15px;font-weight:700;color:#8A6D5C">{{ evHeadText }}</div>
+        <sc-if value="{{ evHasSysDoc }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:12px;background:#F3F0FF;border:2px solid #D0BFFF;border-radius:18px;padding:12px 14px">
+            <img src="assets/icons/icon_document_folder.webp" alt="" style="width:42px;height:42px;flex-shrink:0">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:15px;font-weight:900;color:#5F3DC4">{{ evSysDocName }}</div>
+              <div style="font-size:13px;font-weight:700;color:#7048E8">{{ evSysDocNote }}</div>
+            </div>
+            <div style="font-size:13px;font-weight:900;color:#5F3DC4;background:#fff;border-radius:999px;padding:6px 12px;flex-shrink:0">ระบบออกให้</div>
+          </div>
+        </sc-if>
         <sc-for list="{{ evSlots }}" as="s" hint-placeholder-count="3">
           <div style="background:#fff;border:3px solid {{ s.border }};border-radius:20px;padding:12px 14px">
             <div style="display:flex;align-items:center;gap:14px">
@@ -447,7 +457,7 @@
               </div>
             </sc-if>
             <label style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;background:#FFF8F0;border:2px dashed #FFB27D;border-radius:12px;padding:9px;cursor:pointer">
-              <input type="file" accept="image/*" multiple="multiple" onChange="{{ s.onFile }}" style="display:none">
+              <input type="file" accept="image/*,.heic,.heif" multiple="multiple" onChange="{{ s.onFile }}" style="display:none">
               <span style="font-size:14px;font-weight:800;color:#F76707">{{ s.addLabel }}</span>
             </label>
           </div>
@@ -1085,7 +1095,7 @@
               </sc-for>
             </div>
             <label style="display:flex;align-items:center;gap:10px;margin-top:10px;background:#FFF8F0;border:2px dashed #FFB27D;border-radius:14px;padding:10px 12px;cursor:pointer">
-              <input type="file" accept="image/*" multiple="multiple" onChange="{{ j.onPhoto }}" style="display:none">
+              <input type="file" accept="image/*,.heic,.heif" multiple="multiple" onChange="{{ j.onPhoto }}" style="display:none">
               <img src="assets/icons/icon_camera.webp" alt="" style="width:38px;height:38px">
               <div style="font-size:15px;font-weight:800;color:#F76707">{{ j.photoLabel }}</div>
             </label>
@@ -1168,9 +1178,9 @@
               <div style="margin-top:10px;background:#FFF9DB;border-radius:14px;padding:10px 12px">
                 <div style="font-size:14px;font-weight:800;color:#B35C00">ขาดหลักฐาน: {{ p.missingText }}</div>
                 <label style="display:inline-flex;align-items:center;gap:8px;margin-top:6px;background:#fff;border:2px solid #FFD43B;border-radius:12px;padding:8px 14px;cursor:pointer">
-                  <input type="file" accept="image/*" onChange="{{ p.onFill }}" style="display:none">
+                  <input type="file" accept="image/*,.heic,.heif" multiple="multiple" onChange="{{ p.onFill }}" style="display:none">
                   <img src="assets/icons/icon_camera.webp" alt="" style="width:26px;height:26px">
-                  <span style="font-size:14px;font-weight:800;color:#E67700">เติมหลักฐานเลย</span>
+                  <span style="font-size:14px;font-weight:800;color:#E67700">เติมหลักฐานเลย (หลายรูปได้)</span>
                 </label>
               </div>
             </sc-if>
@@ -1348,6 +1358,7 @@
         </div>
         <div style="margin-top:10px;background:#FFF9DB;border-radius:14px;padding:10px 12px;font-size:14px;font-weight:700;color:#8A6D00">หมายเหตุ: ต้นทุนขายจริงรอเชื่อม App_stock — ตอนนี้เห็นเฉพาะค่าใช้จ่ายฝั่งซื้อ + เงินไหลออก</div>
         <button onClick="{{ goBooks }}" style="width:100%;margin-top:10px;background:#F3F0FF;color:#5F3DC4;border:none;border-radius:14px;padding:12px;font-size:15px;font-weight:800;cursor:pointer">เปิดงบเต็ม 2 ชุด + ตาราง VAT ›</button>
+        <button onClick="{{ goTax }}" style="width:100%;margin-top:8px;background:#FFF4E6;color:#D9480F;border:none;border-radius:14px;padding:12px;font-size:15px;font-weight:800;cursor:pointer">คำนวณภาษี แยกรายคน / รายกิจการ ›</button>
       </div>
 
       <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
@@ -2031,6 +2042,234 @@
     </div>
   </sc-if>
 
+  <!-- ═══════════ คำนวณภาษี (แยกรายคน / รายกิจการ) ═══════════ -->
+  <sc-if value="{{ isTax }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="คำนวณภาษี">
+    <div style="display:flex;align-items:center;gap:12px;padding:16px 16px 6px 16px">
+      <button onClick="{{ goDash }}" style="background:#fff;border:none;border-radius:14px;width:44px;height:44px;font-size:22px;font-weight:900;color:#F76707;box-shadow:0 3px 10px rgba(255,140,90,.2);cursor:pointer">‹</button>
+      <div style="flex:1">
+        <div style="font-size:22px;font-weight:900">คำนวณภาษี</div>
+        <div style="font-size:13px;font-weight:600;color:#8A6D5C">แยกรายคน / รายกิจการ · ปรับตัวเลขเองได้</div>
+      </div>
+      <sc-if value="{{ showMascots }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;align-items:flex-end">
+          <img src="assets/poses2/boypink_05.png" alt="อาเฮีย" style="height:86px;margin-right:-10px">
+          <img src="assets/poses2/girlbeige_05.png" alt="แม่พัน" style="height:84px">
+        </div>
+      </sc-if>
+    </div>
+
+    <div style="padding:8px 16px 16px 16px;display:flex;flex-direction:column;gap:12px">
+      <!-- งวดภาษี -->
+      <div style="background:#fff;border-radius:18px;padding:10px;box-shadow:0 3px 12px rgba(255,140,90,.1);display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <button onClick="{{ taxPrev }}" style="background:#FFF3E6;border:none;border-radius:12px;width:40px;height:40px;font-size:18px;font-weight:900;color:#E8590C;cursor:pointer">‹</button>
+          <div style="flex:1;text-align:center;font-size:17px;font-weight:900">{{ taxPeriodText }}</div>
+          <button onClick="{{ taxNext }}" style="background:#FFF3E6;border:none;border-radius:12px;width:40px;height:40px;font-size:18px;font-weight:900;color:#E8590C;cursor:pointer">›</button>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button onClick="{{ taxSpanFull }}" style="flex:1;border:2px solid #EFE0D0;border-radius:12px;padding:10px;font-size:14px;font-weight:800;cursor:pointer;background:{{ taxSpanFullBg }};color:{{ taxSpanFullFg }}">ทั้งปี ({{ taxFormFull }})</button>
+          <button onClick="{{ taxSpanHalf }}" style="flex:1;border:2px solid #EFE0D0;border-radius:12px;padding:10px;font-size:14px;font-weight:800;cursor:pointer;background:{{ taxSpanHalfBg }};color:{{ taxSpanHalfFg }}">ครึ่งปีแรก ({{ taxFormHalf }})</button>
+        </div>
+      </div>
+
+      <!-- เลือกคน / กิจการ -->
+      <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:2px">
+        <sc-for list="{{ taxEntChips }}" as="e" hint-placeholder-count="4">
+          <button onClick="{{ e.pick }}" style="flex-shrink:0;white-space:nowrap;border:none;border-radius:999px;padding:10px 16px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 2px 8px rgba(255,140,90,.12);background:{{ e.bg }};color:{{ e.fg }}">{{ e.name }}</button>
+        </sc-for>
+      </div>
+
+      <!-- ผลลัพธ์ก้อนใหญ่ -->
+      <div style="background:linear-gradient(120deg,#5F3DC4,#7048E8);border-radius:22px;padding:16px;color:#fff">
+        <div style="font-size:14px;font-weight:700;opacity:.9">{{ taxDueLabel }}</div>
+        <div style="font-size:34px;font-weight:900;line-height:1.2">{{ taxDueText }}</div>
+        <div style="font-size:13px;font-weight:600;opacity:.85;margin-top:2px">{{ taxDueSub }}</div>
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <div style="flex:1;background:rgba(255,255,255,.16);border-radius:14px;padding:10px 12px">
+            <div style="font-size:12px;font-weight:700;opacity:.9">เงินได้</div>
+            <div style="font-size:17px;font-weight:900">{{ taxRevText }}</div>
+          </div>
+          <div style="flex:1;background:rgba(255,255,255,.16);border-radius:14px;padding:10px 12px">
+            <div style="font-size:12px;font-weight:700;opacity:.9">หักค่าใช้จ่าย</div>
+            <div style="font-size:17px;font-weight:900">{{ taxExpText }}</div>
+          </div>
+          <div style="flex:1;background:rgba(255,255,255,.16);border-radius:14px;padding:10px 12px">
+            <div style="font-size:12px;font-weight:700;opacity:.9">{{ taxNetLabel }}</div>
+            <div style="font-size:17px;font-weight:900">{{ taxNetText }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- รายได้ -->
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="font-size:17px;font-weight:900">รายได้ {{ taxPeriodShort }}</div>
+        <div style="font-size:13px;font-weight:600;color:#B08968;margin-top:2px">กรอกเองก่อน — ต่อไปจะดึงจาก App_stock ให้อัตโนมัติ</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:10px">
+          <span style="font-size:20px;font-weight:900;color:#B08968">฿</span>
+          <input type="number" value="{{ taxRevVal }}" onInput="{{ onTaxRev }}" placeholder="0" style="flex:1;min-width:0;border:2px solid #FFE0C2;border-radius:14px;padding:12px 14px;font-size:19px;font-weight:800;background:#FFFDF9;color:#3D2C29;box-sizing:border-box;outline:none">
+        </div>
+        <sc-if value="{{ taxRevZero }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-top:10px;background:#FFF9DB;border-radius:14px;padding:10px 12px;font-size:13.5px;font-weight:700;color:#8A6D00">ยังไม่ได้กรอกรายได้ — ตัวเลขภาษีจะเป็น 0 จนกว่าจะใส่ยอดขาย</div>
+        </sc-if>
+      </div>
+
+      <!-- ค่าใช้จ่าย: เหมา vs ตามจริง -->
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="font-size:17px;font-weight:900">หักค่าใช้จ่าย — เทียบ 2 แบบ</div>
+        <div style="font-size:13px;font-weight:600;color:#B08968;margin-top:2px">{{ taxExpHint }}</div>
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <sc-for list="{{ taxExpOpts }}" as="o" hint-placeholder-count="2">
+            <button onClick="{{ o.pick }}" style="flex:1;text-align:left;border:2px solid {{ o.border }};border-radius:18px;padding:12px;cursor:pointer;background:{{ o.bg }}">
+              <div style="font-size:14px;font-weight:900;color:{{ o.fg }}">{{ o.name }}</div>
+              <div style="font-size:20px;font-weight:900;color:{{ o.fg }};margin-top:2px">{{ o.amtText }}</div>
+              <div style="font-size:12.5px;font-weight:700;color:#8A6D5C;margin-top:4px">ภาษี {{ o.taxText }}</div>
+              <sc-if value="{{ o.isBetter }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:6px;background:#F3F0FF;border-radius:999px;padding:4px 10px;display:inline-block;font-size:12px;font-weight:800;color:#5F3DC4">เสียภาษีน้อยกว่า</div>
+              </sc-if>
+              <sc-if value="{{ o.isPicked }}" hint-placeholder-val="{{ true }}">
+                <div style="margin-top:6px;font-size:12px;font-weight:800;color:#E8590C">● ใช้แบบนี้คำนวณ</div>
+              </sc-if>
+            </button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ taxExpDocNote }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:10px;background:#FFF4E6;border-radius:14px;padding:10px 12px;font-size:13.5px;font-weight:700;color:#D9480F">{{ taxExpDocNoteText }}</div>
+        </sc-if>
+      </div>
+
+      <!-- ค่าลดหย่อน -->
+      <sc-if value="{{ taxShowAllow }}" hint-placeholder-val="{{ true }}">
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="font-size:17px;font-weight:900">ค่าลดหย่อน</div>
+        <div style="font-size:13px;font-weight:600;color:#B08968;margin-top:2px">{{ taxAllowHint }}</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+          <sc-for list="{{ taxAllowRows }}" as="a" hint-placeholder-count="5">
+            <div>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="flex:1;min-width:0">
+                  <div style="font-size:14.5px;font-weight:800;color:#5C4438">{{ a.label }}</div>
+                  <div style="font-size:12.5px;font-weight:600;color:#B08968">{{ a.capText }}</div>
+                </div>
+                <sc-if value="{{ a.fixed }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:16px;font-weight:900;color:#7048E8;width:110px;text-align:right">{{ a.amtText }}</div>
+                </sc-if>
+                <sc-if value="{{ a.editable }}" hint-placeholder-val="{{ true }}">
+                  <input type="number" value="{{ a.val }}" onInput="{{ a.onVal }}" placeholder="0" style="width:110px;border:2px solid #FFE0C2;border-radius:12px;padding:10px;font-size:16px;font-weight:800;text-align:right;background:#FFFDF9;color:#3D2C29;box-sizing:border-box;outline:none">
+                </sc-if>
+              </div>
+              <sc-if value="{{ a.over }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:4px;font-size:12.5px;font-weight:800;color:#D9480F">{{ a.overText }}</div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;justify-content:space-between;border-top:2px dashed #FFE8CC;padding-top:10px;margin-top:12px;font-size:16px;font-weight:900;color:#7048E8">
+          <span>รวมค่าลดหย่อนที่ใช้ได้</span><span>{{ taxAllowTotalText }}</span>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- กระดาษคำนวณ -->
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="font-size:17px;font-weight:900">{{ taxSheetTitle }}</div>
+        <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+          <sc-for list="{{ taxSheetRows }}" as="r" hint-placeholder-count="6">
+            <div style="display:flex;justify-content:space-between;gap:10px;font-size:{{ r.size }};font-weight:{{ r.weight }};color:{{ r.color }};border-top:{{ r.topLine }};padding-top:{{ r.topPad }}">
+              <span style="min-width:0">{{ r.name }}</span><span style="font-weight:900;flex-shrink:0">{{ r.amtText }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ taxMinNote }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:10px;background:#F3F0FF;border-radius:14px;padding:10px 12px;font-size:13.5px;font-weight:700;color:#5F3DC4">{{ taxMinNoteText }}</div>
+        </sc-if>
+      </div>
+
+      <!-- หักออกจากภาษี (ที่จ่าย/ถูกหักไว้แล้ว) -->
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="font-size:17px;font-weight:900">ภาษีที่จ่าย / ถูกหักไว้แล้ว</div>
+        <div style="font-size:13px;font-weight:600;color:#B08968;margin-top:2px">เอามาหักออกจากภาษีที่ต้องเสีย</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+          <sc-for list="{{ taxCreditRows }}" as="c" hint-placeholder-count="2">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:14.5px;font-weight:800;color:#5C4438">{{ c.label }}</div>
+                <div style="font-size:12.5px;font-weight:600;color:#B08968">{{ c.capText }}</div>
+              </div>
+              <input type="number" value="{{ c.val }}" onInput="{{ c.onVal }}" placeholder="0" style="width:110px;border:2px solid #FFE0C2;border-radius:12px;padding:10px;font-size:16px;font-weight:800;text-align:right;background:#FFFDF9;color:#3D2C29;box-sizing:border-box;outline:none">
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;justify-content:space-between;border-top:2px dashed #FFE8CC;padding-top:10px;margin-top:12px;font-size:16px;font-weight:900;color:#7048E8">
+          <span>รวมหักออกได้</span><span>{{ taxCreditTotalText }}</span>
+        </div>
+      </div>
+
+      <!-- ภาษีหัก ณ ที่จ่ายที่ต้องนำส่ง -->
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="font-size:17px;font-weight:900">ภาษีหัก ณ ที่จ่าย ที่ต้องนำส่ง</div>
+        <div style="font-size:13px;font-weight:600;color:#B08968;margin-top:2px">{{ taxWhtHint }}</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+          <sc-for list="{{ taxWhtRows }}" as="w" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:14.5px;font-weight:800;color:#5C4438">{{ w.label }}</div>
+                <div style="font-size:12.5px;font-weight:700;color:#7048E8">หัก {{ w.rateText }} = {{ w.taxText }}</div>
+              </div>
+              <input type="number" value="{{ w.val }}" onInput="{{ w.onVal }}" placeholder="0" style="width:110px;border:2px solid #FFE0C2;border-radius:12px;padding:10px;font-size:16px;font-weight:800;text-align:right;background:#FFFDF9;color:#3D2C29;box-sizing:border-box;outline:none">
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;justify-content:space-between;border-top:2px dashed #FFE8CC;padding-top:10px;margin-top:12px;font-size:16px;font-weight:900;color:#7048E8">
+          <span>รวมต้องนำส่ง ({{ taxWhtForm }})</span><span>{{ taxWhtTotalText }}</span>
+        </div>
+      </div>
+
+      <!-- VAT 1.8 ล้าน -->
+      <div style="background:#fff;border-radius:22px;padding:16px;box-shadow:0 3px 12px rgba(255,140,90,.1)">
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div style="font-size:17px;font-weight:900">เกณฑ์จด VAT (1.8 ล้าน/ปี)</div>
+          <div style="font-size:16px;font-weight:900;color:{{ taxVatColor }}">{{ taxVatPctText }}</div>
+        </div>
+        <div style="margin-top:10px;height:14px;border-radius:999px;background:#F5EDE4;overflow:hidden">
+          <div style="height:100%;border-radius:999px;background:{{ taxVatColor }};width:{{ taxVatW }}"></div>
+        </div>
+        <div style="margin-top:10px;font-size:13.5px;font-weight:700;color:{{ taxVatColor }}">{{ taxVatMsg }}</div>
+        <sc-if value="{{ taxVatRegistered }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:8px;background:#F3F0FF;border-radius:14px;padding:10px 12px;font-size:13.5px;font-weight:700;color:#5F3DC4">รายนี้ตั้งค่าว่าจด VAT แล้ว — ภาษีซื้อดูได้ที่งบการเงิน แท็บ "ภาษีซื้อ"</div>
+        </sc-if>
+      </div>
+
+      <!-- เทียบบุคคลธรรมดา vs นิติบุคคล -->
+      <div style="background:#3D2C29;border-radius:22px;padding:16px;color:#fff">
+        <div style="font-size:17px;font-weight:900">ยอดเดียวกันนี้ เสียภาษีแบบไหนถูกกว่า</div>
+        <div style="font-size:13px;font-weight:600;opacity:.8;margin-top:2px">{{ taxCmpHint }}</div>
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <sc-for list="{{ taxCmpCards }}" as="c" hint-placeholder-count="2">
+            <div style="flex:1;background:rgba(255,255,255,.1);border:2px solid {{ c.border }};border-radius:18px;padding:12px">
+              <div style="font-size:14px;font-weight:900">{{ c.name }}</div>
+              <div style="font-size:22px;font-weight:900;margin-top:4px">{{ c.taxText }}</div>
+              <div style="font-size:12.5px;font-weight:700;opacity:.8;margin-top:4px">{{ c.detail }}</div>
+              <sc-if value="{{ c.isBetter }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:8px;background:#fff;border-radius:999px;padding:4px 10px;display:inline-block;font-size:12px;font-weight:900;color:#3D2C29">ถูกกว่า {{ c.diffText }}</div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:12px;font-size:12.5px;font-weight:600;opacity:.75;line-height:1.5">{{ taxCmpFoot }}</div>
+      </div>
+
+      <div style="background:#FFF9DB;border-radius:16px;padding:12px 14px;font-size:13px;font-weight:700;color:#8A6D00;line-height:1.55">{{ taxDisclaimer }}</div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button onClick="{{ taxPrint }}" style="background:#5C4438;color:#fff;border:none;border-radius:16px;padding:14px;font-size:16px;font-weight:800;cursor:pointer">🖨 พิมพ์ / บันทึก PDF (สรุปให้เพื่อนนักบัญชี)</button>
+        <button onClick="{{ taxPrintAll }}" style="background:#fff;color:#5C4438;border:2px solid #EFE0D0;border-radius:16px;padding:13px;font-size:15px;font-weight:800;cursor:pointer">🖨 พิมพ์ทุกคน/ทุกกิจการในหน้าเดียว</button>
+        <button onClick="{{ taxExportCsv }}" style="background:#37B24D;color:#fff;border:none;border-radius:16px;padding:14px;font-size:16px;font-weight:800;cursor:pointer">⬇ Excel/CSV (ทุกคน/ทุกกิจการ)</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
   <!-- ═══════════ BOTTOM NAV ═══════════ -->
   <div style="position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;background:#fff;border-radius:26px 26px 0 0;box-shadow:0 -6px 24px rgba(255,120,80,.18);display:flex;align-items:flex-end;padding:8px 8px 10px 8px;z-index:50">
     <button onClick="{{ goHome }}" style="flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0">
@@ -2287,6 +2526,13 @@ class Component extends DCLogic {
       // ตั้งค่าเอกสาร (หัวกระดาษ per ใบ + ชื่อกิจการในใบรับรอง)
       const dset = (d.rules || []).find(r => r.key === 'liff_doc_settings');
       if (dset && dset.value) this.setState({ docSet: dset.value });
+      // ตัวเลขที่กรอกในหน้าคำนวณภาษี (รายได้/ค่าลดหย่อน/หัก ณ ที่จ่าย) — เก็บใน fin_rules
+      const txi = (d.rules || []).find(r => r.key === 'liff_tax_inputs');
+      if (txi && txi.value && typeof txi.value === 'object') {
+        const merged = Object.assign({}, this.taxAll(), txi.value);
+        this._taxLocal = merged; this.setState({ taxIn: merged });
+        try { localStorage.setItem('kk_tax_v1', JSON.stringify(merged)); } catch (e) {}
+      }
       this.applyEntitiesFromBootstrap(d);
       // สถิติซื้อจริง (ของใช้บ่อย + กราฟราคา) — ดึงจาก fin_po_items ผ่าน RPC fin_liff_stats
       this.api('liff_stats').then(s => { if (s && s.ok && s.data) this.setState({ stats: s.data }); });
@@ -2319,10 +2565,14 @@ class Component extends DCLogic {
   async ensureMonth(ym, force) {
     if (!this.state.liveMode || !ym) return;
     if (!force && this.state.monthLive[ym]) return;
+    // กันยิงซ้ำ + กันหลายเดือนยิงพร้อมกันแล้วเขียนทับกัน (merge ด้วย setState แบบฟังก์ชัน)
+    this._mlPending = this._mlPending || {};
+    if (!force && this._mlPending[ym]) return;
+    this._mlPending[ym] = 1;
     const r = await this.api('liff_month', { ym });
+    delete this._mlPending[ym];
     if (r && r.ok && r.data) {
-      const monthLive = Object.assign({}, this.state.monthLive); monthLive[ym] = r.data;
-      this.setState({ monthLive });
+      this.setState(s => { const monthLive = Object.assign({}, s.monthLive); monthLive[ym] = r.data; return { monthLive }; });
       // ขอ URL รูปย่อล่วงหน้า (Supabase thumbnail — เร็ว) ให้ไดอารี่โชว์ได้ทันที
       (r.data.files || []).slice(0, 24).forEach(f => { if (f.thumb) this.signThumb(f.thumb); });
     }
@@ -2463,7 +2713,7 @@ class Component extends DCLogic {
   save() {
     try { localStorage.setItem('kk_liff_v1', JSON.stringify({ vendors: this.state.db.vendors, purchases: this.state.db.purchases, sig: this.state.sig, signers: this.state.signers || [], prefsChars: this.state.prefsChars !== false, svc: this.state.svc || {}, rules: this.state.rules || null, entities: this.state.entities || [], defaultEntityId: this.state.defaultEntityId || null, geminiModel: this.state.geminiModel || 'gemini-3.5-flash-lite', freqThreshold: this.state.freqThreshold || 60, freqPins: this.state.freqPins || {}, freqHides: this.state.freqHides || {}, priceHidden: this.state.priceHidden || {}, docSet: this.state.docSet || null })); } catch (e) {}
   }
-  fmt(n) { return '฿' + Math.round(n).toLocaleString('th-TH'); }
+  fmt(n) { return '฿' + (Math.round(n) || 0).toLocaleString('th-TH'); }
   pop(msg) {
     this.setState({ toast: msg });
     clearTimeout(this._tt); this._tt = setTimeout(() => this.setState({ toast: '' }), 2200);
@@ -2608,17 +2858,37 @@ class Component extends DCLogic {
     const s = this.subDefs().find(x => x.key === sub);
     return s ? 'ไม่มีเอกสาร · ' + s.title : r.title;
   }
-  evidenceList() {
-    const v = this.vendorById(this.state.cart.vendorId);
-    const list = (v.doc || []).slice();
+  // 🔑 หลักฐานที่ "บังคับ" มาจากขั้นคัดแยกเอกสาร (route) ที่เดียว — โปรไฟล์ร้านไม่มีสิทธิ์ทำให้ช่องไหนบังคับ
+  evRequiredList() {
     const info = this.currentRouteInfo();
-    // ใบรับรองแทนใบเสร็จ: ขอแค่ "ชื่อ/ข้อมูลผู้รับ" — ไม่ต้องใช้เลขบัตร และเป็นของไม่บังคับ (เซ็นได้เลย)
-    const certLabel = 'ชื่อ/ข้อมูลผู้รับเงิน (ไม่ต้องใช้เลขบัตร)';
-    if (info && info.rule && info.rule.doc === 'cert' && list.indexOf(certLabel) < 0) list.push(certLabel);
+    const rule = (info && info.rule) || null;
+    if (!rule) return [];
+    const doc = rule.doc;
+    if (doc === 'none' && (rule.group || 'main') === 'main') return ['บิล / ใบกำกับภาษี'];
+    if (doc === 'pv') return ['สลิปโอนเงิน', 'รูปสินค้าที่รับ'];
+    return [];
+  }
+  evidenceList() {
+    // 🔑 หลักฐานที่ขอ = ผูกกับ "การคัดแยกเอกสาร" (route) ที่เดียว — ไม่ต้องไปตั้งรายร้าน
+    //    โปรไฟล์ร้าน (v.doc) เป็นแค่ "ตัวเสริมที่แนะนำ" เติมต่อท้ายให้ ไม่บังคับ
+    const v = this.vendorById(this.state.cart.vendorId);
+    const info = this.currentRouteInfo();
+    const rule = (info && info.rule) || null;
+    const doc = rule ? rule.doc : null;
+    const list = this.evRequiredList().slice();
+    if (doc === 'cert' || doc === 'pv_cert') list.push('ชื่อ/ข้อมูลผู้รับเงิน (ไม่ต้องใช้เลขบัตร)');
+    const seen = {};
+    list.forEach(l => { seen[this.evPart(l)] = true; });
+    (v.doc || []).forEach(l => { const pt = this.evPart(l); if (!seen[pt]) { seen[pt] = true; list.push(l); } });
     return list;
   }
-  // หลักฐานที่เป็น "ตัวเสริม" (รูปของ/แคปแชต/ข้อมูลผู้รับ) = ไม่บังคับ — แนบทีหลังได้
-  evOptional(l) { return /รูป|ภาพ|แคป|แชท|คำสั่งซื้อ|ผู้รับ/.test(l || ''); }
+  // หลักฐานที่เป็น "ตัวเสริม" (แคปแชท/คำสั่งซื้อ/ข้อมูลผู้รับ) = ไม่บังคับ — แนบทีหลังได้
+  // ยกเว้น: เส้นทางที่ไม่มีบิล (มีแต่สลิป → ระบบออกใบสำคัญจ่าย) — รูปสินค้าเป็นหลักฐานบังคับ
+  // บังคับ = อยู่ในลิสต์จาก route เท่านั้น (เทียบด้วย part) · ที่มาจากโปรไฟล์ร้าน = ตัวเสริมเสมอ
+  evOptional(l) {
+    const pt = this.evPart(l);
+    return !this.evRequiredList().some(r => this.evPart(r) === pt);
+  }
   evArr(l) { const v = this.state.cart.ev[l]; return Array.isArray(v) ? v : (v ? [v] : []); }
   // กดยืนยันได้เสมอ (never block) — นับเฉพาะเอกสารหลักที่ยังขาด (โชว์เตือนเฉยๆ ไม่ขู่)
   evMissing() { return this.evidenceList().filter(l => !this.evOptional(l) && this.evArr(l).length === 0); }
@@ -2714,7 +2984,11 @@ class Component extends DCLogic {
           const r = await this.api('upload_file', { sha256: sha, thumb_b64: thumb, thumb_mime: thumbMime, original_b64: full || undefined, mime: 'image/jpeg', kind: this.evFileKind(part), case_id: caseId, name: l });
           if (r && r.ok && r.data && r.data.file) {
             n++;
-            if (!attached[part]) { attached[part] = true; await this.api('attach_part', { case_id: caseId, part, file_id: r.data.file.id }); }
+            if (!attached[part]) {
+              attached[part] = true;
+              const a = await this.api('attach_part', { case_id: caseId, part, file_id: r.data.file.id });
+              this.pushIfEvidenceComplete(a);
+            }
           }
         } catch (e) { /* never block — รูปพลาดข้ามไป */ }
       }
@@ -2797,7 +3071,8 @@ class Component extends DCLogic {
         const thumbMime = thumb.indexOf('data:image/webp') === 0 ? 'image/webp' : 'image/jpeg';
         const r = await this.api('upload_file', { sha256: sha, thumb_b64: thumb, thumb_mime: thumbMime, original_b64: full, mime: 'image/jpeg', kind: this.evFileKind(part), case_id: caseId, name: raw.name || 'หลักฐานเพิ่มเติม' });
         if (!(r && r.ok && r.data && r.data.file)) throw new Error((r && r.error) || 'ต่อระบบไม่ได้');
-        await this.api('attach_part', { case_id: caseId, part: part, file_id: r.data.file.id });
+        const a = await this.api('attach_part', { case_id: caseId, part: part, file_id: r.data.file.id });
+        this.pushIfEvidenceComplete(a);
         ok++;
       } catch (err) { errs.push((raw.name || 'รูป') + ': ' + String((err && err.message) || err)); }
     }
@@ -3224,6 +3499,7 @@ class Component extends DCLogic {
           if (r && r.ok) {
             this.pop('เซ็นอนุมัติแล้ว ' + ((r.data && r.data.signed) || ids.length) + ' ใบ ✓' + (signer ? ' · ผู้เซ็น: ' + signer.name : ''));
             this.refreshAllLive();
+            this.driveAutoPush(); // เซ็นแล้ว = หลักฐานถูกยืนยัน ค่อยส่งต้นฉบับขึ้น Drive
           } else this.pop('เซ็นไม่สำเร็จ: ' + ((r && r.error) || 'ต่อระบบไม่ได้'));
         });
       }
@@ -3503,6 +3779,22 @@ class Component extends DCLogic {
     else msg = 'ไม่มีไฟล์ค้างรอส่ง';
     this.setState({ driveBusy: false, driveMsg: msg, drive: (r && r.ok && r.data && r.data.state) || this.state.drive });
   };
+  // หลักฐานครบตามที่กฎกำหนดเมื่อไหร่ → ส่งต้นฉบับขึ้น Drive เองตอนนั้น
+  pushIfEvidenceComplete(res) {
+    const c = res && res.ok && res.data && res.data.case;
+    if (c && (c.status === 'complete' || c.status === 'doc_created' || c.complete === true)) this.driveAutoPush();
+  }
+  // ส่งต้นฉบับขึ้น Drive — เรียกเมื่อ "หลักฐานครบ" หรือ "เซ็นอนุมัติแล้ว" เท่านั้น
+  // ห้ามเรียกทุกครั้งที่อัปรูป: รูปที่ถ่ายมั่ว/เทสต์ ต้องลบทิ้งได้ก่อน ไม่ให้หลุดขึ้น Drive
+  driveAutoPush() {
+    if (!this.state.liveMode) return;
+    clearTimeout(this._drivePushT);
+    this._drivePushT = setTimeout(async () => {
+      const r = await this.api('drive_flush', { limit: 10 });
+      const s = (r && r.ok && r.data && r.data.state) || null;
+      if (s) this.setState({ drive: s });
+    }, 2500);
+  }
   resetDriveErrors = async () => {
     if (!this.state.liveMode) return;
     this.setState({ driveMsg: 'กำลังเอาไฟล์กลับเข้าคิว…' });
@@ -4087,6 +4379,390 @@ class Component extends DCLogic {
     w.document.write(html); w.document.close();
     setTimeout(() => { try { w.focus(); w.print(); } catch (e) {} }, 400);
   }
+  /* ================= คำนวณภาษี (แยกรายคน / รายกิจการ) =================
+     - เงินได้: กรอกเอง (อนาคตดึงจาก App_stock) · ค่าใช้จ่ายจริง: ดึงจากงบปีเดียวกัน (by_entity)
+     - บุคคล/หสม.: หักเหมา 60% vs ตามจริง เทียบให้ + ขั้นบันได + ภาษีขั้นต่ำ 0.5%
+     - นิติบุคคล: SME 0/15/20% (ภ.ง.ด.50) · ครึ่งปี = ครึ่งของภาษีประมาณการ (ภ.ง.ด.51)
+     ตัวเลขที่กรอกเก็บ localStorage 'kk_tax_v1' + fin_rules 'liff_tax_inputs' */
+  taxDefaults() {
+    return { rev: '', revH1: '', expOverride: '', pick: 'auto', partners: '2',
+      life: '', sso: '', fund: '', mortgage: '', eas: '', donate: '',
+      prepaid: '', paid94: '', wht_svc: '', wht_ship: '', wht_rent: '', wht_ads: '' };
+  }
+  taxAll() {
+    if (!this._taxLoaded) {
+      this._taxLoaded = true;
+      try { this._taxLocal = JSON.parse(localStorage.getItem('kk_tax_v1') || 'null') || {}; } catch (e) { this._taxLocal = {}; }
+    }
+    return this.state.taxIn || this._taxLocal || {};
+  }
+  taxOf(id) { return Object.assign(this.taxDefaults(), this.taxAll()[id || '_'] || {}); }
+  setTax(id, patch) {
+    const key = id || '_';
+    const all = Object.assign({}, this.taxAll());
+    all[key] = Object.assign({}, this.taxOf(key), patch);
+    this._taxLocal = all;
+    this.setState({ taxIn: all });
+    try { localStorage.setItem('kk_tax_v1', JSON.stringify(all)); } catch (e) {}
+    clearTimeout(this._taxSaveT);
+    this._taxSaveT = setTimeout(() => {
+      if (this.state.liveMode) this.pushQuiet('settings_save', { rule_key: 'liff_tax_inputs', value: this.state.taxIn, description: 'ตัวเลขที่กรอกในหน้าคำนวณภาษี (KodKlean_Money)' });
+    }, 1500);
+  }
+  pitTax(net) {
+    const B = [[150000, 0], [150000, .05], [200000, .10], [250000, .15], [250000, .20], [1000000, .25], [3000000, .30]];
+    let t = 0, left = Math.max(0, net);
+    for (let i = 0; i < B.length; i++) { if (left <= 0) break; const a = Math.min(left, B[i][0]); t += a * B[i][1]; left -= a; }
+    return t + Math.max(0, left) * .35;
+  }
+  citTax(profit) {
+    let p = Math.max(0, profit), t = 0;
+    p -= Math.min(p, 300000);
+    const b = Math.min(p, 2700000); t += b * .15; p -= b;
+    return t + p * .20;
+  }
+  taxAllow(V, rev, exp, isOP, f) {
+    const num = (v) => Math.max(0, +v || 0);
+    const th = (n) => Math.round(n).toLocaleString('th-TH');
+    const rows = []; let total = 0;
+    if (isOP) {
+      const n = Math.min(Math.max(1, +V.partners || 2), 10);
+      const amt = Math.min(60000 * n, 120000) * f;
+      rows.push({ key: 'partners', label: 'ผู้เป็นหุ้นส่วน (กรอกจำนวนคน) × 60,000', capText: 'หสม./คณะบุคคล หักได้เท่านี้ · รวมไม่เกิน ' + th(120000 * f), editable: true, raw: n, amt, isPartners: true });
+      return { total: amt, rows, isOP: true, partners: n };
+    }
+    const self = 60000 * f;
+    rows.push({ key: 'self', label: 'ค่าลดหย่อนส่วนตัว', capText: 'ใส่ให้อัตโนมัติ ' + th(self) + ' บาท', fixed: true, amt: self });
+    total += self;
+    [['life', 'เบี้ยประกันชีวิต + สุขภาพ', 100000 * f],
+     ['sso', 'ประกันสังคมที่จ่ายเอง', 9000 * f],
+     ['fund', 'กองทุน SSF / RMF', Math.min(500000 * f, rev * .3)],
+     ['mortgage', 'ดอกเบี้ยบ้าน', 100000 * f],
+     ['eas', 'Easy E-Receipt / ช้อปดีมีคืน', 50000]
+    ].forEach(([key, label, c]) => {
+      const raw = num(V[key]); const amt = Math.min(raw, Math.max(0, c));
+      rows.push({ key, label, capText: 'ใช้ได้ไม่เกิน ' + th(c) + ' บาท' + (key === 'fund' ? ' (30% ของเงินได้)' : ''), editable: true, raw, amt, over: raw > c + .5, cap: c });
+      total += amt;
+    });
+    const dCap = Math.max(0, (rev - exp - total) * .1);
+    const dRaw = num(V.donate); const dAmt = Math.min(dRaw, dCap);
+    rows.push({ key: 'donate', label: 'เงินบริจาค', capText: 'ไม่เกิน 10% ของเงินได้หลังหักค่าใช้จ่าย/ลดหย่อน = ' + th(dCap) + ' บาท', editable: true, raw: dRaw, amt: dAmt, over: dRaw > dCap + .5, cap: dCap });
+    return { total: total + dAmt, rows, isOP: false };
+  }
+  // แกนคำนวณ — ใช้ทั้งบนจอ / CSV / หน้าพิมพ์
+  taxCalc(ent, half, yad) {
+    const e = ent || { id: null, name: '', type: 'individual' };
+    const V = this.taxOf(e.id);
+    const type = e.type || 'individual';
+    const isJur = type === 'juristic_partnership' || type === 'juristic_company';
+    const isOP = type === 'ordinary_partnership';
+    const f = half ? .5 : 1;
+    const num = (v) => Math.max(0, +v || 0);
+    const rev = num(half ? V.revH1 : V.rev);
+    const fin = this.finOf(String(yad));
+    const match = (arr) => (arr || []).find(x => (x.entity_id && e.id && x.entity_id === e.id) || x.name === e.name) || null;
+    const yrow = fin ? match(fin.by_entity) : null;
+    const yDoc = yrow ? Math.round(+yrow.s_exp || 0) : 0;
+    const yAll = yrow ? Math.round(+yrow.p_exp || 0) : 0;
+    let expDoc = yDoc, expAll = yAll, halfExact = false;
+    if (half) {
+      let sD = 0, sA = 0, ok = true;
+      for (let m = 1; m <= 6; m++) {
+        const d = (this.state.monthLive || {})[yad + '-' + String(m).padStart(2, '0')];
+        const mf = d && d.fin;
+        if (!mf) { ok = false; break; }
+        const r = match(mf.by_entity);
+        if (r) { sD += +r.s_exp || 0; sA += +r.p_exp || 0; }
+      }
+      if (ok) { expDoc = Math.round(sD); expAll = Math.round(sA); halfExact = true; }
+      else { expDoc = Math.round(yDoc / 2); expAll = Math.round(yAll / 2); }
+    }
+    const ovrRaw = V.expOverride;
+    const ovr = (ovrRaw === '' || ovrRaw == null) ? null : num(ovrRaw);
+    const expActual = ovr != null ? ovr : expDoc;
+    const expFlat = Math.round(rev * .6);
+    const one = (exp, forceInd) => {
+      const jur = isJur && !forceInd;
+      const A = jur ? { total: 0, rows: [] } : this.taxAllow(V, rev, exp, isOP, f);
+      const profit = rev - exp;
+      const net = Math.max(0, profit - A.total);
+      let grad = jur ? (half ? this.citTax(profit * 2) / 2 : this.citTax(profit)) : this.pitTax(net);
+      const min05 = (!jur && !half && rev > 60000) ? rev * .005 : 0;
+      const useMin = min05 > grad && min05 > 5000;
+      return { exp, A, profit, net, grad, min05, useMin, tax: useMin ? min05 : grad };
+    };
+    const flat = one(expFlat), actual = one(expActual);
+    let useKind = isJur ? 'actual' : (V.pick === 'flat' ? 'flat' : V.pick === 'actual' ? 'actual' : (flat.tax <= actual.tax ? 'flat' : 'actual'));
+    const use = useKind === 'flat' ? flat : actual;
+    const better = flat.tax <= actual.tax ? 'flat' : 'actual';
+    const credit = num(V.prepaid) + (half ? 0 : num(V.paid94));
+    const W = [['wht_svc', 'ค่าจ้างทำของ / ค่าบริการ', .03], ['wht_ship', 'ค่าขนส่ง', .01], ['wht_rent', 'ค่าเช่า', .05], ['wht_ads', 'ค่าโฆษณา', .02]]
+      .map(([k, label, rate]) => { const base = num(V[k]); return { k, label, rate, base, tax: base * rate }; });
+    const cmpPit = Math.min(one(expFlat, true).tax, one(expActual, true).tax);
+    const cmpCit = half ? this.citTax((rev - expActual) * 2) / 2 : this.citTax(rev - expActual);
+    return {
+      ent: e, V, type, isJur, isOP, half, f, rev, expDoc, expAll, expActual, expFlat, ovr, halfExact,
+      flat, actual, use, useKind, better, credit, remain: use.tax - credit,
+      wht: W, whtTotal: W.reduce((a, x) => a + x.tax, 0),
+      vatBase: half ? rev * 2 : rev, cmpPit, cmpCit,
+      formFull: isJur ? 'ภ.ง.ด.50' : 'ภ.ง.ด.90', formHalf: isJur ? 'ภ.ง.ด.51' : 'ภ.ง.ด.94'
+    };
+  }
+  taxEntities() {
+    const hid = this.state.hiddenEntities || [];
+    return this.entitiesList().filter(e => hid.indexOf(e.id) < 0);
+  }
+  taxCur() {
+    const T = this.state.tax || {};
+    const ents = this.taxEntities();
+    const id = T.entId || this.state.defaultEntityId;
+    return ents.find(e => e.id === id) || ents[0] || null;
+  }
+  taxYb() { const T = this.state.tax || {}; return T.yb || (new Date().getFullYear() + 543); }
+  // ครึ่งปี (ภ.ง.ด.94/51) ใช้ยอดจริงเดือน ม.ค.–มิ.ย. → โหลด 6 เดือนไว้ให้ครบ
+  taxEnsureData(yb) {
+    const yad = (yb || this.taxYb()) - 543;
+    this.ensureMonth(String(yad));
+    for (let m = 1; m <= 6; m++) this.ensureMonth(yad + '-' + String(m).padStart(2, '0'));
+  }
+  taxSetYear(d) {
+    const yb = this.taxYb() + d;
+    this.setState({ tax: Object.assign({}, this.state.tax, { yb }) });
+    this.taxEnsureData(yb);
+  }
+  // ตารางสรุป (ใช้ทั้ง CSV และหน้าพิมพ์)
+  taxTable(C, label) {
+    const r2 = (n) => Math.round(n * 100) / 100;
+    const rows = [['รายการ', 'จำนวน (บาท)']];
+    rows.push(['เงินได้ ' + label, r2(C.rev)]);
+    if (C.isJur) {
+      rows.push(['หักต้นทุน + ค่าใช้จ่าย (เอกสารครบ)', r2(C.use.exp)]);
+      rows.push(['กำไรสุทธิทางภาษี', r2(C.use.profit)]);
+      rows.push(['ภาษีนิติบุคคล SME (0/15/20%)' + (C.half ? ' — ครึ่งของภาษีประมาณการ' : ''), r2(C.use.grad)]);
+    } else {
+      rows.push([C.useKind === 'flat' ? 'หักค่าใช้จ่ายเหมา 60%' : 'หักค่าใช้จ่ายตามจริง (เอกสารครบ)', r2(C.use.exp)]);
+      rows.push(['เงินได้หลังหักค่าใช้จ่าย', r2(C.use.profit)]);
+      C.use.A.rows.forEach(a => rows.push(['  ลดหย่อน — ' + a.label, r2(a.amt)]));
+      rows.push(['รวมค่าลดหย่อน', r2(C.use.A.total)]);
+      rows.push(['เงินได้สุทธิ', r2(C.use.net)]);
+      rows.push(['ภาษีตามขั้นบันได', r2(C.use.grad)]);
+      if (C.use.min05) rows.push(['ภาษีขั้นต่ำ 0.5% ของเงินได้', r2(C.use.min05)]);
+    }
+    rows.push(['ภาษีที่ต้องเสีย', r2(C.use.tax)]);
+    rows.push(['หัก ภาษีถูกหัก ณ ที่จ่าย / จ่ายล่วงหน้า', r2(C.credit)]);
+    rows.push([C.remain >= 0 ? 'คงเหลือต้องจ่าย' : 'ขอคืนได้', r2(Math.abs(C.remain))]);
+    rows.push(['', '']);
+    rows.push(['ภาษีหัก ณ ที่จ่ายที่ต้องนำส่ง (ภ.ง.ด.3 / 53)', r2(C.whtTotal)]);
+    C.wht.filter(w => w.base).forEach(w => rows.push(['  ' + w.label + ' ' + (w.rate * 100) + '%', r2(w.tax)]));
+    rows.push(['ฐานรายได้เทียบเกณฑ์จด VAT (1.8 ล้าน/ปี)', r2(C.vatBase)]);
+    rows.push(['เทียบ: เสียแบบบุคคลธรรมดา', r2(C.cmpPit)]);
+    rows.push(['เทียบ: เสียแบบนิติบุคคล SME', r2(C.cmpCit)]);
+    return rows;
+  }
+  taxPeriodLabel(yb, half) { return half ? ('ครึ่งปีแรก ' + yb + ' (ม.ค.–มิ.ย.)') : ('ปีภาษี ' + yb + ' (ม.ค.–ธ.ค.)'); }
+  taxExportCsv = () => {
+    const H = window.KK_HELPERS; if (!H) return;
+    const T = this.state.tax || {}; const half = !!T.half; const yb = this.taxYb();
+    const label = this.taxPeriodLabel(yb, half);
+    const ents = this.taxEntities();
+    if (!ents.length) { this.pop('ยังไม่มีผู้จ่าย/กิจการ — เพิ่มที่หน้าตั้งค่าก่อน'); return; }
+    const rows = [['KodKlean_Money · คำนวณภาษี', label], []];
+    ents.forEach(e => {
+      const C = this.taxCalc(e, half, yb - 543);
+      rows.push([e.name + ' · ' + this.entityTypeLabel(e.type) + ' · แบบ ' + (half ? C.formHalf : C.formFull)]);
+      this.taxTable(C, label).forEach(r => rows.push(r));
+      rows.push([]);
+    });
+    rows.push(['หมายเหตุ: รายได้กรอกเอง (รอเชื่อม App_stock) · ค่าใช้จ่ายตามจริงดึงจากงบจำลองนิติ (เฉพาะรายการที่เอกสารครบ) · ตัวเลขนี้ใช้ประกอบการตรวจ ไม่ใช่แบบยื่นจริง']);
+    H.download('KodKlean_คำนวณภาษี_' + yb + (half ? '_ครึ่งปี' : '') + '.csv', new Blob([H.csv(rows)], { type: 'text/csv;charset=utf-8' }));
+    this.pop('ส่งออกไฟล์คำนวณภาษีแล้ว ✓');
+  };
+  taxPrint = (allEnts) => {
+    const T = this.state.tax || {}; const half = !!T.half; const yb = this.taxYb();
+    const label = this.taxPeriodLabel(yb, half);
+    const list = allEnts === true ? this.taxEntities() : [this.taxCur()].filter(Boolean);
+    if (!list.length) { this.pop('ยังไม่มีผู้จ่าย/กิจการ — เพิ่มที่หน้าตั้งค่าก่อน'); return; }
+    const esc = (v) => String(v == null ? '' : v).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+    const th = (n) => (Math.round(n * 100) / 100).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    let body = '';
+    list.forEach(e => {
+      const C = this.taxCalc(e, half, yb - 543);
+      body += '<h2>' + esc(e.name) + ' — ' + esc(this.entityTypeLabel(e.type)) + ' · แบบ ' + esc(half ? C.formHalf : C.formFull) + (e.tax_id ? ' · เลขประจำตัว ' + esc(e.tax_id) : '') + '</h2>';
+      body += '<table><thead><tr><th>รายการ</th><th class="n">จำนวน (บาท)</th></tr></thead><tbody>';
+      this.taxTable(C, label).slice(1).forEach(r => {
+        if (r[0] === '' && r[1] === '') return;
+        body += '<tr><td>' + esc(r[0]) + '</td><td class="n">' + (r[1] === '' ? '' : th(r[1])) + '</td></tr>';
+      });
+      body += '</tbody></table>';
+    });
+    body += '<div class="note">รายได้เป็นตัวเลขที่เจ้าของกรอก (ยังไม่เชื่อม App_stock) · ค่าใช้จ่ายตามจริงมาจากงบจำลองนิติบุคคล เฉพาะรายการที่เอกสารครบ · เอกสารนี้เป็นกระดาษทำการเพื่อให้ผู้ทำบัญชีตรวจ ไม่ใช่แบบแสดงรายการภาษีฉบับยื่น</div>';
+    body += '<div class="sig"><div><div class="line"></div>ผู้จัดทำ</div><div><div class="line"></div>ผู้ตรวจสอบ / ผู้ทำบัญชี</div><div><div class="line"></div>ผู้มีอำนาจลงนาม</div></div>';
+    const html = '<!doctype html><html lang="th"><head><meta charset="utf-8"><title>' + esc('คำนวณภาษี ' + label) + '</title>' +
+      '<style>@page{size:A4;margin:16mm}' +
+      'body{font-family:"Noto Sans Thai","Sarabun",sans-serif;color:#111;font-size:12pt;margin:0}' +
+      'h1{font-size:17pt;margin:0 0 2mm}h2{font-size:13pt;margin:8mm 0 2mm;page-break-after:avoid}' +
+      '.sub{font-size:11pt;color:#444;margin-bottom:4mm}' +
+      'table{width:100%;border-collapse:collapse;margin-bottom:3mm}' +
+      'th,td{border:1px solid #999;padding:2mm 2.5mm;font-size:11pt;text-align:left}' +
+      'th{background:#eee}td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}' +
+      'tbody tr:last-child td{font-weight:700}' +
+      '.note{font-size:10.5pt;color:#444;margin-top:5mm;line-height:1.6}' +
+      '.sig{display:flex;gap:10mm;margin-top:12mm;page-break-inside:avoid}' +
+      '.sig>div{flex:1;text-align:center;font-size:11pt}.line{border-bottom:1px solid #333;height:14mm}' +
+      '</style></head><body><h1>กระดาษทำการคำนวณภาษี</h1><div class="sub">' + esc(label) + ' · KodKlean_Money</div>' + body + '</body></html>';
+    const w = window.open('', '_blank');
+    if (!w) { this.pop('เบราว์เซอร์บล็อกหน้าต่างใหม่ — อนุญาต pop-up แล้วลองอีกครั้ง'); return; }
+    w.document.write(html); w.document.close();
+    setTimeout(() => { try { w.focus(); w.print(); } catch (e) {} }, 400);
+  };
+  taxVals() {
+    const st = this.state; const fmt = (n) => this.fmt(n);
+    const T = st.tax || {}; const half = !!T.half; const yb = this.taxYb(); const yad = yb - 543;
+    const ents = this.taxEntities();
+    const cur = this.taxCur();
+    if (!cur) {
+      return { isTax: st.screen === 'tax', taxPeriodText: this.taxPeriodLabel(yb, half), taxEntChips: [],
+        taxPrev: () => this.taxSetYear(-1), taxNext: () => this.taxSetYear(1),
+        taxSpanFull: () => this.setState({ tax: Object.assign({}, T, { half: false }) }), taxSpanHalf: () => this.setState({ tax: Object.assign({}, T, { half: true }) }),
+        taxSpanFullBg: half ? '#fff' : '#FF8A3D', taxSpanFullFg: half ? '#8A6D5C' : '#fff', taxSpanHalfBg: half ? '#FF8A3D' : '#fff', taxSpanHalfFg: half ? '#fff' : '#8A6D5C',
+        taxFormFull: 'ภ.ง.ด.90', taxFormHalf: 'ภ.ง.ด.94', taxDueLabel: 'ยังไม่มีผู้จ่าย/กิจการ', taxDueText: '—',
+        taxDueSub: 'เพิ่มผู้จ่าย/กิจการที่หน้าตั้งค่าก่อน แล้วกลับมาหน้านี้', taxRevText: '—', taxExpText: '—', taxNetLabel: 'เงินได้สุทธิ', taxNetText: '—',
+        taxPeriodShort: '', taxRevVal: '', onTaxRev: () => {}, taxRevZero: false, taxExpHint: '', taxExpOpts: [], taxExpDocNote: false, taxExpDocNoteText: '',
+        taxShowAllow: false, taxAllowHint: '', taxAllowRows: [], taxAllowTotalText: '—', taxSheetTitle: '', taxSheetRows: [], taxMinNote: false, taxMinNoteText: '',
+        taxCreditRows: [], taxCreditTotalText: '—', taxWhtHint: '', taxWhtRows: [], taxWhtForm: 'ภ.ง.ด.3 / 53', taxWhtTotalText: '—',
+        taxVatColor: '#7048E8', taxVatPctText: '0%', taxVatW: '0%', taxVatMsg: '', taxVatRegistered: false,
+        taxCmpHint: '', taxCmpCards: [], taxCmpFoot: '', taxDisclaimer: '', taxPrint: () => {}, taxPrintAll: () => {}, taxExportCsv: () => {} };
+    }
+    const C = this.taxCalc(cur, half, yad);
+    const V = C.V; const set = (patch) => this.setTax(cur.id, patch);
+    const th = (n) => Math.round(n).toLocaleString('th-TH');
+    const periodShort = half ? '(ม.ค.–มิ.ย. ' + yb + ')' : '(ทั้งปี ' + yb + ')';
+    const SR = (name, amt, o) => Object.assign({
+      name, amtText: typeof amt === 'string' ? amt : fmt(amt),
+      size: '15px', weight: '700', color: '#5C4438', topLine: 'none', topPad: '0'
+    }, o || {});
+    const big = { size: '17px', weight: '900', color: '#7048E8', topLine: '2px dashed #FFE8CC', topPad: '10px' };
+
+    /* ค่าใช้จ่าย 2 แบบ */
+    const opts = [];
+    if (!C.isJur) {
+      opts.push({
+        name: 'เหมา 60%', amtText: fmt(C.expFlat), taxText: fmt(C.flat.tax),
+        isBetter: C.better === 'flat', isPicked: C.useKind === 'flat',
+        bg: C.useKind === 'flat' ? '#FFF4E6' : '#FFFDF9', border: C.useKind === 'flat' ? '#FFB27D' : '#F0E4D6', fg: '#D9480F',
+        pick: () => set({ pick: 'flat' })
+      });
+    }
+    opts.push({
+      name: C.isJur ? 'ต้นทุน+ค่าใช้จ่ายจริง' : 'ตามจริง (เอกสารครบ)', amtText: fmt(C.expActual), taxText: fmt(C.actual.tax),
+      isBetter: !C.isJur && C.better === 'actual', isPicked: C.useKind === 'actual',
+      bg: C.useKind === 'actual' ? '#F3F0FF' : '#FFFDF9', border: C.useKind === 'actual' ? '#B197FC' : '#F0E4D6', fg: '#5F3DC4',
+      pick: () => set({ pick: 'actual' })
+    });
+
+    /* ค่าลดหย่อน */
+    const allowRows = C.use.A.rows.map(a => ({
+      label: a.label, capText: a.capText, fixed: !!a.fixed, editable: !!a.editable,
+      amtText: fmt(a.amt), val: a.isPartners ? String(a.raw) : (V[a.key] === '' || V[a.key] == null ? '' : String(V[a.key])),
+      over: !!a.over, overText: a.over ? ('กรอก ' + th(a.raw) + ' — ใช้ได้จริง ' + th(a.amt) + ' บาท ส่วนเกินไม่นำมาหัก') : '',
+      onVal: (e) => set(a.isPartners ? { partners: e.target.value } : { [a.key]: e.target.value })
+    }));
+
+    /* กระดาษคำนวณ */
+    const sheet = [];
+    sheet.push(SR('เงินได้ ' + periodShort, C.rev));
+    if (C.isJur) {
+      sheet.push(SR('หักต้นทุน + ค่าใช้จ่าย (เอกสารครบ)', -C.use.exp));
+      sheet.push(SR('กำไรสุทธิทางภาษี', C.use.profit, { weight: '900' }));
+      sheet.push(SR('ภาษีนิติบุคคล SME 0 / 15 / 20%' + (half ? ' — ครึ่งของภาษีประมาณการ' : ''), C.use.grad));
+    } else {
+      sheet.push(SR(C.useKind === 'flat' ? 'หักค่าใช้จ่ายเหมา 60%' : 'หักค่าใช้จ่ายตามจริง', -C.use.exp));
+      sheet.push(SR('เงินได้หลังหักค่าใช้จ่าย', C.use.profit, { weight: '900' }));
+      sheet.push(SR('หักค่าลดหย่อนรวม', -C.use.A.total));
+      sheet.push(SR('เงินได้สุทธิ', C.use.net, { weight: '900' }));
+      sheet.push(SR('ภาษีตามขั้นบันได', C.use.grad));
+      if (C.use.min05) sheet.push(SR('ภาษีขั้นต่ำ 0.5% ของเงินได้', C.use.min05, { color: C.use.useMin ? '#D9480F' : '#B08968' }));
+    }
+    sheet.push(SR('ภาษีที่ต้องเสีย', C.use.tax, big));
+    sheet.push(SR('หัก ภาษีถูกหัก ณ ที่จ่าย / จ่ายล่วงหน้า', -C.credit));
+    sheet.push(SR(C.remain >= 0 ? 'คงเหลือต้องจ่าย' : 'ขอคืนได้', Math.abs(C.remain), big));
+
+    /* หักออกจากภาษี (กรอกเอง) */
+    const creditRows = [{
+      label: 'ภาษีถูกหัก ณ ที่จ่าย (ที่ผู้ซื้อหักเราไว้)', capText: 'ดูจากหนังสือรับรองการหักภาษี', val: V.prepaid === '' ? '' : String(V.prepaid),
+      onVal: (e) => set({ prepaid: e.target.value })
+    }];
+    if (!half) creditRows.push({
+      label: 'ภาษีครึ่งปีที่จ่ายแล้ว (' + C.formHalf + ')', capText: 'ใส่เมื่อยื่นครึ่งปีไปแล้ว', val: V.paid94 === '' ? '' : String(V.paid94),
+      onVal: (e) => set({ paid94: e.target.value })
+    });
+
+    /* VAT */
+    const pct = C.vatBase / 1800000;
+    const vatColor = pct >= 1 ? '#D9480F' : pct >= .8 ? '#E8590C' : '#7048E8';
+    const vatMsg = pct >= 1 ? 'เกินเกณฑ์แล้ว — ต้องยื่นจดทะเบียน VAT ภายใน 30 วันนับจากวันที่รายได้เกิน 1.8 ล้าน'
+      : pct >= .8 ? 'ใกล้เกณฑ์ 1.8 ล้าน — เตรียมเอกสารจด VAT ไว้ก่อน เหลืออีก ' + fmt(1800000 - C.vatBase)
+      : 'ยังไม่ถึงเกณฑ์ — เหลืออีก ' + fmt(Math.max(0, 1800000 - C.vatBase)) + ' ถึงจะต้องจด VAT';
+
+    /* เทียบบุคคล vs นิติ */
+    const pitBetter = C.cmpPit <= C.cmpCit;
+    const cmp = [
+      { name: 'บุคคลธรรมดา', taxText: fmt(C.cmpPit), detail: 'หักเหมา 60% หรือตามจริง + ค่าลดหย่อน · ขั้นบันได 0–35%', isBetter: pitBetter, border: pitBetter ? '#FFD8A8' : 'transparent', diffText: fmt(Math.abs(C.cmpCit - C.cmpPit)) },
+      { name: 'นิติบุคคล (SME)', taxText: fmt(C.cmpCit), detail: 'กำไรสุทธิ ≤3 แสนยกเว้น · 3 แสน–3 ล้าน 15% · เกิน 3 ล้าน 20%', isBetter: !pitBetter, border: !pitBetter ? '#FFD8A8' : 'transparent', diffText: fmt(Math.abs(C.cmpCit - C.cmpPit)) }
+    ];
+
+    return {
+      isTax: st.screen === 'tax',
+      taxPeriodText: this.taxPeriodLabel(yb, half), taxPeriodShort: periodShort,
+      taxPrev: () => this.taxSetYear(-1), taxNext: () => this.taxSetYear(1),
+      taxSpanFull: () => this.setState({ tax: Object.assign({}, T, { half: false }) }),
+      taxSpanHalf: () => { this.setState({ tax: Object.assign({}, T, { half: true }) }); this.taxEnsureData(yb); },
+      taxSpanFullBg: half ? '#fff' : '#FF8A3D', taxSpanFullFg: half ? '#8A6D5C' : '#fff',
+      taxSpanHalfBg: half ? '#FF8A3D' : '#fff', taxSpanHalfFg: half ? '#fff' : '#8A6D5C',
+      taxFormFull: C.formFull, taxFormHalf: C.formHalf,
+      taxEntChips: ents.map(e => ({
+        name: e.name, bg: e.id === cur.id ? '#7048E8' : '#fff', fg: e.id === cur.id ? '#fff' : '#8A6D5C',
+        pick: () => { this.setState({ tax: Object.assign({}, T, { entId: e.id }) }); this.taxEnsureData(yb); }
+      })),
+      taxDueLabel: (C.remain >= 0 ? 'ภาษีที่ต้องจ่าย' : 'ขอคืนได้') + ' · ' + cur.name + ' · ' + (half ? C.formHalf : C.formFull),
+      taxDueText: fmt(Math.abs(C.remain)),
+      taxDueSub: this.entityTypeLabel(cur.type) + ' · ' + this.taxPeriodLabel(yb, half) + (C.use.useMin ? ' · ใช้ภาษีขั้นต่ำ 0.5%' : ''),
+      taxRevText: fmt(C.rev), taxExpText: fmt(C.use.exp),
+      taxNetLabel: C.isJur ? 'กำไรสุทธิ' : 'เงินได้สุทธิ', taxNetText: fmt(C.isJur ? C.use.profit : C.use.net),
+      taxRevVal: (half ? V.revH1 : V.rev) === '' ? '' : String(half ? V.revH1 : V.rev),
+      onTaxRev: (e) => set(half ? { revH1: e.target.value } : { rev: e.target.value }),
+      taxRevZero: !C.rev,
+      taxExpHint: (C.isJur ? 'นิติบุคคลหักตามจริงเท่านั้น — ตัวเลขมาจากงบจำลองนิติ (เอกสารครบ)'
+        : 'เหมา 60% ไม่ต้องมีหลักฐาน · ตามจริงใช้ยอดจากงบจำลองนิติ (เฉพาะรายการที่เอกสารครบ)')
+        + (half ? (C.halfExact ? ' · ครึ่งปีนี้ใช้ยอดจริงเดือน ม.ค.–มิ.ย.' : ' · ครึ่งปีนี้ประมาณจากทั้งปี ÷ 2 (กำลังโหลดยอดรายเดือน)') : ''),
+      taxExpOpts: opts,
+      taxExpDocNote: C.expAll > C.expDoc,
+      taxExpDocNoteText: 'ค่าใช้จ่ายที่บันทึกไว้ทั้งหมด ' + fmt(C.expAll) + ' แต่ใช้ทางภาษีได้ ' + fmt(C.expDoc) + ' — ส่วนต่าง ' + fmt(C.expAll - C.expDoc) + ' ยังเอกสารไม่ครบ',
+      taxShowAllow: !C.isJur, taxAllowHint: half ? 'ครึ่งปี (' + C.formHalf + ') ใช้ค่าลดหย่อนครึ่งหนึ่งของทั้งปี' : 'กรอกเท่าที่จ่ายจริง — ระบบตัดให้ไม่เกินเพดานกฎหมาย',
+      taxAllowRows: allowRows, taxAllowTotalText: fmt(C.use.A.total),
+      taxSheetTitle: 'กระดาษคำนวณ · แบบ ' + (half ? C.formHalf : C.formFull),
+      taxSheetRows: sheet,
+      taxMinNote: !!C.use.useMin,
+      taxMinNoteText: 'เงินได้เกิน 60,000 บาท และภาษีตามขั้นบันไดน้อยกว่า 0.5% ของเงินได้ — กฎหมายให้เสียตามอัตราขั้นต่ำ 0.5%',
+      taxCreditRows: creditRows, taxCreditTotalText: fmt(C.credit),
+      taxWhtHint: 'ยอดที่เราจ่ายให้คนอื่นแล้วต้องหักภาษีนำส่งกรมสรรพากร (ยื่น ภ.ง.ด.3 ถ้าจ่ายให้บุคคล · ภ.ง.ด.53 ถ้าจ่ายให้นิติบุคคล) ภายในวันที่ 7 ของเดือนถัดไป',
+      taxWhtRows: C.wht.map(w => ({
+        label: w.label, rateText: (w.rate * 100) + '%', taxText: fmt(w.tax),
+        val: V[w.k] === '' || V[w.k] == null ? '' : String(V[w.k]),
+        onVal: (e) => set({ [w.k]: e.target.value })
+      })),
+      taxWhtForm: 'ภ.ง.ด.3 / 53', taxWhtTotalText: fmt(C.whtTotal),
+      taxVatColor: vatColor, taxVatPctText: Math.round(pct * 100) + '%',
+      taxVatW: Math.min(100, Math.round(pct * 100)) + '%', taxVatMsg: vatMsg,
+      taxVatRegistered: !!cur.vat_registered,
+      taxCmpHint: 'ใช้เงินได้ ' + fmt(C.rev) + ' และค่าใช้จ่ายชุดเดียวกันมาลองคำนวณทั้ง 2 แบบ',
+      taxCmpCards: cmp,
+      taxCmpFoot: 'นิติบุคคลถ้าถอนกำไรออกมาใช้ส่วนตัวยังมีภาษีเงินปันผลอีกชั้น (หัก ณ ที่จ่าย 10%) และมีค่าทำบัญชี/สอบบัญชีเพิ่ม — ตัวเลขนี้เทียบแค่ภาษีเงินได้',
+      taxDisclaimer: 'ตัวเลขนี้เป็นกระดาษทำการช่วยประมาณ ไม่ใช่แบบยื่นภาษีจริง — รายได้ยังกรอกเอง (รอเชื่อม App_stock) และค่าใช้จ่ายตามจริงนับเฉพาะรายการที่เอกสารครบ ให้ผู้ทำบัญชีตรวจก่อนยื่นทุกครั้ง',
+      taxPrint: () => this.taxPrint(false), taxPrintAll: () => this.taxPrint(true), taxExportCsv: this.taxExportCsv
+    };
+  }
+
   booksKey() {
     const B = this.state.books || {};
     const ym = B.ym || (window.KK_HELPERS ? KK_HELPERS.thisYm() : '');
@@ -4652,7 +5328,7 @@ class Component extends DCLogic {
       flushDrive: this.flushDrive, resetDriveErrors: this.resetDriveErrors,
       driveMsg: st.driveMsg || '',
       hasDriveErr: driveErrs.length > 0,
-      driveErrors: driveErrs.map(e => ({ name: e.name || '(ไม่มีชื่อ)', error: e.error || '' })),
+      driveErrors: driveErrs.map(e => ({ name: e.name || '(ไม่มีชื่อ)', error: /drive not configured/i.test(e.error || '') ? 'ยังไม่ได้ส่ง — กดปุ่มส่งขึ้น Drive อีกครั้ง' : (e.error || '') })),
       modalIsHistory: isHist, histTitle: isHist ? m.title : '', histRows: isHist ? m.hist : []
     };
   }
@@ -4733,12 +5409,16 @@ class Component extends DCLogic {
       pick: () => this.setState({ cart: Object.assign({}, st.cart, { sub: s.key }) })
     }));
     const rInfo = this.currentRouteInfo();
-    const routeWarn = (st.cart.route === 'none' && (st.cart.sub === 'cashid' || st.cart.sub === 'cashno')) ? 'ถ้าโอนได้ แนะนำโอนนะ — จะมีสลิปพิสูจน์ผู้รับ ลงภาษีได้เต็มที่' : '';
+    const noSlipDoc = !!(rInfo && rInfo.rule && (rInfo.rule.doc === 'cert' || rInfo.rule.doc === 'pv_cert'));
+    const bigNoSlip = noSlipDoc && this.grandTotal() > 1000;
+    const routeWarn = bigNoSlip
+      ? 'ยอดนี้สูงสำหรับรายการที่ไม่มีสลิป — ใบรับรองแทนใบเสร็จเหมาะกับยอดย่อย (ค่าส่ง ค่าเดินทาง) ถ้ายอดสูงแบบนี้ โอนเงินเอาสลิปดีกว่า'
+      : (st.cart.route === 'none' && (st.cart.sub === 'cashid' || st.cart.sub === 'cashno')) ? 'ถ้าโอนได้ แนะนำโอนนะ — จะมีสลิปพิสูจน์ผู้รับ ลงภาษีได้เต็มที่' : '';
 
     const evList = this.evidenceList();
     const evIcon = (l) => l.indexOf('สลิป') >= 0 ? 'assets/icons/icon_payment_slip.webp' : l.indexOf('ใบกำกับ') >= 0 || l.indexOf('ใบเสร็จ') >= 0 || l.indexOf('บิล') >= 0 ? 'assets/icons/icon_tax_invoice.webp' : l.indexOf('แชท') >= 0 || l.indexOf('คำสั่งซื้อ') >= 0 ? 'assets/icons/icon_po_clipboard.webp' : 'assets/icons/icon_camera.webp';
     // แนบได้หลายรูปต่อช่อง (บิลหลายหน้า/สลิปหลายใบ/ของหลายลัง) — เลื่อนดู + ลบทีละรูป
-    const evSlots = evList.map(l => {
+    const evSlots = evList.slice().sort((a, b) => (this.evOptional(a) ? 1 : 0) - (this.evOptional(b) ? 1 : 0)).map(l => {
       const arr = this.evArr(l);
       const done = arr.length > 0;
       return {
@@ -5048,6 +5728,16 @@ class Component extends DCLogic {
       routeHasWarn: !!routeWarn, routeWarn,
       next4Bg: rInfo ? 'linear-gradient(135deg,#FF922B,#F76BB8)' : '#8B7767',
       evSlots, next5Bg: evAllDone ? 'linear-gradient(135deg,#37B24D,#2B8A3E)' : 'linear-gradient(135deg,#FF922B,#F76BB8)',
+      evHasSysDoc: !!(rInfo && rInfo.rule && rInfo.rule.doc && rInfo.rule.doc !== 'none'),
+      evSysDocName: (rInfo && rInfo.rule) ? (window.KK_HELPERS ? KK_HELPERS.docLabel(rInfo.rule) : '') : '',
+      evSysDocNote: 'ต้องมีคู่กับหลักฐานด้านล่าง — ระบบสร้างให้อัตโนมัติตอนกดยืนยัน แล้วไปเซ็นอนุมัติที่หน้า "เอกสารรออนุมัติ" (ไม่ต้องอัปเอง)',
+      evHeadText: (() => {
+        const need = this.evMissing();
+        const req = evList.filter(l => !this.evOptional(l));
+        if (!req.length) return 'เอกสารชุดนี้ระบบออกให้เอง — รูปเป็นของเสริม ถ่ายเก็บไว้กันเอกสารหาย ไม่ถ่ายก็กดยืนยันลงบัญชีได้เลย';
+        const head = 'เอกสารชุดนี้ต้องมี: ' + req.join(' + ') + (need.length ? ' — ยังขาด ' + need.join(' · ') : ' — ครบแล้ว ✓');
+        return head + ' · เติมทีหลังได้ กดยืนยันลงบัญชีได้เลย ไม่บล็อก';
+      })(),
       next5Label: evAllDone ? 'หลักฐานครบ ไปสรุป ›' : 'ไปสรุป (ขาด ' + this.evMissing().length + ' ชิ้น) ›',
       saveDraft: this.saveDraft,
       summaryLines, sumShipText: this.fmt(+st.cart.ship || 0), sumBoxText: this.fmt(+st.cart.box || 0),
@@ -5131,6 +5821,8 @@ class Component extends DCLogic {
       togglePriceSave: () => { m.saveToVendor = !m.saveToVendor; this.forceUpdate(); },
       // เอกสารเต็มรูปแบบ (ทุกชนิด) — ประกอบจาก payload โดย docVals
       ...this.docVals(m && m.kind === 'doc' ? m.d : null),
+      ...this.taxVals(),
+      goTax: () => { this.setState({ screen: 'tax', buyStep: 0, dataVendorId: null, modal: null }); this.taxEnsureData(); },
 
       navHomeC: navC('home'), navHomeF: navF('home'),
       navListC: (st.screen === 'diary' || st.screen === 'list') ? '#F76707' : '#B8A08D',
