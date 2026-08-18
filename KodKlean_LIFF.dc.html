@@ -407,6 +407,12 @@
             </button>
           </sc-for>
         </sc-if>
+        <sc-if value="{{ showBillAuto }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FFF4E6;border:3px solid #FFD8A8;border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:10px">
+            <span style="font-size:22px;flex-shrink:0">📄</span>
+            <div style="font-size:15px;font-weight:800;color:#B35309;line-height:1.45">{{ billAutoText }}</div>
+          </div>
+        </sc-if>
         <sc-if value="{{ routeHasResult }}" hint-placeholder-val="{{ false }}">
           <div style="background:#E7F5FF;border-radius:18px;padding:14px 16px">
             <div style="font-size:16px;font-weight:900;color:#1971C2">{{ routeResultTitle }}</div>
@@ -2798,6 +2804,7 @@ class Component extends DCLogic {
           color: v.color || '#8A6D5C', shipping: +v.shipping || 0, box: +v.box || 0, freq: v.freq || '',
           doc: Array.isArray(v.doc) ? v.doc : [], cats: Array.isArray(v.cats) ? v.cats : [],
           docType: v.docType || '', taxId: v.tax_id || '', address: v.address || '', contact: v.contact || '',
+          isBillable: v.is_billable !== false,
           vatMode: (v.vatMode === 'excl' || v.vatMode === 'none') ? v.vatMode : 'incl',
           items: Array.isArray(v.items) ? v.items : []
         }));
@@ -3143,6 +3150,39 @@ class Component extends DCLogic {
     return !this.evRequiredList().some(r => this.evPart(r) === pt);
   }
   evArr(l) { const v = this.state.cart.ev[l]; return Array.isArray(v) ? v : (v ? [v] : []); }
+
+  /* ---------- ธงออกบิลรายบิล (billable_override) — "อัปคือมี ไม่อัปคือไม่มี" ----------
+     ร้านที่ธงเป็น "ออกบิลไม่ได้": แนบเอกสารจากร้าน (บิล/ใบกำกับ) ปุ๊บ ระบบสลับเส้นทางให้เอง
+     + ตั้ง billable_override = true · ไม่แนบ = เดินเส้นสร้างชุดภายในตามปกติ
+     ร้านที่ธงเป็น "ออกบิลได้" ไม่แตะอะไรเลย · กดการ์ดเส้นทางเองได้เสมอ = ทับค่าที่ระบบตั้ง */
+  cartHasVendorDoc(cart) {
+    const ev = (cart && cart.ev) || {};
+    return Object.keys(ev).some(l => this.evPart(l) === 'vendor_doc' && (Array.isArray(ev[l]) ? ev[l].length > 0 : !!ev[l]));
+  }
+  // กฎที่ "ใช้เอกสารจากร้านได้เลย ไม่สร้างเอกสารเพิ่ม" และไม่แยก VAT (ร้านธง false ออกใบกำกับไม่ได้)
+  docBearingRuleId() {
+    const rs = this.mainRules();
+    const r = rs.find(x => x.doc === 'none' && !x.vat) || rs.find(x => x.doc === 'none');
+    return r ? r.id : null;
+  }
+  syncBillableAuto(cart) {
+    const v = this.vendorById(cart.vendorId);
+    if (!v || v.isBillable !== false) { cart.billOvr = null; cart.billAuto = false; return cart; }
+    const has = this.cartHasVendorDoc(cart);
+    const cur = this.mainRules().find(x => x.id === cart.route);
+    if (has) {
+      cart.billOvr = true;
+      if (!cart.routeManual && !(cur && cur.doc === 'none')) {
+        const id = this.docBearingRuleId();
+        if (id) { cart.route = id; cart.sub = null; cart.billAuto = true; }
+      }
+    } else if (cart.billAuto) {
+      cart.billOvr = null; cart.billAuto = false;
+      const pf = this.prefillRoute(v); cart.route = pf.route; cart.sub = pf.sub;
+    } else cart.billOvr = null;
+    return cart;
+  }
+  billOverrideOut() { return this.state.cart.billOvr === true ? true : undefined; }
   // กดยืนยันได้เสมอ (never block) — นับเฉพาะเอกสารหลักที่ยังขาด (โชว์เตือนเฉยๆ ไม่ขู่)
   evMissing() { return this.evidenceList().filter(l => !this.evOptional(l) && this.evArr(l).length === 0); }
 
@@ -3255,8 +3295,8 @@ class Component extends DCLogic {
       vendor_name: this.vendorById(this.state.cart.vendorId).name, route: this.beRoute(),
       total: this.grandTotal(), is_stock: true, description: this.routeLabel() + ' — ' + this.vendorById(this.state.cart.vendorId).name,
       payment_method: this.cartPay(), reimburser: (this.state.cart.reimburser || '').trim() || undefined,
-      vat: this.beRoute() === '1a' ? this.cartVat() : 0,
-      items: this.cartLines().map(l => ({ item_name: l.it.name, qty: l.qty, unit: l.it.unit, unit_price: l.price, vat: l.vatable })),
+      vat: this.beRoute() === '1a' ? this.cartVat() : 0, billable_override: this.billOverrideOut(),
+      items: this.cartLines().map(l => ({ item_name: l.it.name, vendor_item_id: l.it.id, qty: l.qty, unit: l.it.unit, unit_price: l.price, vat: l.vatable })),
       shipping_cost: +this.state.cart.ship || 0, packaging_cost: +this.state.cart.box || 0,
       draft: true, idem: 'liff-draft-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8)
     }, this.evSnapshot(), true);
@@ -3422,7 +3462,7 @@ class Component extends DCLogic {
         vendor_id: vid, vendor_name: vn,
         route: beR, total, vat, is_stock: false, is_asset: true,
         category_account: '5010', description: this.routeLabel() + ' — ' + vn,
-        items: this.cartLines().map(l => ({ item_name: l.it.name, qty: l.qty, unit: l.it.unit, unit_price: l.price, cat: l.it.cat || undefined, vat: l.vatable })),
+        items: this.cartLines().map(l => ({ item_name: l.it.name, vendor_item_id: l.it.id, qty: l.qty, unit: l.it.unit, unit_price: l.price, cat: l.it.cat || undefined, vat: l.vatable })),
         asset: { name: vn + ' (ของถาวร)' }
       }, 'ลงบัญชีของถาวรขึ้นระบบจริงแล้ว ✓');
       // ซื้อสินค้า: liff_purchase_save — backend สร้าง CASE + ใบสั่งซื้อ (fin_purchase_orders+รายการ) + ลงบัญชี (เดบิต=เครดิต) + เอกสารร่าง ครบใน transaction เดียว
@@ -3430,10 +3470,10 @@ class Component extends DCLogic {
       else this.savePurchaseLive({
         entity_id: this.currentPayerId(), entity_name: (this.payerEntity() || {}).name || null, entity_tax_id: (this.payerEntity() || {}).tax_id || null,
         vendor_id: vid, vendor_name: vn,
-        route: beR, total, vat, is_stock: true, category_account: '5010',
+        route: beR, total, vat, is_stock: true, category_account: '5010', billable_override: this.billOverrideOut(),
         description: this.routeLabel() + ' — ' + vn,
         payment_method: this.cartPay(), reimburser: (this.state.cart.reimburser || '').trim() || undefined,
-        items: this.cartLines().map(l => ({ item_name: l.it.name, qty: l.qty, unit: l.it.unit, unit_price: l.price, cat: l.it.cat || undefined, vat: l.vatable })),
+        items: this.cartLines().map(l => ({ item_name: l.it.name, vendor_item_id: l.it.id, qty: l.qty, unit: l.it.unit, unit_price: l.price, cat: l.it.cat || undefined, vat: l.vatable })),
         shipping_cost: +this.state.cart.ship || 0, packaging_cost: +this.state.cart.box || 0,
         draft: false, idem: 'liff-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8)
       }, this.evSnapshot(), false);
@@ -5839,7 +5879,7 @@ class Component extends DCLogic {
       icon: r.icon, title: r.title, desc: r.desc,
       border: st.cart.route === r.key ? '#FF8A3D' : '#FFEEDD',
       checkBg: st.cart.route === r.key ? '#FF8A3D' : '#F1E4D4', check: st.cart.route === r.key ? '✓' : '',
-      pick: () => this.setState({ cart: Object.assign({}, st.cart, { route: r.key, sub: null }) })
+      pick: () => this.setState({ cart: Object.assign({}, st.cart, { route: r.key, sub: null, routeManual: true, billAuto: false }) })
     }));
     const subCards = this.subDefs().map(s => ({
       title: s.title, desc: s.desc,
@@ -5867,7 +5907,7 @@ class Component extends DCLogic {
           del: () => {
             const cart = this.state.cart; cart.ev = Object.assign({}, cart.ev);
             const a = this.evArr(l).slice(); a.splice(i, 1); cart.ev[l] = a;
-            this.setState({ cart });
+            this.setState({ cart: this.syncBillableAuto(cart) });
           }
         })),
         sub: done ? 'แนบแล้ว ' + arr.length + ' รูป ✓' : 'สั่งหลายอย่าง/บิลหลายหน้า แนบทีเดียวหลายรูปได้',
@@ -5877,7 +5917,7 @@ class Component extends DCLogic {
         onFile: (e) => this.readFiles(e, (url) => {
           const cart = this.state.cart; cart.ev = Object.assign({}, cart.ev);
           cart.ev[l] = this.evArr(l).concat([url]);
-          this.setState({ cart });
+          this.setState({ cart: this.syncBillableAuto(cart) });
         }, true)
       };
     });
@@ -6253,6 +6293,8 @@ class Component extends DCLogic {
       sumExemptText: this.fmt(sumExempt), sumTaxableText: this.fmt(sumTaxable),
       sumVatNote: this.cartVatMode() === 'excl' ? 'ร้านนี้ตั้งไว้ว่าราคายังไม่รวม VAT — ระบบบวก 7% ให้ท้ายบิล' : 'ราคาสินค้ารวม VAT แล้ว — ระบบแยกภาษีซื้อออกจากยอดให้',
       routeCards, showSub: st.cart.route === 'none', subCards,
+      showBillAuto: st.cart.billOvr === true,
+      billAutoText: 'บิลนี้มีเอกสารจากร้านแนบมาแล้ว — ระบบสลับเส้นทางให้เอง (ปกติร้านนี้ตั้งไว้ว่าออกบิลไม่ได้) ถ้าไม่ใช่ กดเลือกการ์ดด้านบนทับได้เลย',
       routeHasResult: !!rInfo, routeResultTitle: rInfo ? rInfo.result : '', routeResultDesc: rInfo ? 'เข้างบ: ' + rInfo.book : '',
       routeHasWarn: !!routeWarn, routeWarn,
       next4Bg: rInfo ? 'linear-gradient(135deg,#FF922B,#F76BB8)' : '#8B7767',
